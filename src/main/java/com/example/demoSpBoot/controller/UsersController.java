@@ -1,5 +1,8 @@
 package com.example.demoSpBoot.controller;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,5 +72,41 @@ public class UsersController {
 	@DeleteMapping("/users/{manhanvien}")
 	public void deleteCustomer(@PathVariable("manhanvien") String manhanvien) {
 		usersService.delete(manhanvien);
+	}
+	
+	/* ---------------- ENCODE MD5 ------------------------ */
+	
+	public static String convertByteToHex1(byte[] data) {
+		  BigInteger number = new BigInteger(1, data);
+		  String hashtext = number.toString(16);
+		  // Now we need to zero pad it if you actually want the full 32 chars.
+		  while (hashtext.length() < 32) {
+		    hashtext = "0" + hashtext;
+		  }
+		  return hashtext;
+		}
+
+	
+	public static String getMD5(String input) {
+		  try {
+		    MessageDigest md = MessageDigest.getInstance("MD5");
+		    byte[] messageDigest = md.digest(input.getBytes());
+		    return convertByteToHex1(messageDigest);
+		  } catch (NoSuchAlgorithmException e) {
+		    throw new RuntimeException(e);
+		  }
+		}
+	
+	@PostMapping("/login")
+	public ResponseEntity<users>login(@PathVariable("manhanvien") String manhanvien,@PathVariable("password") String password){
+		Optional<users> user=usersService.findByMNV(manhanvien);
+		if(user.isPresent()) {
+			String salt=user.get().getSalt();
+			String password_db=user.get().getPassword();
+			String passcurrent=getMD5(password.concat(salt));
+			if(password_db.equals(passcurrent)) {
+				return new ResponseEntity<users>(user.get(),HttpStatus.OK);
+			} else return new ResponseEntity<users>(user.get(),HttpStatus.NO_CONTENT);
+		} else return new ResponseEntity<users>(user.get(),HttpStatus.NOT_FOUND);
 	}
 }
