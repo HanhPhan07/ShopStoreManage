@@ -12,9 +12,13 @@ import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.integration.IntegrationProperties.Jdbc;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import lombok.Data;
+
+
 @Embeddable
 @Entity
 @Table(name = "users")
+@Data
 public class users {
 	@Id
 	@Column(name = "manhanvien")

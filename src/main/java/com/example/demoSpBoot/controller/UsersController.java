@@ -1,13 +1,11 @@
 package com.example.demoSpBoot.controller;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demoSpBoot.service.UsersService;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.example.demoSpBoot.model.users;
-import com.example.demoSpBoot.repository.UsersRepository;
 
 @RestController
 @RequestMapping("/ShopStore")
@@ -74,41 +74,28 @@ public class UsersController {
 	public void deleteCustomer(@PathVariable("manhanvien") String manhanvien) {
 		usersService.delete(manhanvien);
 	}
-	
-	/* ---------------- ENCODE MD5 ------------------------ */
-	
-	public static String convertByteToHex1(byte[] data) {
-		  BigInteger number = new BigInteger(1, data);
-		  String hashtext = number.toString(16);
-		  // Now we need to zero pad it if you actually want the full 32 chars.
-		  while (hashtext.length() < 32) {
-		    hashtext = "0" + hashtext;
-		  }
-		  return hashtext;
-		}
-
-	
-	public static String getMD5(String input) {
-		  try {
-		    MessageDigest md = MessageDigest.getInstance("MD5");
-		    byte[] messageDigest = md.digest(input.getBytes());
-		    return convertByteToHex1(messageDigest);
-		  } catch (NoSuchAlgorithmException e) {
-		    throw new RuntimeException(e);
-		  }
-		}
+	/* ---------------- USER LOGIN ------------------------ */
 	
 	@PostMapping("/login")
-	public ResponseEntity<users>login(@RequestParam String manhanvien,@RequestParam String password){
+	public ResponseEntity<users>login (@RequestParam String manhanvien, @RequestParam(name="password") String pass){
 		Optional<users> user=usersService.findByMNV(manhanvien);
 		if(user.isPresent()) {
 			String salt=user.get().getSalt();
-			String password_db=user.get().getPassword();
-			String passcurrent=getMD5(password.concat(salt));
-			//System.out.println(passcurrent);
-			if(password_db.equals(passcurrent)) {
-				return new ResponseEntity<users>(user.get(),HttpStatus.OK);
-			} else return new ResponseEntity<users>(HttpStatus.NO_CONTENT);
-		} else return new ResponseEntity<users>(HttpStatus.NOT_FOUND);
+			String password=user.get().getPassword();
+			boolean valuate = BCrypt.checkpw(pass,password);
+			if(valuate==true) {
+				return new ResponseEntity<>(user.get(), HttpStatus.OK);
+			}
+			else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	/* ---------------- RANDOM STRING ------------------------ */
+	@GetMapping("/random")
+	public void randomSalt() {
+		String salt=RandomStringUtils.randomAlphabetic(6);
+		System.out.println(salt);
+		//return salt;
 	}
 }

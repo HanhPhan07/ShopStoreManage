@@ -3,6 +3,8 @@ package com.example.demoSpBoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.demoSpBoot.service.CustomerService;
+
 @SpringBootApplication
 public class ShopStoreApplication {
 

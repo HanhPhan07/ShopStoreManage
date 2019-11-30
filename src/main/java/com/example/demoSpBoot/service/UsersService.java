@@ -21,9 +21,7 @@ public class UsersService {
     }
 
 	public void create(users customer) {
-		if(usersrepository.findById(customer.getManhanvien()).isPresent()) {
 			usersrepository.save(customer);
-		}else System.out.print("Customer Not Found");
 	}
 
 	public void update(users customer) {
