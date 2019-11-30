@@ -7,6 +7,10 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.sql.DataSource;
+
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.Jdbc;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
 
@@ -31,7 +35,7 @@ public class users {
 	private String diachi;
 	private Date ngaysinh;
 	private boolean gioitinh;
-	
+		
 	public users() {	}
 
 	public String getManhanvien() {
@@ -155,3 +159,4 @@ public class users {
 		this.gioitinh = gioitinh;
 	}
 }
+	

@@ -1,6 +1,9 @@
 package com.example.demoSpBoot.controller;
 
 import java.nio.charset.Charset;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -81,7 +84,6 @@ public class UsersController {
 		if(user.isPresent()) {
 			String salt=user.get().getSalt();
 			String password=user.get().getPassword();
-			//String passcurrent=BCrypt.hashpw(pass, user.get().getSalt());
 			boolean valuate = BCrypt.checkpw(pass,password);
 			if(valuate==true) {
 				return new ResponseEntity<>(user.get(), HttpStatus.OK);
@@ -91,13 +93,5 @@ public class UsersController {
 		}
 		else return new ResponseEntity<>(
                 HttpStatus.UNAUTHORIZED);
-	}
-	@GetMapping("/random")
-	public void random() {
-	    byte[] array = new byte[7]; // length is bounded by 7
-	    new Random().nextBytes(array);
-	    String generatedString = new String(array, Charset.forName("UTF-8"));
-	 
-	    System.out.println(generatedString);
 	}
 }
