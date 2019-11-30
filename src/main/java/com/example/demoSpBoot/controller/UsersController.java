@@ -1,10 +1,13 @@
 package com.example.demoSpBoot.controller;
 
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.validation.Valid;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demoSpBoot.service.UsersService;
 import com.example.demoSpBoot.model.users;
@@ -69,5 +73,31 @@ public class UsersController {
 	@DeleteMapping("/users/{manhanvien}")
 	public void deleteCustomer(@PathVariable("manhanvien") String manhanvien) {
 		usersService.delete(manhanvien);
+	}
+	/* ---------------- USER LOGIN ------------------------ */
+	@PostMapping("/login")
+	public ResponseEntity<users>login (@RequestParam String manhanvien, @RequestParam(name="password") String pass){
+		Optional<users> user=usersService.findByMNV(manhanvien);
+		if(user.isPresent()) {
+			String salt=user.get().getSalt();
+			String password=user.get().getPassword();
+			//String passcurrent=BCrypt.hashpw(pass, user.get().getSalt());
+			boolean valuate = BCrypt.checkpw(pass,password);
+			if(valuate==true) {
+				return new ResponseEntity<>(user.get(), HttpStatus.OK);
+			}
+			else return new ResponseEntity<>(
+                    HttpStatus.UNAUTHORIZED);
+		}
+		else return new ResponseEntity<>(
+                HttpStatus.UNAUTHORIZED);
+	}
+	@GetMapping("/random")
+	public void random() {
+	    byte[] array = new byte[7]; // length is bounded by 7
+	    new Random().nextBytes(array);
+	    String generatedString = new String(array, Charset.forName("UTF-8"));
+	 
+	    System.out.println(generatedString);
 	}
 }

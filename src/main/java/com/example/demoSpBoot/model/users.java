@@ -8,9 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
+
 @Embeddable
 @Entity
 @Table(name = "users")
+@Data
 public class users {
 	@Id
 	@Column(name = "manhanvien")
