@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demoSpBoot.service.UsersService;
 import com.example.demoSpBoot.model.users;
@@ -98,15 +99,16 @@ public class UsersController {
 		}
 	
 	@PostMapping("/login")
-	public ResponseEntity<users>login(@PathVariable("manhanvien") String manhanvien,@PathVariable("password") String password){
+	public ResponseEntity<users>login(@RequestParam String manhanvien,@RequestParam String password){
 		Optional<users> user=usersService.findByMNV(manhanvien);
 		if(user.isPresent()) {
 			String salt=user.get().getSalt();
 			String password_db=user.get().getPassword();
 			String passcurrent=getMD5(password.concat(salt));
+			//System.out.println(passcurrent);
 			if(password_db.equals(passcurrent)) {
 				return new ResponseEntity<users>(user.get(),HttpStatus.OK);
-			} else return new ResponseEntity<users>(user.get(),HttpStatus.NO_CONTENT);
-		} else return new ResponseEntity<users>(user.get(),HttpStatus.NOT_FOUND);
+			} else return new ResponseEntity<users>(HttpStatus.NO_CONTENT);
+		} else return new ResponseEntity<users>(HttpStatus.NOT_FOUND);
 	}
 }
