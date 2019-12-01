@@ -22,6 +22,7 @@ import com.example.demoSpBoot.service.UsersService;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.model.users;
 
 @RestController
@@ -56,8 +57,15 @@ public class UsersController {
 
 	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
 	@PostMapping("/users")
-	public void saveCustomer(@Valid @RequestBody users customer) {
-		usersService.create(customer);
+	public ResponseEntity<users> saveCustomer(@Valid @RequestBody users customer) {
+		String salt=randomSalt();
+		customer.setSalt(salt);
+		customer.setPassword(BCrypt.hashpw(customer.getPassword().concat(salt), BCrypt.gensalt(12)));
+		if(usersService.create(customer)) return new ResponseEntity<users>(customer,HttpStatus.OK);
+		else {
+			return new ResponseEntity<users>(customer,HttpStatus.NOT_FOUND);
+		}
+		
 	}
 	
 	/* ---------------- UPDATE CUSTOMER ------------------------ */
@@ -92,10 +100,8 @@ public class UsersController {
 	}
 	
 	/* ---------------- RANDOM STRING ------------------------ */
-	@GetMapping("/random")
-	public void randomSalt() {
+	public String randomSalt() {
 		String salt=RandomStringUtils.randomAlphabetic(6);
-		System.out.println(salt);
-		//return salt;
+		return salt;
 	}
 }
