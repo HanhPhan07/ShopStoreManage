@@ -3,6 +3,8 @@ package com.example.demoSpBoot.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -15,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +41,7 @@ import com.example.demoSpBoot.model.users;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/ShopStore")
 public class UsersController {
 	@Autowired
@@ -59,7 +64,6 @@ public class UsersController {
 	}
 	/* ---------------- GET CUSTOMER BY ID ------------------------ */
 	@GetMapping("/users/{manhanvien}")
-	
 	public ResponseEntity<users> getProductById(
             @PathVariable("manhanvien") String manhanvien) {
         Optional<users> product = usersService.findByMNV(manhanvien);
@@ -101,28 +105,39 @@ public class UsersController {
 	/* ---------------- USER LOGIN ------------------------ */
 	
 	@PostMapping("/login")
-	public LoginRespone authenticateUser (@RequestParam String manhanvien, @RequestParam(name="password") String pass) throws Exception{
-		// Xác thực từ username và password.
-		try {
+	public LoginRespone authenticateUser (@Valid @RequestParam String manhanvien, @RequestParam(name="password") String pass) throws Exception{
+		    Optional<users> usertemp=usersService.findByMNV(manhanvien);
+		    //System.out.println(usersService.passwordEncoder(pass+usertemp.get().getSalt()));
 			Authentication authentication = authenticationManager.authenticate(
 	                new UsernamePasswordAuthenticationToken(
 	                        manhanvien,
-	                        pass
+	                        pass+usertemp.get().getSalt()
 	                )
 	        );
-			System.out.println(manhanvien);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-	        //System.out.print(usersService.passwordEncoder(pass));
+	        
 	        // Trả về jwt cho người dùng.
 			CustomUserDetails user =(CustomUserDetails) authentication.getPrincipal();
 	        String jwt = tokenProvider.generateToken(user);
 	        return new LoginRespone(jwt,user);
-		} 
-		catch(BadCredentialsException be) {
-			throw new Exception("Incorrect username or password",be);
-		}
+		
 	}
-        
+    
+	@PostMapping("/logout")
+	public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response)
+	{
+		try {
+			SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false); 
+			return new ResponseEntity<>(
+	              HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(
+		              HttpStatus.NO_CONTENT);
+		}
+		
+		
+	}
 
         // Nếu không xảy ra exception tức là thông tin hợp lệ
         // Set thông tin authentication vào Security Context
