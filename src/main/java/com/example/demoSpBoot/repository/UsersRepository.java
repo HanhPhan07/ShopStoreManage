@@ -8,4 +8,5 @@ import com.example.demoSpBoot.model.users;
 @Repository
 public interface UsersRepository extends JpaRepository<users, String>{
 	//users findByMNV(String manhanvien);
+	users findByUsername(String username);
 }

@@ -22,7 +22,7 @@ import lombok.Data;
 public class users {
 	@Id
 	@Column(name = "manhanvien")
-	private String manhanvien;
+	private String username;
 	private String password;
 	private int vaitro;
 	private String salt;
@@ -37,13 +37,13 @@ public class users {
 	private boolean gioitinh;
 		
 	public users() {	}
-
+	
 	public String getManhanvien() {
-		return manhanvien;
+		return username;
 	}
 
 	public void setManhanvien(String manhanvien) {
-		this.manhanvien = manhanvien;
+		this.username = manhanvien;
 	}
 
 	public String getPassword() {
@@ -144,7 +144,7 @@ public class users {
 
 	public users(String manhanvien, String password, int vaitro, String salt, boolean trangthai, Date createdAt,
 			Date updatedAt, String ten, String sdt, String email, String diachi, Date ngaysinh, boolean gioitinh) {
-		this.manhanvien = manhanvien;
+		this.username = manhanvien;
 		this.password = password;
 		this.vaitro = vaitro;
 		this.salt = salt;
