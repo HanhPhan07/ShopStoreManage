@@ -36,8 +36,11 @@ public class UsersService implements UserDetailsService{
         return usersrepository.findById(manhanvien);
     }
 
-	public void create(users customer) {
+	public boolean create(users customer) {
+		if(usersrepository.findById(customer.getManhanvien()).isPresent()) {
 			usersrepository.save(customer);
+			return true;
+		}else return false;
 	}
 
 	public void update(users customer) {
