@@ -30,6 +30,11 @@ import com.example.demoSpBoot.jwt.LoginRespone;
 import com.example.demoSpBoot.model.users;
 import com.example.demoSpBoot.jwt.CustomUserDetails;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
+import com.example.demoSpBoot.model.users;
+
+
 @RestController
 @RequestMapping("/ShopStore")
 public class UsersController {
@@ -86,6 +91,7 @@ public class UsersController {
 		usersService.delete(manhanvien);
 	}
 	/* ---------------- USER LOGIN ------------------------ */
+	
 	@PostMapping("/login")
 	public LoginRespone authenticateUser (@RequestParam String manhanvien, @RequestParam(name="password") String pass) throws Exception{
 		// Xác thực từ username và password.
@@ -107,6 +113,7 @@ public class UsersController {
 		catch(BadCredentialsException be) {
 			throw new Exception("Incorrect username or password",be);
 		}
+	}
         
 
         // Nếu không xảy ra exception tức là thông tin hợp lệ
@@ -126,5 +133,25 @@ public class UsersController {
 //                HttpStatus.UNAUTHORIZED);
   
         
+	public ResponseEntity<users>login (@RequestParam String manhanvien, @RequestParam(name="password") String pass){
+		Optional<users> user=usersService.findByMNV(manhanvien);
+		if(user.isPresent()) {
+			String salt=user.get().getSalt();
+			String password=user.get().getPassword();
+			boolean valuate = BCrypt.checkpw(pass,password);
+			if(valuate==true) {
+				return new ResponseEntity<>(user.get(), HttpStatus.OK);
+			}
+			else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	/* ---------------- RANDOM STRING ------------------------ */
+	@GetMapping("/random")
+	public void randomSalt() {
+		String salt=RandomStringUtils.randomAlphabetic(6);
+		System.out.println(salt);
+		//return salt;
 	}
 }

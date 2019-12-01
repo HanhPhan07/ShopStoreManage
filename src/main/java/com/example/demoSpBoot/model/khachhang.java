@@ -2,7 +2,15 @@ package com.example.demoSpBoot.model;
 
 import java.util.Date;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+
+@Embeddable
+@Entity
 public class khachhang {
+	@Id
 	private String makhachhang;
 	private String ten;
 	private String sdt;
