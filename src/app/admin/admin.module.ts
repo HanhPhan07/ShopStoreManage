@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AdminComponent } from './admin.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -19,8 +20,10 @@ import { ProductsComponent } from './products/products.component';
 import { CategoriesProdComponent } from './products/categories-prod/categories-prod.component';
 import { ManufProdComponent } from './products/manuf-prod/manuf-prod.component';
 import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod.component';
+import { ProfilesComponent } from './profiles/profiles.component';
+
 @NgModule({
-  imports: [CommonModule, AdminRoutingModule],
+  imports: [CommonModule, AdminRoutingModule, FormsModule, ReactiveFormsModule],
   declarations: [
     AdminComponent,
     HeaderComponent,
@@ -38,7 +41,8 @@ import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod
     ProductsComponent,
     CategoriesProdComponent,
     ManufProdComponent,
-    SuppliersProdComponent
+    SuppliersProdComponent,
+    ProfilesComponent
   ]
 })
 export class AdminModule {}

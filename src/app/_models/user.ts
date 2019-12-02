@@ -3,8 +3,8 @@ export interface User {
   password: string;
   vaitro: number;
   trangthai: number;
-  createdAt: Date;
-  updateAt?: Date;
+  created_at: Date;
+  update_at?: Date;
   ten: string;
   sdt: string;
   email: string;

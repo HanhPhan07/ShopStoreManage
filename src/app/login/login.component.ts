@@ -16,10 +16,8 @@ export class LoginComponent implements OnInit {
     this.user.manhanvien = form.value.username;
     this.user.password = form.value.password;
 
-    this.authService.logIn(this.user).subscribe(next => {
-      alert('Login Successfully')
-    }, error => {
-      console.log(error);
+    this.authService.logIn(this.user).subscribe(next => {}, error => {
+      alert('Login Fail');
     }, () => {
       this.router.navigate(['/admin']);
     });

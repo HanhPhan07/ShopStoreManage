@@ -18,38 +18,29 @@ export class AuthService {
   token: any;
   currentUser: User;
   isLogged: boolean = false;
-  constructor(private router: Router, private httpClient: HttpClient) {
-  }
+  constructor(private router: Router, private httpClient: HttpClient) {}
 
-  logIn(userlogin: any){
+  logIn(userlogin: any) {
     localStorage.setItem('isLoggedIn', 'true');
     return this.httpClient.post(this.baseUrl + 'login', userlogin)
       .pipe(map((response: any) => {
         if (response) {
           localStorage.setItem('token', response.accessToken);
           this.decodedToken = this.jwtHelper.decodeToken(response.accessToken);
-          this.getUserByUsername(response.user.username);
-          this.isLogged = true;
+          localStorage.setItem('user', JSON.stringify(response.userDetail));
+          this.currentUser = response.userDetail;
         }
       }));
   }
-  getUserByUsername(username: string) {
-    return this.httpClient.get(this.baseUrl + 'users/' + username)
-      .pipe(map((response: any) => {
-        if (response) {
-          console.log("res:"+response);
-          localStorage.setItem('user', JSON.stringify(response));
-          this.currentUser = response;
-        }
-      }));
-  }
+
   loggedIn() {
     this.token = localStorage.getItem('token');
-    return !this.jwtHelper.isTokenExpired(this.token)&&this.isLogged;
+    // console.log(this.jwtHelper.getTokenExpirationDate(this.token));
+    // console.log(this.jwtHelper.isTokenExpired(this.token));
+    return !this.jwtHelper.isTokenExpired(this.token);
   }
 
   logOut(): void {
-    this.isLogged = false;
     localStorage.clear();
     this.router.navigate(['/login']);
   }

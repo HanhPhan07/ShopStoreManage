@@ -1,6 +1,6 @@
 export interface NhaSanXuat {
   id: number;
   tennsx: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  created_at: Date;
+  updated_at?: Date;
 }

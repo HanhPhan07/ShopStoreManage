@@ -5,6 +5,6 @@ export interface NhaCungCap {
   sdt: string;
   email?: string;
   diachi?: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  created_at: Date;
+  updated_at?: Date;
 }

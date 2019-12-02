@@ -29,7 +29,7 @@ export function tokenGetter() {
       // Use this config to globally add jwt to request
       // https://github.com/auth0/angular2-jwt#usage-injection
       config: {
-         tokenGetter,
+         tokenGetter: tokenGetter,
          whitelistedDomains: ['localhost:8090'],
          blacklistedRoutes: ['localhost:5000/api/auth']
       }

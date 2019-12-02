@@ -9,8 +9,8 @@ export interface HoaDonBanHang {
   giamgia?: number;
   datra: number;
   trangthai: number;
-  createdAt: Date;
-  updatedAt?: Date;
+  created_at: Date;
+  updated_at?: Date;
   nguoisua?: User;
   nguoitao: User;
   chitiethoadon: string;

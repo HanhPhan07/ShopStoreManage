@@ -11,7 +11,7 @@ import { ProductsComponent } from './products/products.component';
 import { CategoriesProdComponent } from './products/categories-prod/categories-prod.component';
 import { ManufProdComponent } from './products/manuf-prod/manuf-prod.component';
 import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod.component';
-
+import { ProfilesComponent } from './profiles/profiles.component';
 const routes: Routes = [
   {
     path: '',
@@ -52,6 +52,10 @@ const routes: Routes = [
       {
         path: 'suppliers-prod',
         component: SuppliersProdComponent
+      },
+      {
+        path: 'profile',
+        component: ProfilesComponent
       },
       {
         path: '',
