@@ -1,5 +1,7 @@
 package com.example.demoSpBoot.service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,12 +45,16 @@ public class UsersService implements UserDetailsService{
 		}else return false;
 	}
 
-	public void update(users customer) {
+	public boolean update(users customer) {
 
 		if (!usersrepository.findById(customer.getManhanvien()).isPresent()) {
-			System.out.print("Customer Not Found");
+			return false;
 		} else {
+			long millis=System.currentTimeMillis();  
+			customer.setUpdatedAt(new java.sql.Date(millis));
+			customer.setPassword(this.passwordEncoder(customer.getPassword()+customer.getSalt()));
 			usersrepository.save(customer);
+			return true;
 		}
 	}
 
