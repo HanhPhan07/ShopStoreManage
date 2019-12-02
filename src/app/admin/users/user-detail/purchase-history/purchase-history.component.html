@@ -1,0 +1,50 @@
+<h1>
+    Lịch sử mua hàng
+    <span class="pull-right">
+      <button
+        type="button"
+        class="btn btn-block btn-primary"
+        (click)="toggleToDebt(false)"
+      >
+        <i class="fa fa-edit"></i> Thu nợ
+      </button>
+    </span>
+</h1>
+<div class="box">
+    <div class="box-header"></div>
+    <div class="box-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Mã đơn hàng</th>
+              <th scope="col">Ngày bán</th>
+              <th scope="col">Thu ngân</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Tổng tiền</th>
+              <th scope="col">Khách trả</th>
+              <th scope="col">Nợ</th>
+              <th scope="col">Công cụ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">id</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box-footer">
+        <div class="d-flex justify-content-between p-2"></div>
+        <div class="alert alert-info" role="alert">
+          Tổng số đơn hàng: <span>3</span> Tổng tiền: <span>1.000.000</span>đ
+          Tổng nợ: <span>0</span>đ
+        </div>
+      </div>
+</div>
