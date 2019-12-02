@@ -11,11 +11,13 @@ public class LoginRespone {
     private String accessToken;
     private String tokenType;
     private CustomUserDetails user;
+    private users userDetail;
     
-    public LoginRespone(String accessToken,CustomUserDetails user) {
+    public LoginRespone(String accessToken,CustomUserDetails user, users userDetail) {
     	this.setTokenType("Bearer");
         this.setAccessToken(accessToken);
         this.user = user;
+        this.userDetail = userDetail;
     }
     
     public String getAccessToken() {
@@ -37,5 +39,13 @@ public class LoginRespone {
 
 	public void setUser(CustomUserDetails user) {
 		this.user = user;
+	}
+
+	public users getUserDetail() {
+		return userDetail;
+	}
+
+	public void setUserDetail(users userDetail) {
+		this.userDetail = userDetail;
 	}
 }

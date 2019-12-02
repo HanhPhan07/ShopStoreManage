@@ -36,6 +36,7 @@ import com.example.demoSpBoot.jwt.CustomUserDetails;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import com.example.demoSpBoot.model.LoginForm;
 import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.model.users;
 
@@ -105,13 +106,13 @@ public class UsersController {
 	/* ---------------- USER LOGIN ------------------------ */
 	
 	@PostMapping("/login")
-	public LoginRespone authenticateUser (@Valid @RequestParam String manhanvien, @RequestParam(name="password") String pass) throws Exception{
-		    Optional<users> usertemp=usersService.findByMNV(manhanvien);
+	public LoginRespone authenticateUser (@Valid @RequestBody LoginForm loginform) throws Exception{
+		    Optional<users> usertemp=usersService.findByMNV(loginform.getManhanvien());
 		    //System.out.println(usersService.passwordEncoder(pass+usertemp.get().getSalt()));
 			Authentication authentication = authenticationManager.authenticate(
 	                new UsernamePasswordAuthenticationToken(
-	                        manhanvien,
-	                        pass+usertemp.get().getSalt()
+	                		loginform.getManhanvien(),
+	                		loginform.getPassword()+usertemp.get().getSalt()
 	                )
 	        );
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -119,7 +120,7 @@ public class UsersController {
 	        // Trả về jwt cho người dùng.
 			CustomUserDetails user =(CustomUserDetails) authentication.getPrincipal();
 	        String jwt = tokenProvider.generateToken(user);
-	        return new LoginRespone(jwt,user);
+	        return new LoginRespone(jwt,user,usertemp.get());
 		
 	}
     
