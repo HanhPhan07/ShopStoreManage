@@ -91,9 +91,9 @@ public class UsersController {
 	
 	/* ---------------- UPDATE CUSTOMER ------------------------ */
 	@PutMapping("/users")
-//	public ResponseEntity<ServiceResult> update(@RequestBody Customer customer) {
-//		return new ResponseEntity<ServiceResult>(customerService.update(customer), HttpStatus.OK);
-//	}
+	public ResponseEntity<Boolean> update(@RequestBody users user) {
+		return new ResponseEntity<Boolean>(usersService.update(user), HttpStatus.OK);
+	}
 	public void updateCustomer(@RequestBody users customer) {
 		usersService.update(customer);
 	}
