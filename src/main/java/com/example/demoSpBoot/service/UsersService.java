@@ -43,12 +43,13 @@ public class UsersService implements UserDetailsService{
 		}else return false;
 	}
 
-	public void update(users customer) {
+	public boolean update(users customer) {
 
 		if (!usersrepository.findById(customer.getManhanvien()).isPresent()) {
-			System.out.print("Customer Not Found");
+			return false;
 		} else {
 			usersrepository.save(customer);
+			return true;
 		}
 	}
 

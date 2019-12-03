@@ -2,10 +2,13 @@ package com.example.demoSpBoot.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-
+import javax.persistence.Id;
+@Entity
 public class sanpham {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String masp;
@@ -14,7 +17,7 @@ public class sanpham {
 	private long giaban;
 	private int soluong;
 	private int trangthai;
-	private int nhasanxuat;
+	private int nhasx;
 	private String danhmuc;
 	private String anhsp;
 	private String motasp;
@@ -67,10 +70,10 @@ public class sanpham {
 		this.trangthai = trangthai;
 	}
 	public int getNhasanxuat() {
-		return nhasanxuat;
+		return nhasx;
 	}
 	public void setNhasanxuat(int nhasanxuat) {
-		this.nhasanxuat = nhasanxuat;
+		this.nhasx = nhasanxuat;
 	}
 	public String getDanhmuc() {
 		return danhmuc;
@@ -136,7 +139,7 @@ public class sanpham {
 		this.giaban = giaban;
 		this.soluong = soluong;
 		this.trangthai = trangthai;
-		this.nhasanxuat = nhasanxuat;
+		this.nhasx = nhasanxuat;
 		this.danhmuc = danhmuc;
 		this.anhsp = anhsp;
 		this.motasp = motasp;
