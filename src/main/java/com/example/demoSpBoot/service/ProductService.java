@@ -21,8 +21,11 @@ public class ProductService {
     }
 
 	public boolean create(sanpham product) {
+		if(!productRepo.findBymasp(product.getMasp()).isPresent())
+		{
 		productRepo.save(product);
 			return true;
+		}else return false;
 	}
 
 	public boolean update(sanpham product) {

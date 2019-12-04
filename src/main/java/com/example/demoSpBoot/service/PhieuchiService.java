@@ -21,8 +21,11 @@ public class PhieuchiService {
     }
 
 	public boolean create(phieuchi phieuchi) {
+		if(!phieuchiRepo.findBymaphieuchi(phieuchi.getMaphieuchi()).isPresent())
+		{
 		phieuchiRepo.save(phieuchi);
 			return true;
+		}else return false;
 	}
 
 	public boolean update(phieuchi phieuchi) {

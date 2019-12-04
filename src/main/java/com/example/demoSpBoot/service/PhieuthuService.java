@@ -21,8 +21,11 @@ public class PhieuthuService {
     }
 
 	public boolean create(phieuthu phieuthu) {
+		if(!phieuthuRepo.findBymaphieuthu(phieuthu.getMaphieuthu()).isPresent())
+		{
 		phieuthuRepo.save(phieuthu);
 			return true;
+		}else return false;
 	}
 
 	public boolean update(phieuthu phieuthu) {

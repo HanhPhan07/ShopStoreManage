@@ -21,8 +21,11 @@ public class HoadonNHService {
     }
 
 	public boolean create(hoadonnhaphang bill) {
+		if(!hoadonNHRepo.findBymahoadon(bill.getMahoadon()).isPresent())
+		{
 			hoadonNHRepo.save(bill);
 			return true;
+		}else return false;
 	}
 
 	public boolean update(hoadonnhaphang bill) {

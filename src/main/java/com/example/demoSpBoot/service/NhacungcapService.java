@@ -21,8 +21,11 @@ public class NhacungcapService {
     }
 
 	public boolean create(nhacungcap ncc) {
+		if(!nhaccRepo.findBymancc(ncc.getMancc()).isPresent())
+		{
 		nhaccRepo.save(ncc);
 			return true;
+		}else return false;
 	}
 
 	public boolean update(nhacungcap ncc) {
