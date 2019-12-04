@@ -59,6 +59,7 @@ export class ProfilesComponent implements OnInit {
     this.userUpdate.password = this.profileForm.controls['password'].value;
     this.userService.updateUser(this.userUpdate).subscribe(next => {
       this.currentUser = this.userUpdate;
+      localStorage.setItem('user', JSON.stringify(this.currentUser));
       alert('Update Successfully');
     }, error => {
       alert('Login Fail');
