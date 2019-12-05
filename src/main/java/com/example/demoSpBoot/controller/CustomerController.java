@@ -31,7 +31,7 @@ public class CustomerController {
 	/* ---------------- GET ALL CUSTOMER ------------------------ */
 	@GetMapping("/customers")
 	public ResponseEntity<List<khachhang>> findAllCustomers() {	
-		List<khachhang> listCustomers = customerService.findAll();
+		List<khachhang> listCustomers = customerService.findListAll();
 		if(listCustomers.isEmpty()) {
 			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
 		}
@@ -74,10 +74,46 @@ public class CustomerController {
 	/* ---------------- DELETE CUSTOMER ------------------------ */
 	
 	@DeleteMapping("/customers/{makhachhang}")
-	public ResponseEntity<khachhang> deleteCustomer(@PathVariable("makhachhang") String makhachhang) {
+	public ResponseEntity<khachhang> deleteCustomer(@RequestBody String makhachhang) {
 		if(customerService.delete(makhachhang)) return new ResponseEntity<khachhang>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<khachhang>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/* ---------------- SREACH CUSTOMER ------------------------ */
+	@GetMapping("/customers/search/{sreachkeyword}")
+	public ResponseEntity<List<khachhang>> sreachCustomer(@PathVariable("sreachkeyword") String sreachkeyword) {
+		List<khachhang> customer=customerService.findKhachHangByTenLike(sreachkeyword);
+		if(customer.isEmpty()) {
+			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.NO_CONTENT);
+		}
+		else {
+			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.OK);
+		}
+	}
+	@GetMapping("/customers/count")
+	public long countCustomers() {
+		 return customerService.count();
+	}
+	
+//	@GetMapping("/customers/indebtedness")
+//	public ResponseEntity<Long> indebtednessCustomers() {
+//		
+//		if(customerService.sumIndebtedness()>0) return new ResponseEntity<Long>(customerService.sumIndebtedness(),HttpStatus.OK);
+//		else {
+//			return new ResponseEntity<Long>(customerService.sumIndebtedness(),HttpStatus.NO_CONTENT);
+//		}
+//	}
+//	
+//	@GetMapping("/customers/totalmoney")
+//	public ResponseEntity<Long> totalMoney() {
+//		if(customerService.totalMoney()>0) return new ResponseEntity<Long>(customerService.totalMoney(),HttpStatus.OK);
+//		else {
+//			return new ResponseEntity<Long>(customerService.totalMoney(),HttpStatus.NO_CONTENT);
+//		}
+//	}
+	
+	
+	
 }
