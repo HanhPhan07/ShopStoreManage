@@ -1,6 +1,5 @@
 package com.example.demoSpBoot.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,9 @@ import com.example.demoSpBoot.repository.CustomerRepository;
 public class CustomerService {
 	@Autowired
 	CustomerRepository customerrepository;
-	public List<khachhang> findAll(){
-		return (List<khachhang>) customerrepository.findAll();
+	
+	public java.util.List<khachhang> findListAll(){
+		return  customerrepository.customerListAll();
 	}
 	
 	public Optional<khachhang> findByMNV(String makhachhang) {
@@ -48,4 +48,30 @@ public class CustomerService {
 			return true;
 		}
 	}
+	
+	public java.util.List<khachhang> findKhachHangByTenLike(String keyword) {
+		return customerrepository.findCustomerList(keyword);
+	}
+	
+	public long count(){
+		long count;
+		count=customerrepository.count();
+		if(count>0) return count;
+			else {
+				return 0;
+			}
+	}
+	
+//	public Long sumIndebtedness() {
+//		return customerrepository.sumIndebtedness();
+//	}
+//	
+//	public Long totalMoney() {
+//		if(customerrepository.sumMoney()>0) return customerrepository.sumMoney();
+//		else {
+//			return (long) 0;
+//		}
+//	}
+	
+	
 }
