@@ -1,11 +1,16 @@
 package com.example.demoSpBoot.model;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class nhacungcap {
@@ -19,6 +24,10 @@ public class nhacungcap {
 	private String diachi;
 	private Date createdAt;
 	private Date updatedAt;
+	@OneToMany(
+            cascade =  CascadeType.ALL,
+            mappedBy = "nhacungcap")
+	private Set<hoadonnhaphang> hoadonnhaphang;
 	public int getId() {
 		return id;
 	}
@@ -68,7 +77,7 @@ public class nhacungcap {
 		this.updatedAt = updatedAt;
 	}
 	public nhacungcap(int id, String mancc, String tenncc, String sdt, String email, String diachi, Date createdAt,
-			Date updatedAt) {
+			Date updatedAt, hoadonnhaphang... hoadonnhaphangs) {
 		this.id = id;
 		this.mancc = mancc;
 		this.tenncc = tenncc;
@@ -77,6 +86,8 @@ public class nhacungcap {
 		this.diachi = diachi;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.hoadonnhaphang=Stream.of(hoadonnhaphangs).collect(Collectors.toSet());
+		this.hoadonnhaphang.forEach(x -> x.setNhacungcap(this));
 	}
 	public nhacungcap() {
 		

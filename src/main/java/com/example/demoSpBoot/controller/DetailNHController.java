@@ -25,7 +25,7 @@ import com.example.demoSpBoot.service.DetailNHService;
 public class DetailNHController {
 	@Autowired
 	DetailNHService detailNHService;
-	@GetMapping("/detail")
+	@GetMapping("/detailNH")
 	public ResponseEntity<List<chitiethoadonnh>> findAllCates() {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
@@ -36,7 +36,7 @@ public class DetailNHController {
 		return new ResponseEntity<List<chitiethoadonnh>>(listDetail, HttpStatus.OK);
 	}
 	/* ---------------- GET CATE BY ID ------------------------ */
-	@GetMapping("/detail/{id}")
+	@GetMapping("/detailNH/{id}")
 	
 	public ResponseEntity<chitiethoadonnh> getcateById(
             @PathVariable("id") int id) {
@@ -50,7 +50,7 @@ public class DetailNHController {
     }
 
 	/* ---------------- CREATE NEW CATE ------------------------ */
-	@PostMapping("/detail")
+	@PostMapping("/detailNH")
 	public ResponseEntity<chitiethoadonnh> saveCate(@Valid @RequestBody chitiethoadonnh chitiet) {
 		if(detailNHService.create(chitiet)) return new ResponseEntity<chitiethoadonnh>(chitiet,HttpStatus.OK);
 		else {

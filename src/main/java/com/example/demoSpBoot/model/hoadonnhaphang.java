@@ -1,11 +1,18 @@
 package com.example.demoSpBoot.model;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,8 +22,13 @@ public class hoadonnhaphang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String mahoadon;
-	private int nhacungcap;
+	@ManyToOne
+    @JoinColumn(name = "nhacungcap")
+	private nhacungcap nhacungcap;
 	private int loaithanhtoan;
+	public void setNhacungcap(nhacungcap nhacungcap) {
+		this.nhacungcap = nhacungcap;
+	}
 	private long tonggia;
 	private long giamgia;
 	private long datra;
@@ -25,7 +37,10 @@ public class hoadonnhaphang {
 	private Date updatedAt;
 	private String nguoitao;
 	private String nguoisua;
-	private String chitiethoadon;
+	@OneToMany(
+            cascade =  CascadeType.ALL,
+            mappedBy = "hoadonnhaphang")
+	private Set<phieuchi> phieuchi;
 	public int getId() {
 		return id;
 	}
@@ -37,12 +52,6 @@ public class hoadonnhaphang {
 	}
 	public void setMahoadon(String mahoadon) {
 		this.mahoadon = mahoadon;
-	}
-	public int getNhacungcap() {
-		return nhacungcap;
-	}
-	public void setNhacungcap(int nhacungcap) {
-		this.nhacungcap = nhacungcap;
 	}
 	public int getLoaithanhtoan() {
 		return loaithanhtoan;
@@ -98,18 +107,11 @@ public class hoadonnhaphang {
 	public void setNguoisua(String nguoisua) {
 		this.nguoisua = nguoisua;
 	}
-	public String getChitiethoadon() {
-		return chitiethoadon;
-	}
-	public void setChitiethoadon(String chitiethoadon) {
-		this.chitiethoadon = chitiethoadon;
-	}
-	public hoadonnhaphang(int id, String mahoadon, int nhacungcap, int loaithanhtoan, long tonggia, long giamgia,
+	public hoadonnhaphang(int id, String mahoadon, int loaithanhtoan, long tonggia, long giamgia,
 			long datra, int trangthai, Date createdAt, Date updatedAt, String nguoitao, String nguoisua,
-			String chitiethoadon) {
+			nhacungcap nhacungcap, phieuchi...phieuchis) {
 		this.id = id;
 		this.mahoadon = mahoadon;
-		this.nhacungcap = nhacungcap;
 		this.loaithanhtoan = loaithanhtoan;
 		this.tonggia = tonggia;
 		this.giamgia = giamgia;
@@ -119,7 +121,12 @@ public class hoadonnhaphang {
 		this.updatedAt = updatedAt;
 		this.nguoitao = nguoitao;
 		this.nguoisua = nguoisua;
-		this.chitiethoadon = chitiethoadon;
+		this.nhacungcap=nhacungcap;
+		this.phieuchi=Stream.of(phieuchis).collect(Collectors.toSet());
+		this.phieuchi.forEach(x -> x.setHoadonnhaphang(this));
+	}
+	public nhacungcap getNhacungcap() {
+		return nhacungcap;
 	}
 	public hoadonnhaphang() {
 

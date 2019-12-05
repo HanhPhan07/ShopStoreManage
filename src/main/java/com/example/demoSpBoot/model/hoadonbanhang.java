@@ -1,15 +1,18 @@
 package com.example.demoSpBoot.model;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Builder;
@@ -24,7 +27,6 @@ public class hoadonbanhang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String mahoadon;
-	//private String makhachhang;
 	private int loaithanhtoan;
 	private long tonggia;
 	private long giamgia;
@@ -34,6 +36,10 @@ public class hoadonbanhang {
 	private Date updatedAt;
 	private String nguoisua;
 	private String nguoitao;
+	@OneToMany(
+            cascade =  CascadeType.ALL,
+            mappedBy = "hoadonbanhang")
+	private Set<phieuthu> phieuthu;
 	@ManyToOne
     @JoinColumn(name = "makhachhang")
 	private khachhang khachhang;
@@ -114,7 +120,7 @@ public class hoadonbanhang {
 
 	public hoadonbanhang(int id, String mahoadon,  int loaithanhtoan, long tonggia, long giamgia,
 			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, String nguoisua, String nguoitao,
-			khachhang khachhang) {
+			khachhang khachhang, phieuthu...phieuthus) {
 		this.id = id;
 		this.mahoadon = mahoadon;
 		this.khachhang=khachhang;
@@ -127,6 +133,8 @@ public class hoadonbanhang {
 		this.updatedAt = updatedAt;
 		this.nguoisua = nguoisua;
 		this.nguoitao = nguoitao;
+		this.phieuthu=Stream.of(phieuthus).collect(Collectors.toSet());
+		this.phieuthu.forEach(x -> x.setHoadonbanhang(this));
 	}
 	public hoadonbanhang() {
 

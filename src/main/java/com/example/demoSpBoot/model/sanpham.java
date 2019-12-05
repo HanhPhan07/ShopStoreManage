@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 @Entity
 public class sanpham {
 	@Id
@@ -17,7 +19,12 @@ public class sanpham {
 	private long giaban;
 	private int soluong;
 	private int trangthai;
-	private int nhasx;
+	@ManyToOne
+    @JoinColumn(name = "nhasx")
+	private nhasanxuat nhasanxuat;
+	public void setNhasanxuat(nhasanxuat nhasanxuat) {
+		this.nhasanxuat = nhasanxuat;
+	}
 	private String danhmuc;
 	private String anhsp;
 	private String motasp;
@@ -27,6 +34,7 @@ public class sanpham {
 	private boolean displaywebsite;
 	private Date createdAt;
 	private Date updatedAt;
+	
 	public int getId() {
 		return id;
 	}
@@ -69,11 +77,8 @@ public class sanpham {
 	public void setTrangthai(int trangthai) {
 		this.trangthai = trangthai;
 	}
-	public int getNhasanxuat() {
-		return nhasx;
-	}
-	public void setNhasanxuat(int nhasanxuat) {
-		this.nhasx = nhasanxuat;
+	public nhasanxuat getNhasanxuat() {
+		return nhasanxuat;
 	}
 	public String getDanhmuc() {
 		return danhmuc;
@@ -130,8 +135,8 @@ public class sanpham {
 		this.updatedAt = updatedAt;
 	}
 	public sanpham(int id, String masp, String tensp, long giagoc, long giaban, int soluong, int trangthai,
-			int nhasanxuat, String danhmuc, String anhsp, String motasp, String donvitinh, boolean ishot, boolean isnew,
-			boolean displaywebsite, Date createdAt, Date updatedAt) {
+			String danhmuc, String anhsp, String motasp, String donvitinh, boolean ishot, boolean isnew,
+			boolean displaywebsite, Date createdAt, Date updatedAt, nhasanxuat nhasanxuat) {
 		this.id = id;
 		this.masp = masp;
 		this.tensp = tensp;
@@ -139,7 +144,6 @@ public class sanpham {
 		this.giaban = giaban;
 		this.soluong = soluong;
 		this.trangthai = trangthai;
-		this.nhasx = nhasanxuat;
 		this.danhmuc = danhmuc;
 		this.anhsp = anhsp;
 		this.motasp = motasp;
@@ -149,6 +153,7 @@ public class sanpham {
 		this.displaywebsite = displaywebsite;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.nhasanxuat=nhasanxuat;
 	}
 	public sanpham() {
 

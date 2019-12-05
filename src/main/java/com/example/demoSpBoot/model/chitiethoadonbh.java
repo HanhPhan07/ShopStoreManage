@@ -17,6 +17,12 @@ public class chitiethoadonbh {
 	private int soluong;
 	private long gia;
 	private long giamgia;
+	public int getId_hoadon() {
+		return id_hoadon;
+	}
+	public void setId_hoadon(int id_hoadon) {
+		this.id_hoadon = id_hoadon;
+	}
 	public long getGia() {
 		return gia;
 	}
@@ -35,12 +41,6 @@ public class chitiethoadonbh {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getId_hoadon() {
-		return id_hoadon;
-	}
-	public void setId_hoadon(int id_hoadon) {
-		this.id_hoadon = id_hoadon;
-	}
 	public int getId_sanpham() {
 		return id_sanpham;
 	}
@@ -55,7 +55,7 @@ public class chitiethoadonbh {
 	}
 	public chitiethoadonbh(int id, int id_hoadon, int id_sanpham, int soluong, long gia, long giamgia) {
 		this.id = id;
-		this.id_hoadon = id_hoadon;
+		this.id_hoadon=id_hoadon;
 		this.id_sanpham = id_sanpham;
 		this.soluong = soluong;
 		this.gia=gia;

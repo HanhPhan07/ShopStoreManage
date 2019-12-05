@@ -7,10 +7,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.sql.DataSource;
-
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.Jdbc;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
 
