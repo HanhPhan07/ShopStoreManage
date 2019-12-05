@@ -2,14 +2,29 @@ package com.example.demoSpBoot.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Entity
+@Data
+@Builder
+@Table(name = "hoadonbanhang")
 public class hoadonbanhang {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String mahoadon;
-	private String makhachhang;
+	//private String makhachhang;
 	private int loaithanhtoan;
 	private long tonggia;
 	private long giamgia;
@@ -19,7 +34,15 @@ public class hoadonbanhang {
 	private Date updatedAt;
 	private String nguoisua;
 	private String nguoitao;
-	private String chitiethoadon;
+	@ManyToOne
+    @JoinColumn(name = "makhachhang")
+	private khachhang khachhang;
+	public khachhang getKhachhang() {
+		return khachhang;
+	}
+	public void setKhachhang(khachhang khachhang) {
+		this.khachhang = khachhang;
+	}
 	public int getId() {
 		return id;
 	}
@@ -32,12 +55,7 @@ public class hoadonbanhang {
 	public void setMahoadon(String mahoadon) {
 		this.mahoadon = mahoadon;
 	}
-	public String getMakhachhang() {
-		return makhachhang;
-	}
-	public void setMakhachhang(String makhachhang) {
-		this.makhachhang = makhachhang;
-	}
+	
 	public int getLoaithanhtoan() {
 		return loaithanhtoan;
 	}
@@ -92,18 +110,14 @@ public class hoadonbanhang {
 	public void setNguoitao(String nguoitao) {
 		this.nguoitao = nguoitao;
 	}
-	public String getChitiethoadon() {
-		return chitiethoadon;
-	}
-	public void setChitiethoadon(String chitiethoadon) {
-		this.chitiethoadon = chitiethoadon;
-	}
-	public hoadonbanhang(int id, String mahoadon, String makhachhang, int loaithanhtoan, long tonggia, long giamgia,
+
+
+	public hoadonbanhang(int id, String mahoadon,  int loaithanhtoan, long tonggia, long giamgia,
 			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, String nguoisua, String nguoitao,
-			String chitiethoadon) {
+			khachhang khachhang) {
 		this.id = id;
 		this.mahoadon = mahoadon;
-		this.makhachhang = makhachhang;
+		this.khachhang=khachhang;
 		this.loaithanhtoan = loaithanhtoan;
 		this.tonggia = tonggia;
 		this.giamgia = giamgia;
@@ -113,7 +127,6 @@ public class hoadonbanhang {
 		this.updatedAt = updatedAt;
 		this.nguoisua = nguoisua;
 		this.nguoitao = nguoitao;
-		this.chitiethoadon = chitiethoadon;
 	}
 	public hoadonbanhang() {
 
