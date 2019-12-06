@@ -13,6 +13,7 @@ import com.example.demoSpBoot.model.khachhang;
 @Repository
 public interface CustomerRepository extends JpaRepository<khachhang , String>{
 	
+    
 //		@Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at), "
 //				+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
 //				+ "INNER JOIN hoadonbanhang b ON k.makhachhang=b.makhachhang"
@@ -25,10 +26,10 @@ public interface CustomerRepository extends JpaRepository<khachhang , String>{
 ////	    @Query( "SELECT sum(tonggia) FROM com.example.demoSpBoot.model.hoadonbanhang")
 ////	    Long sumMoney();
 ////	    
-////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
-////	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
-////	    		+ "INNER JOIN hoadonbanhang b "
-////	    		+ "ON k.makhachhang=b.makhachhang  GROUP BY (k.makhachhang)")
+//	    @Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
+//	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
+//	    		+ "INNER JOIN hoadonbanhang b "
+//	    		+ "ON k.makhachhang=b.makhachhang  GROUP BY (k.makhachhang)",nativeQuery = true)
 //	    java.util.List<khachhang> customerListAll();
 //
 ////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
