@@ -88,7 +88,7 @@
     <div class="row">
       <div class="col-md-8">
         <div class="order-search" style="margin: 10px 0px; position: relative;">
-          <input class="form-control ui-autocomplete-input" id="search-pro-box" type="text"
+          <input class="form-control ui-autocomplete-input" (change) = "searchProd()" ([ngModel])="keySearchProd" name="keySearchProd" type="text"
             placeholder="Nhập mã sản phẩm hoặc tên sản phẩm" autocomplete="off">
         </div>
 

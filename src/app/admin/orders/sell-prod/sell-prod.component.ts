@@ -7,12 +7,17 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class SellProdComponent implements OnInit {
   modalRef: BsModalRef;
+  keySearchProd: string;
   constructor(private modalService: BsModalService) { }
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
   ngOnInit() {
+  }
+
+  searchProd() {
+
   }
 
 }

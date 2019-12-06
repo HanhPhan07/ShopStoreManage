@@ -1,6 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { AdminComponent } from './admin.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -23,7 +25,14 @@ import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod
 import { ProfilesComponent } from './profiles/profiles.component';
 
 @NgModule({
-  imports: [CommonModule, AdminRoutingModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    AdminRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot()
+  ],
   declarations: [
     AdminComponent,
     HeaderComponent,

@@ -1,4 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { viLocale } from 'ngx-bootstrap/locale';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-admin',
@@ -8,9 +11,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class AdminComponent implements OnInit, OnDestroy {
   bodyClasses = 'skin-blue sidebar-mini';
   body: HTMLBodyElement = document.getElementsByTagName('body')[0];
-  constructor() { }
+  locale = 'vi';
+  constructor(private localeService: BsLocaleService) { }
 
   ngOnInit() {
+    defineLocale('vi', viLocale);
+    this.localeService.use(this.locale);
     // add the the body classes
     this.body.classList.add('skin-blue');
     this.body.classList.add('sidebar-mini');
