@@ -1,11 +1,10 @@
 package com.example.demoSpBoot.model;
 
 import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Builder;
 import lombok.Data;
@@ -27,22 +28,48 @@ public class hoadonbanhang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String mahoadon;
+	//private String makhachhang;
 	private int loaithanhtoan;
 	private long tonggia;
 	private long giamgia;
 	private long khachhangtra;
 	private int trangthai;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_at")
 	private Date createdAt;
+	
+	
+	@Column(name = "updated_at",nullable = true)
 	private Date updatedAt;
 	private String nguoisua;
 	private String nguoitao;
-	@OneToMany(
-            cascade =  CascadeType.ALL,
-            mappedBy = "hoadonbanhang")
-	private Set<phieuthu> phieuthu;
 	@ManyToOne
     @JoinColumn(name = "makhachhang")
 	private khachhang khachhang;
+	
+	@Column(nullable = true)
+	@OneToMany( cascade =  CascadeType.ALL )
+	@JoinColumn( name= "idhoadon", referencedColumnName= "id")
+	private List<phieuthu> phieuthus;
+	
+	public List<phieuthu> getPhieuthus() {
+		return phieuthus;
+	}
+	public void setPhieuthus(List<phieuthu> phieuthus) {
+		this.phieuthus = phieuthus;
+	}
+	@Column(nullable = true)
+	@OneToMany( cascade =  CascadeType.ALL )
+	@JoinColumn( name= "id_hoadon", referencedColumnName= "id")
+	private List<chitiethoadonbh> chitiethoadons;
+	
+	public List<chitiethoadonbh> getChitiethoadons() {
+		return chitiethoadons;
+	}
+	public void setChitiethoadons(List<chitiethoadonbh> chitiethoadons) {
+		this.chitiethoadons = chitiethoadons;
+	}
 	public khachhang getKhachhang() {
 		return khachhang;
 	}
@@ -119,11 +146,9 @@ public class hoadonbanhang {
 
 
 	public hoadonbanhang(int id, String mahoadon,  int loaithanhtoan, long tonggia, long giamgia,
-			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, String nguoisua, String nguoitao,
-			khachhang khachhang, phieuthu...phieuthus) {
+			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, String nguoisua, String nguoitao) {
 		this.id = id;
 		this.mahoadon = mahoadon;
-		this.khachhang=khachhang;
 		this.loaithanhtoan = loaithanhtoan;
 		this.tonggia = tonggia;
 		this.giamgia = giamgia;
@@ -133,10 +158,9 @@ public class hoadonbanhang {
 		this.updatedAt = updatedAt;
 		this.nguoisua = nguoisua;
 		this.nguoitao = nguoitao;
-		this.phieuthu=Stream.of(phieuthus).collect(Collectors.toSet());
-		this.phieuthu.forEach(x -> x.setHoadonbanhang(this));
 	}
 	public hoadonbanhang() {
 
-	}	
+	}
+	
 }

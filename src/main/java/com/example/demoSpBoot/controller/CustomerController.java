@@ -29,73 +29,73 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 	/* ---------------- GET ALL CUSTOMER ------------------------ */
-	@GetMapping("/customers")
-	public ResponseEntity<List<khachhang>> findAllCustomers() {	
-		List<khachhang> listCustomers = customerService.findListAll();
-		if(listCustomers.isEmpty()) {
-			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<khachhang>>(listCustomers, HttpStatus.OK);
-	}
-	
-	/* ---------------- GET CUSTOMER BY ID ------------------------ */
-	@GetMapping("/customers/{manhanvien}")
-	
-	public ResponseEntity<khachhang> getProductById(
-            @PathVariable("makhachhang") String makhachhang) {
-        Optional<khachhang> product = customerService.findByMNV(makhachhang);
-
-        if (!product.isPresent()) {
-            return new ResponseEntity<>(product.get(),
-                    HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(product.get(), HttpStatus.OK);
-    }
-
-	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
-	@PostMapping("/customers")
-	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer) {
-		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
-		else {
-			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
-		}
-		
-	}
-	
-	/* ---------------- UPDATE CUSTOMER ------------------------ */
-	@PutMapping("/customers")
-
-	public ResponseEntity<khachhang> updateCustomer(@RequestBody khachhang customer) {
-		if(customerService.update(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
-		else {
-			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
-		}
-	}
-	/* ---------------- DELETE CUSTOMER ------------------------ */
-	
-	@DeleteMapping("/customers/{makhachhang}")
-	public ResponseEntity<khachhang> deleteCustomer(@RequestBody String makhachhang) {
-		if(customerService.delete(makhachhang)) return new ResponseEntity<khachhang>(HttpStatus.OK);
-		else {
-			return new ResponseEntity<khachhang>(HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	/* ---------------- SREACH CUSTOMER ------------------------ */
-	@GetMapping("/customers/search/{sreachkeyword}")
-	public ResponseEntity<List<khachhang>> sreachCustomer(@PathVariable("sreachkeyword") String sreachkeyword) {
-		List<khachhang> customer=customerService.findKhachHangByTenLike(sreachkeyword);
-		if(customer.isEmpty()) {
-			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.NO_CONTENT);
-		}
-		else {
-			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.OK);
-		}
-	}
-	@GetMapping("/customers/count")
-	public long countCustomers() {
-		 return customerService.count();
-	}
+//	@GetMapping("/customers")
+//	public ResponseEntity<List<khachhang>> findAllCustomers() {	
+//		List<khachhang> listCustomers = customerService.findListAll();
+//		if(listCustomers.isEmpty()) {
+//			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
+//		}
+//		return new ResponseEntity<List<khachhang>>(listCustomers, HttpStatus.OK);
+//	}
+//	
+//	/* ---------------- GET CUSTOMER BY ID ------------------------ */
+//	@GetMapping("/customers/{manhanvien}")
+//	
+//	public ResponseEntity<khachhang> getProductById(
+//            @PathVariable("makhachhang") String makhachhang) {
+//        Optional<khachhang> product = customerService.findByMNV(makhachhang);
+//
+//        if (!product.isPresent()) {
+//            return new ResponseEntity<>(product.get(),
+//                    HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(product.get(), HttpStatus.OK);
+//    }
+//
+//	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
+//	@PostMapping("/customers")
+//	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer) {
+//		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
+//		else {
+//			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
+//		}
+//		
+//	}
+//	
+//	/* ---------------- UPDATE CUSTOMER ------------------------ */
+//	@PutMapping("/customers")
+//
+//	public ResponseEntity<khachhang> updateCustomer(@RequestBody khachhang customer) {
+//		if(customerService.update(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
+//		else {
+//			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
+//		}
+//	}
+//	/* ---------------- DELETE CUSTOMER ------------------------ */
+//	
+//	@DeleteMapping("/customers/{makhachhang}")
+//	public ResponseEntity<khachhang> deleteCustomer(@RequestBody String makhachhang) {
+//		if(customerService.delete(makhachhang)) return new ResponseEntity<khachhang>(HttpStatus.OK);
+//		else {
+//			return new ResponseEntity<khachhang>(HttpStatus.NOT_FOUND);
+//		}
+//	}
+//	
+//	/* ---------------- SREACH CUSTOMER ------------------------ */
+//	@GetMapping("/customers/search/{sreachkeyword}")
+//	public ResponseEntity<List<khachhang>> sreachCustomer(@PathVariable("sreachkeyword") String sreachkeyword) {
+//		List<khachhang> customer=customerService.findKhachHangByTenLike(sreachkeyword);
+//		if(customer.isEmpty()) {
+//			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.NO_CONTENT);
+//		}
+//		else {
+//			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.OK);
+//		}
+//	}
+//	@GetMapping("/customers/count")
+//	public long countCustomers() {
+//		 return customerService.count();
+//	}
 	
 //	@GetMapping("/customers/indebtedness")
 //	public ResponseEntity<Long> indebtednessCustomers() {

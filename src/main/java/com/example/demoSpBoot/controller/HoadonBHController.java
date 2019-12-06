@@ -1,11 +1,15 @@
 package com.example.demoSpBoot.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.hoadonbanhang;
@@ -29,15 +34,37 @@ public class HoadonBHController {
 	HoadonBHService hoadonService;
 	@GetMapping("/billBHs")
 	/* ---------------- GET ALL BILL ------------------------ */
-	public ResponseEntity<List<hoadonbanhang>> findAllBills() {
-		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
-		
-		List<hoadonbanhang> listBill= hoadonService.findAll();
+	public ResponseEntity<Page<hoadonbanhang>> findAllBills(@RequestParam int pageNumber, @RequestParam int pageSize) {
+		Page<hoadonbanhang> listBill= hoadonService.findAll(pageNumber,pageSize);
 		if(listBill.isEmpty()) {
-			return new ResponseEntity<List<hoadonbanhang>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<hoadonbanhang>>(listBill, HttpStatus.OK);
+		return new ResponseEntity<Page<hoadonbanhang>>(listBill, HttpStatus.OK);
 	}
+	
+	@GetMapping("/billBHs/search")
+	/* ---------------- GET ALL BILL ------------------------ */
+	public ResponseEntity<Page<hoadonbanhang>> findBills(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm, @RequestParam String fromdate,@RequestParam String todate) throws ParseException {
+		Page<hoadonbanhang> listBill = null;
+		System.out.println("searchTerm: "+searchTerm);
+		System.out.println("fromdate: "+fromdate);
+		System.out.println("todate: "+todate);
+		if(fromdate == "" &&todate=="") {
+			listBill= hoadonService.searchBillNoDate(pageNumber,pageSize,searchTerm);
+		}else {
+			Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(fromdate);  
+			Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(todate);
+			listBill= hoadonService.searchBill(pageNumber,pageSize,searchTerm,date1,date2);
+		}
+		
+		if(listBill.isEmpty()) {
+			return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Page<hoadonbanhang>>(listBill, HttpStatus.OK);
+	}
+	
+	
+
 	/* ---------------- GET BILL BY ID ------------------------ */
 	@GetMapping("/billBHs/{id}")
 	

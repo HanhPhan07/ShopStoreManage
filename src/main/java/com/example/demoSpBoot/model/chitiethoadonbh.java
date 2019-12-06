@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,16 +15,20 @@ public class chitiethoadonbh {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int id_hoadon;
-	private int id_sanpham;
+	
+	@ManyToOne
+    @JoinColumn(name = "id_sanpham", referencedColumnName= "id")
+	private sanpham sanpham;
+	public sanpham getSanpham() {
+		return sanpham;
+	}
+	public void setSanpham(sanpham sanpham) {
+		this.sanpham = sanpham;
+	}
+	//private int id_sanpham;
 	private int soluong;
 	private long gia;
 	private long giamgia;
-	public int getId_hoadon() {
-		return id_hoadon;
-	}
-	public void setId_hoadon(int id_hoadon) {
-		this.id_hoadon = id_hoadon;
-	}
 	public long getGia() {
 		return gia;
 	}
@@ -41,28 +47,27 @@ public class chitiethoadonbh {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getId_sanpham() {
-		return id_sanpham;
-	}
-	public void setId_sanpham(int id_sanpham) {
-		this.id_sanpham = id_sanpham;
-	}
+	
 	public int getSoluong() {
 		return soluong;
 	}
 	public void setSoluong(int soluong) {
 		this.soluong = soluong;
 	}
-	public chitiethoadonbh(int id, int id_hoadon, int id_sanpham, int soluong, long gia, long giamgia) {
+	public chitiethoadonbh(int id, int soluong, long gia, long giamgia) {
 		this.id = id;
-		this.id_hoadon=id_hoadon;
-		this.id_sanpham = id_sanpham;
 		this.soluong = soluong;
 		this.gia=gia;
 		this.giamgia=giamgia;
 	}
 	public chitiethoadonbh() {
 		
+	}
+	public int getId_hoadon() {
+		return id_hoadon;
+	}
+	public void setId_hoadon(int id_hoadon) {
+		this.id_hoadon = id_hoadon;
 	}
 	
 }
