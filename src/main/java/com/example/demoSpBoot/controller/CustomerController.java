@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demoSpBoot.dto.KhachHangDTO;
 import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.service.CustomerService;
 
@@ -29,14 +30,14 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 	/* ---------------- GET ALL CUSTOMER ------------------------ */
-//	@GetMapping("/customers")
-//	public ResponseEntity<List<khachhang>> findAllCustomers() {	
-//		List<khachhang> listCustomers = customerService.findListAll();
-//		if(listCustomers.isEmpty()) {
-//			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
-//		}
-//		return new ResponseEntity<List<khachhang>>(listCustomers, HttpStatus.OK);
-//	}
+	@GetMapping("/customers")
+	public ResponseEntity<List<KhachHangDTO>> findAllCustomers() {	
+		List<KhachHangDTO> listCustomers = customerService.findListAll();
+		if(listCustomers.isEmpty()) {
+			return new ResponseEntity<List<KhachHangDTO>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<KhachHangDTO>>(listCustomers, HttpStatus.OK);
+	}
 //	
 //	/* ---------------- GET CUSTOMER BY ID ------------------------ */
 //	@GetMapping("/customers/{manhanvien}")

@@ -1,21 +1,26 @@
 package com.example.demoSpBoot.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demoSpBoot.dto.KhachHangDTO;
 import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.repository.CustomerRepository;
+import com.example.demoSpBoot.repository.KhachHangDTORepository;
 
 @Service
 public class CustomerService {
 	@Autowired
 	CustomerRepository customerrepository;
 	
-//	public java.util.List<khachhang> findListAll(){
-//		return  customerrepository.customerListAll();
-//	}
+	@Autowired
+	KhachHangDTORepository khachhangDTORes;
+	public java.util.List<KhachHangDTO> findListAll(){
+		return  khachhangDTORes.customerListAll();
+	}
 //	
 //	public Optional<khachhang> findByMNV(String makhachhang) {
 //        return customerrepository.findById(makhachhang);

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.example.demoSpBoot.dto.KhachHangDTO;
 import com.example.demoSpBoot.model.khachhang;
 
 
@@ -25,11 +26,7 @@ public interface CustomerRepository extends JpaRepository<khachhang , String>{
 ////	    @Query( "SELECT sum(tonggia) FROM com.example.demoSpBoot.model.hoadonbanhang")
 ////	    Long sumMoney();
 ////	    
-////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
-////	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
-////	    		+ "INNER JOIN hoadonbanhang b "
-////	    		+ "ON k.makhachhang=b.makhachhang  GROUP BY (k.makhachhang)")
-//	    java.util.List<khachhang> customerListAll();
+	    
 //
 ////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
 ////	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
