@@ -21,6 +21,7 @@ public class DetailBHService {
     }
 
 	public boolean create(chitiethoadonbh bill) {
+			
 			detailBHRepo.save(bill);
 			return true;
 	}

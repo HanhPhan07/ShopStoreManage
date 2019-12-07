@@ -38,6 +38,14 @@ public class CustomerController {
 		}
 		return new ResponseEntity<List<KhachHangDTO>>(listCustomers, HttpStatus.OK);
 	}
+	@GetMapping("/allcustomers")
+	public ResponseEntity<List<khachhang>> getAllCustomers() {	
+		List<khachhang> listCustomers = customerService.getListAll();
+		if(listCustomers.isEmpty()) {
+			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<khachhang>>(listCustomers, HttpStatus.OK);
+	}
 //	
 //	/* ---------------- GET CUSTOMER BY ID ------------------------ */
 //	@GetMapping("/customers/{manhanvien}")

@@ -56,6 +56,13 @@ public class DetailBHController {
 		else {
 			return new ResponseEntity<chitiethoadonbh>(chitiet,HttpStatus.NOT_FOUND);
 		}
-		
+	}
+	
+	@PostMapping("/detailsBH")
+	public ResponseEntity<Boolean> saveDetailsBill(@Valid @RequestBody chitiethoadonbh[] chitiets) {
+		for( @Valid chitiethoadonbh chitiet : chitiets) {
+			if(!detailBHService.create(chitiet)) return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
+		} 
+		return new ResponseEntity<>(true,HttpStatus.OK);
 	}
 }

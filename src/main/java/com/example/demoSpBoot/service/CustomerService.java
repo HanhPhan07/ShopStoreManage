@@ -16,6 +16,9 @@ public class CustomerService {
 	@Autowired
 	CustomerRepository customerrepository;
 	
+	public java.util.List<khachhang> getListAll(){
+		return  customerrepository.findAll();
+	}
 	@Autowired
 	KhachHangDTORepository khachhangDTORes;
 	public java.util.List<KhachHangDTO> findListAll(){
