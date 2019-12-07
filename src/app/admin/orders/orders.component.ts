@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BillsBhService } from 'src/app/_services/bills-bh.service';
 import { HoaDonBanHang } from 'src/app/_models/hoadonbanhang';
 import { Pagination, PaginatedResult } from '../../_models/pagination';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -26,11 +27,13 @@ export class OrdersComponent implements OnInit {
   itemsPerPage = 4;
   listSubTrTableBill = [];
 
-  constructor( private orderService: BillsBhService ) { }
+  constructor(
+    private orderService: BillsBhService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.fitlerloaidonhang = 0;
-
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.listBills = new Array();
     this.pagination = {
@@ -40,8 +43,11 @@ export class OrdersComponent implements OnInit {
       itemsPerPage: this.itemsPerPage
     };
     this.resetFilter();
-    this.search();
     this.baseDataListBills = [];
+    this.activatedRoute.data.subscribe(data => {
+      this.updateListBill(data.bills.result);
+      this.pagination = data.bills.pagination;
+    });
 
   }
 
@@ -55,7 +61,7 @@ export class OrdersComponent implements OnInit {
   }
 
   editBill(maHD: number) {
-
+    this.router.navigate(['/admin/orders/' + maHD]);
   }
 
   pageChanged(event: any): void {
@@ -306,4 +312,6 @@ export class OrdersComponent implements OnInit {
     }
 
   }
+
+
 }

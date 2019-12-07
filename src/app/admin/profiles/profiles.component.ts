@@ -29,11 +29,6 @@ export class ProfilesComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.userUpdate = this.currentUser;
     this.updateValueProfileForm();
-    // this.userService.getUserByMaNV(this.currentUser.manhanvien).subscribe({
-    //   next(num) { console.log(num); },
-    //   complete() { console.log('Finished sequence'); }
-    // });
-
   }
 
   updateValueProfileForm() {

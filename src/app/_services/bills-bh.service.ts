@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -61,7 +61,25 @@ constructor( private httpClient: HttpClient ) { }
       }));
   }
 
+  getBillById(id: number): any {
+    return this.httpClient.get(environment.baseUrl + 'billBHs/' + id);
+  }
+
   deleteBill(id: number) {
     return this.httpClient.delete(environment.baseUrl + 'billBHs/' + id);
   }
+
+  postBill(bill: HoaDonBanHang): any {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.post(environment.baseUrl + 'billBHs', bill, { headers: headers });
+  }
+
+  putBill(bill: HoaDonBanHang): any {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.put(environment.baseUrl + 'billBHs', bill, { headers: headers });
+  }
+
+
 }

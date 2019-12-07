@@ -5,5 +5,5 @@ export interface KhachHang {
   email: string;
   diachi: string;
   ngaysinh: Date;
-  gioitinh: number;
+  gioitinh: boolean;
 }

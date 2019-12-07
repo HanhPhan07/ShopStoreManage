@@ -1,9 +1,8 @@
 import { SanPham } from './sanpham';
-import { HoaDonBanHang } from './hoadonbanhang';
 
-export interface ChiTietHoaDonBH {
-  id: number;
-  hoadonbanhang: HoaDonBanHang;
+export class ChiTietHoaDonBH {
+  id?: number;
+  id_hoadon: number;
   sanpham: SanPham;
   soluong: number;
   gia: number;

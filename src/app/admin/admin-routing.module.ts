@@ -12,6 +12,13 @@ import { CategoriesProdComponent } from './products/categories-prod/categories-p
 import { ManufProdComponent } from './products/manuf-prod/manuf-prod.component';
 import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod.component';
 import { ProfilesComponent } from './profiles/profiles.component';
+import { EditOrderComponent } from './orders/edit-order/edit-order.component';
+
+import { ProductsResolver } from '../_resolver/product-resolver';
+import { CustomersResolver } from '../_resolver/customer-resolver';
+import { BillBHResolver } from '../_resolver/bill-bh-resolver';
+import { EditBillResolver } from '../_resolver/edit-bill-resolver';
+
 const routes: Routes = [
   {
     path: '',
@@ -31,11 +38,18 @@ const routes: Routes = [
       },
       {
         path: 'orders',
-        component: OrdersComponent
+        component: OrdersComponent,
+        resolve: {bills: BillBHResolver}
+      },
+      {
+        path: 'orders/:id',
+        component: EditOrderComponent,
+        resolve: {bill: EditBillResolver, prods: ProductsResolver, custs: CustomersResolver}
       },
       {
         path: 'sell-prod',
-        component: SellProdComponent
+        component: SellProdComponent,
+        resolve: {prods: ProductsResolver, custs: CustomersResolver}
       },
       {
         path: 'products',
