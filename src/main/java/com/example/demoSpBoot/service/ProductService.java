@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ import com.example.demoSpBoot.repository.ProductRepository;
 public class ProductService {
 	@Autowired
 	ProductRepository productRepo;
+	public List<sanpham> findAllProd(){
+		return (List<sanpham>) productRepo.findAll();
+	}
+	
 	public Page<sanpham> findAll(int pageNumber,int pageSize){
 		Sort sortable = Sort.by("id").ascending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);

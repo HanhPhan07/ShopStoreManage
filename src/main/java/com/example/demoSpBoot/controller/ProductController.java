@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -28,6 +29,19 @@ import com.example.demoSpBoot.service.ProductService;
 public class ProductController {
 	@Autowired
 	ProductService productService;
+	
+	@GetMapping("/allproducts")
+	/* ---------------- GET ALL PRODUCT ------------------------ */
+	public ResponseEntity<List<sanpham>> findAllProduct() {
+		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
+		
+		List<sanpham> listProduct= productService.findAllProd();
+		if(listProduct.isEmpty()) {
+			return new ResponseEntity<List<sanpham>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<sanpham>>(listProduct, HttpStatus.OK);
+	}
+	
 	@GetMapping("/product")
 	/* ---------------- GET ALL PRODUCT ------------------------ */
 	public ResponseEntity<Page<sanpham>> findAllProduct(@RequestParam int pageNumber, @RequestParam int pageSize) {

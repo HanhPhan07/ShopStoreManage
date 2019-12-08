@@ -69,7 +69,7 @@ public class HoadonBHService {
 	}
 	
 	public Page<hoadonbanhang> searchBill( int pageNumber, int pageSize, String searchTerm, Date fromdate, Date todate){
-		Sort sortable = Sort.by("id").ascending();
+		Sort sortable = Sort.by("id").descending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		java.sql.Date sDate1 = convertUtilToSql(fromdate);
 		java.sql.Date sDate2 = convertUtilToSql(todate);
@@ -77,7 +77,7 @@ public class HoadonBHService {
 	}
 	
 	public Page<hoadonbanhang> searchBillNoDate( int pageNumber, int pageSize, String searchTerm){
-		Sort sortable = Sort.by("id").ascending();
+		Sort sortable = Sort.by("id").descending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<hoadonbanhang>) hoadonBHRepo.findByMahoadonContaining(phantrang,searchTerm);
 	}
