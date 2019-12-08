@@ -15,34 +15,15 @@ import com.example.demoSpBoot.model.khachhang;
 public interface CustomerRepository extends JpaRepository<khachhang , String>{
 	
     
-//		@Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at), "
-//				+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
-//				+ "INNER JOIN hoadonbanhang b ON k.makhachhang=b.makhachhang"
-//				+ "GROUP BY (k.makhachhang) HAVING k.ten LIKE '%ten%'")
-//	    java.util.List<khachhang> findCustomerList(String ten);
-//	    
+   
 ////	    @Query( "SELECT sum(tonggia -khachhangtra) FROM hoadonbanhang  WHERE (tonggia-khachhangtra)>0")
 ////	    Long sumIndebtedness();
 ////	    
 ////	    @Query( "SELECT sum(tonggia) FROM com.example.demoSpBoot.model.hoadonbanhang")
 ////	    Long sumMoney();
 ////	    
-<<<<<<< HEAD
-//	    @Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
-//	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
-//	    		+ "INNER JOIN hoadonbanhang b "
-//	    		+ "ON k.makhachhang=b.makhachhang  GROUP BY (k.makhachhang)",nativeQuery = true)
-//	    java.util.List<khachhang> customerListAll();
-=======
-	    
->>>>>>> 6907403fdc5e0003c06dd1c80b4e9211f22fead3
 //
-////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
-////	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
-////	    		+ "INNER JOIN hoadonbanhang b "
-////	    		+ "ON k.makhachhang=b.makhachhang  "
-////	    		+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)>0")
-//	    java.util.List<khachhang> customerListIndebtedness();
+////	   
 //	    
 ////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
 ////	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "

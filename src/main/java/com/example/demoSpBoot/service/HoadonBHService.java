@@ -20,7 +20,7 @@ public class HoadonBHService {
 	@Autowired
 	HoadonBHRepository hoadonBHRepo;
 	public Page<hoadonbanhang> findAll(int pageNumber,int pageSize){
-		Sort sortable = Sort.by("id").ascending();
+		Sort sortable = Sort.by("makhachhang").ascending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<hoadonbanhang>) hoadonBHRepo.findAll( phantrang);
 	}
