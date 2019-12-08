@@ -28,7 +28,6 @@ public class hoadonbanhang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String mahoadon;
-	//private String makhachhang;
 	private int loaithanhtoan;
 	private long tonggia;
 	private long giamgia;

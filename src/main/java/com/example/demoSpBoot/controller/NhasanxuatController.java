@@ -1,11 +1,11 @@
 package com.example.demoSpBoot.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.nhasanxuat;
@@ -29,14 +30,14 @@ public class NhasanxuatController {
 	NhasanxuatService nsxService;
 	@GetMapping("/NSXs")
 	/* ---------------- GET ALL NSX ------------------------ */
-	public ResponseEntity<List<nhasanxuat>> findAllNSXs() {
+	public ResponseEntity<Page<nhasanxuat>> findAllNSXs(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
-		List<nhasanxuat> listNSX= nsxService.findAll();
+		Page<nhasanxuat> listNSX= nsxService.findAll(pageNumber,pageSize);
 		if(listNSX.isEmpty()) {
-			return new ResponseEntity<List<nhasanxuat>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Page<nhasanxuat>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<nhasanxuat>>(listNSX, HttpStatus.OK);
+		return new ResponseEntity<Page<nhasanxuat>>(listNSX, HttpStatus.OK);
 	}
 	/* ---------------- GET NSX BY ID ------------------------ */
 	@GetMapping("/NSXs/{id}")

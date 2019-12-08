@@ -1,11 +1,10 @@
 package com.example.demoSpBoot.controller;
 
-import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.chitietdanhmuc;
@@ -29,14 +29,14 @@ public class DetailCateController {
 	DetailCateService detailCateService;
 	@GetMapping("/detailCate")
 	/* ---------------- GET ALL BILL ------------------------ */
-	public ResponseEntity<List<chitietdanhmuc>> findAlls() {
+	public ResponseEntity<Page<chitietdanhmuc>> findAlls(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
-		List<chitietdanhmuc> listdetailCate= detailCateService.findAll();
+		Page<chitietdanhmuc> listdetailCate= detailCateService.findAll(pageNumber,pageSize);
 		if(listdetailCate.isEmpty()) {
-			return new ResponseEntity<List<chitietdanhmuc>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Page<chitietdanhmuc>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<chitietdanhmuc>>(listdetailCate, HttpStatus.OK);
+		return new ResponseEntity<Page<chitietdanhmuc>>(listdetailCate, HttpStatus.OK);
 	}
 	/* ---------------- GET BILL BY ID ------------------------ */
 	@GetMapping("/detailCate/{id}")
