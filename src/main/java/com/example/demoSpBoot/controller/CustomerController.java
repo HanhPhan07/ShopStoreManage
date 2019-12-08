@@ -37,22 +37,15 @@ public class CustomerController {
 		}
 		return new ResponseEntity<Page<KhachHangDTO>>(listCustomers, HttpStatus.OK);
 	}
-<<<<<<< HEAD
 	
 	@GetMapping("/allcustomers")
 	public ResponseEntity<List<khachhang>> getAllCustomers() {	
 		List<khachhang> listCustomers = customerService.getListAllNonPage();
-=======
-	@GetMapping("/allcustomers")
-	public ResponseEntity<List<khachhang>> getAllCustomers() {	
-		List<khachhang> listCustomers = customerService.getListAll();
->>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 		if(listCustomers.isEmpty()) {
 			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<khachhang>>(listCustomers, HttpStatus.OK);
 	}
-<<<<<<< HEAD
 	
 	/* ---------------- GET CUSTOMER BY NAME ------------------------ */
 	@GetMapping("/customers/sreach")
@@ -78,7 +71,7 @@ public class CustomerController {
 
 	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
 	@PostMapping("/customers")
-	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer) {
+	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer){
 		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
 		else {
 			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
@@ -86,7 +79,6 @@ public class CustomerController {
 		
 	}
 	
-=======
 //	
 //	/* ---------------- GET CUSTOMER BY ID ------------------------ */
 //	@GetMapping("/customers/{manhanvien}")
@@ -112,7 +104,6 @@ public class CustomerController {
 //		
 //	}
 //	
->>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 //	/* ---------------- UPDATE CUSTOMER ------------------------ */
 //	@PutMapping("/customers")
 //

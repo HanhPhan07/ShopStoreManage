@@ -1,15 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: spring-security-jwt
 Implementation-Version: 0.1.0
-<<<<<<< HEAD
 Built-By: ADMIN
 Implementation-Vendor-Id: org.springframework
 Build-Jdk: 1.8.0_212
-=======
-Built-By: ASUS-PRO
-Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_202
->>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/spring-security-jwt
 Created-By: Maven Integration for Eclipse
