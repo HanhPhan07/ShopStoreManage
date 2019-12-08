@@ -37,15 +37,22 @@ public class CustomerController {
 		}
 		return new ResponseEntity<Page<KhachHangDTO>>(listCustomers, HttpStatus.OK);
 	}
+<<<<<<< HEAD
 	
 	@GetMapping("/allcustomers")
 	public ResponseEntity<List<khachhang>> getAllCustomers() {	
 		List<khachhang> listCustomers = customerService.getListAllNonPage();
+=======
+	@GetMapping("/allcustomers")
+	public ResponseEntity<List<khachhang>> getAllCustomers() {	
+		List<khachhang> listCustomers = customerService.getListAll();
+>>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 		if(listCustomers.isEmpty()) {
 			return new ResponseEntity<List<khachhang>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<khachhang>>(listCustomers, HttpStatus.OK);
 	}
+<<<<<<< HEAD
 	
 	/* ---------------- GET CUSTOMER BY NAME ------------------------ */
 	@GetMapping("/customers/sreach")
@@ -79,6 +86,33 @@ public class CustomerController {
 		
 	}
 	
+=======
+//	
+//	/* ---------------- GET CUSTOMER BY ID ------------------------ */
+//	@GetMapping("/customers/{manhanvien}")
+//	
+//	public ResponseEntity<khachhang> getProductById(
+//            @PathVariable("makhachhang") String makhachhang) {
+//        Optional<khachhang> product = customerService.findByMNV(makhachhang);
+//
+//        if (!product.isPresent()) {
+//            return new ResponseEntity<>(product.get(),
+//                    HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(product.get(), HttpStatus.OK);
+//    }
+//
+//	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
+//	@PostMapping("/customers")
+//	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer) {
+//		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
+//		else {
+//			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
+//		}
+//		
+//	}
+//	
+>>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 //	/* ---------------- UPDATE CUSTOMER ------------------------ */
 //	@PutMapping("/customers")
 //

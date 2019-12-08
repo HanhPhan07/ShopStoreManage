@@ -1,9 +1,12 @@
 package com.example.demoSpBoot.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demoSpBoot.model.phieuchi;
@@ -13,8 +16,10 @@ import com.example.demoSpBoot.repository.PhieuchiRepository;
 public class PhieuchiService {
 	@Autowired
 	PhieuchiRepository phieuchiRepo;
-	public List<phieuchi> findAll(){
-		return (List<phieuchi>) phieuchiRepo.findAll();
+	public Page<phieuchi> findAll(int pageNumber,int pageSize){
+		Sort sortable = Sort.by("id").ascending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		return (Page<phieuchi>) phieuchiRepo.findAll( phantrang);
 	}
 	public Optional<phieuchi> findByID(int id) {
         return phieuchiRepo.findById(id);

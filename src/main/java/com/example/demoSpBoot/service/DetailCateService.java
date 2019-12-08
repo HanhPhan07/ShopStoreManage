@@ -1,9 +1,12 @@
 package com.example.demoSpBoot.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demoSpBoot.model.chitietdanhmuc;
@@ -13,8 +16,10 @@ import com.example.demoSpBoot.repository.DetailCateRepository;
 public class DetailCateService {
 	@Autowired
 	DetailCateRepository detailCateRepo;
-	public List<chitietdanhmuc> findAll(){
-		return (List<chitietdanhmuc>) detailCateRepo.findAll();
+	public Page<chitietdanhmuc> findAll(int pageNumber,int pageSize){
+		Sort sortable = Sort.by("id").ascending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		return (Page<chitietdanhmuc>) detailCateRepo.findAll( phantrang);
 	}
 	public Optional<chitietdanhmuc> findByID(int id) {
         return detailCateRepo.findById(id);

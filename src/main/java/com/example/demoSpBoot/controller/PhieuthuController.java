@@ -1,11 +1,11 @@
 package com.example.demoSpBoot.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.phieuthu;
@@ -29,14 +30,13 @@ public class PhieuthuController {
 	PhieuthuService phieuthuService;
 	@GetMapping("/phieuthu")
 	/* ---------------- GET ALL PHIEU THU ------------------------ */
-	public ResponseEntity<List<phieuthu>> findAllPhieuchi() {
-		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
+	public ResponseEntity<Page<phieuthu>> findAllPhieuchi(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		
-		List<phieuthu> listPT= phieuthuService.findAll();
+		Page<phieuthu> listPT= phieuthuService.findAll(pageNumber,pageSize);
 		if(listPT.isEmpty()) {
-			return new ResponseEntity<List<phieuthu>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Page<phieuthu>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<phieuthu>>(listPT, HttpStatus.OK);
+		return new ResponseEntity<Page<phieuthu>>(listPT, HttpStatus.OK);
 	}
 	/* ---------------- GET PHIEU THU BY ID ------------------------ */
 	@GetMapping("/phieuthu/{id}")

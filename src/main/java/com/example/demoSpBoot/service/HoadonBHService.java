@@ -12,15 +12,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demoSpBoot.model.chitiethoadonbh;
 import com.example.demoSpBoot.model.hoadonbanhang;
+import com.example.demoSpBoot.repository.DetailBHRepository;
 import com.example.demoSpBoot.repository.HoadonBHRepository;
 
 @Service
 public class HoadonBHService {
 	@Autowired
 	HoadonBHRepository hoadonBHRepo;
+	DetailBHRepository chitietRepo;
+	
 	public Page<hoadonbanhang> findAll(int pageNumber,int pageSize){
+<<<<<<< HEAD
 		Sort sortable = Sort.by("makhachhang").ascending();
+=======
+		Sort sortable = Sort.by("id").descending();
+>>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<hoadonbanhang>) hoadonBHRepo.findAll( phantrang);
 	}
@@ -30,6 +38,9 @@ public class HoadonBHService {
 
 	public boolean create(hoadonbanhang bill) {
 		if(!hoadonBHRepo.findBymahoadon(bill.getMahoadon()).isPresent()) {
+			bill.setCreatedAt(new Date());
+			String randomStr= (new Date()).getTime() +"";
+			bill.setMahoadon("HD"+randomStr);
 			hoadonBHRepo.save(bill);
 			return true;
 			}
@@ -41,7 +52,9 @@ public class HoadonBHService {
 		if (!hoadonBHRepo.findById(bill.getId()).isPresent()) {
 			return false;
 		} else {
-			hoadonBHRepo.save(bill);
+			hoadonBHRepo.deletechitiethoadon(bill.getId());
+			bill.setUpdatedAt(new Date());
+			hoadonBHRepo.update(bill.getGiamgia(),bill.getKhachhang().getMakhachhang(),bill.getKhachhangtra(), bill.getLoaithanhtoan(),bill.getNguoisua(),bill.getTonggia(),bill.getTrangthai(),bill.getUpdatedAt(),bill.getId());
 			return true;
 		}
 	}
@@ -52,10 +65,13 @@ public class HoadonBHService {
 		if (bill == null) {
 			return false;
 		} else {
-			hoadonBHRepo.delete(bill);
+			hoadonBHRepo.deletechitiethoadon(id);
+			hoadonBHRepo.delete(id);
+			
 			return true;
 		}
 	}
+	
 	public Page<hoadonbanhang> searchBill( int pageNumber, int pageSize, String searchTerm, Date fromdate, Date todate){
 		Sort sortable = Sort.by("id").ascending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
@@ -74,4 +90,6 @@ public class HoadonBHService {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }
+	
+	
 }

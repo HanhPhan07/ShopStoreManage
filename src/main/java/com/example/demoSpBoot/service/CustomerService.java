@@ -22,6 +22,9 @@ public class CustomerService {
 	@Autowired
 	CustomerRepository customerrepository;
 	
+	public java.util.List<khachhang> getListAll(){
+		return  customerrepository.findAll();
+	}
 	@Autowired
 	KhachHangDTORepository khachhangDTORes;
 	public Page<KhachHangDTO> findListAll(@RequestParam int pageNumber, @RequestParam int pageSize){

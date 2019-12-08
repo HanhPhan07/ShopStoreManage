@@ -1,9 +1,12 @@
 package com.example.demoSpBoot.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demoSpBoot.model.sanpham;
@@ -13,8 +16,10 @@ import com.example.demoSpBoot.repository.ProductRepository;
 public class ProductService {
 	@Autowired
 	ProductRepository productRepo;
-	public List<sanpham> findAll(){
-		return (List<sanpham>) productRepo.findAll();
+	public Page<sanpham> findAll(int pageNumber,int pageSize){
+		Sort sortable = Sort.by("id").ascending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		return (Page<sanpham>) productRepo.findAll( phantrang);
 	}
 	public Optional<sanpham> findByID(int id) {
         return productRepo.findById(id);
