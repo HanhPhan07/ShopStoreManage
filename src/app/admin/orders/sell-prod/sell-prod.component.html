@@ -10,7 +10,7 @@
         <div class="col-md-6">
           <div class="right-action text-right">
             <div class="btn-groups">
-              <button class="btn btn-primary" type="button"><i class="fa fa-check"></i> Lưu
+              <button class="btn btn-primary" (click)="checkoutBill()"><i class="fa fa-check"></i> Lưu
               </button>
               <a routerLink="../orders">
                 <button class="btn-back btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Hủy
@@ -88,8 +88,22 @@
     <div class="row">
       <div class="col-md-8">
         <div class="order-search" style="margin: 10px 0px; position: relative;">
-          <input class="form-control ui-autocomplete-input" (change) = "searchProd()" ([ngModel])="keySearchProd" name="keySearchProd" type="text"
-            placeholder="Nhập mã sản phẩm hoặc tên sản phẩm" autocomplete="off">
+          <ng-template #customItemTemplate let-model="item" let-index="index">
+            <h5>{{model.masp}}-{{model.tensp}}-{{model.giaban | currency: "VND"}}</h5>
+          </ng-template>
+
+          <input [(ngModel)]="asyncSelected"
+                  [typeaheadAsync]="true"
+                  [typeahead]="dataSource"
+                  (typeaheadLoading)="changeTypeaheadLoading($event)"
+                  (typeaheadOnSelect)="typeaheadOnSelect($event)"
+                  [typeaheadItemTemplate]="customItemTemplate"
+                  [typeaheadOptionsLimit]="7"
+                  [typeaheadScrollable]="true"
+                  typeaheadOptionField="masp"
+                  placeholder="Nhập mã sp hoặc tên sp"
+                  class="form-control">
+            <div *ngIf="typeaheadLoading">Loading</div>
         </div>
 
         <div class="product-results">
@@ -101,11 +115,38 @@
                 <th>Tên sản phẩm</th>
                 <th class="text-center">Số lượng</th>
                 <th class="text-center">Giá bán</th>
+                <th class="text-center">Giảm giá</th>
                 <th class="text-center">Thành tiền</th>
                 <th></th>
               </tr>
             </thead>
             <tbody id="pro_search_append">
+                <tr *ngFor = "let chitiet of listchitiethoadon; index as i">
+                  <th class="text-center">{{ i }}</th>
+                  <th>{{chitiet.sanpham.masp}}</th>
+                  <th>{{chitiet.sanpham.tensp}}</th>
+                  <th class="text-center">
+                    <input
+                    type="number"
+                    name="soluongsp"
+                    [(ngModel)]="chitiet.soluong"
+                    class="form-control"
+                    />
+                  </th>
+                  <th class="text-center">{{chitiet.sanpham.giaban | currency: "VND"}}</th>
+                  <th class="text-center">
+                      <input
+                      type="number"
+                      name="giamgiasp"
+                      [(ngModel)]="chitiet.giamgia"
+                      class="form-control"
+                      />
+                  </th>
+                  <th class="text-center">{{chitiet.sanpham.giaban*chitiet.soluong -chitiet.giamgia| currency: "VND"}}</th>
+                  <th style="text-align: center;">
+                    <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteChitietBill(i)"></i>
+                  </th>
+                </tr>
             </tbody>
           </table>
           <div class="alert alert-success" role="alert" style="margin-top: 30px;">Gõ mã hoặc tên sản phẩm vào hộp
@@ -124,8 +165,24 @@
                   </div>
                   <div class="col-md-8">
                     <div class="col-md-10 padd-0" style="position: relative;">
-                      <input class="form-control" id="search-box-cys" style="border-radius: 3px 0 0 3px !important;"
-                        type="text" placeholder="Tìm khách hàng"><span class="del-cys"
+                      <ng-template #customItemTemplateKhachHang let-model="item" let-index="index">
+                        <h6>{{model.makhachhang}}</h6>
+                        <p><strong>{{model.ten}}</strong></p>
+                        <p>{{model.sdt}}</p>
+                      </ng-template>
+                        <input [(ngModel)]="asyncSelectedKhachHang"
+                        [typeaheadAsync]="true"
+                        [typeahead]="dataSourceKhachHang"
+                        (typeaheadOnSelect)="typeaheadOnSelectKhachHang($event)"
+                        [typeaheadItemTemplate]="customItemTemplateKhachHang"
+                        [typeaheadOptionsLimit]="7"
+                        [typeaheadScrollable]="true"
+                        typeaheadOptionField="makhachhang"
+                        placeholder="Tìm khách hàng"
+                        class="form-control"
+                        style="border-radius: 3px 0 0 3px !important;">
+                        <div *ngIf="typeaheadLoading">Loading</div>
+                        <span class="del-cys"
                         style="color: red; position: absolute; right: 5px; top:5px; "></span>
 
                       <div id="cys-suggestion-box"
@@ -144,33 +201,10 @@
                 </div>
                 <div class="form-group marg-bot-10 clearfix">
                   <div class="col-md-4" style="padding:0px">
-                    <label>Ngày bán</label>
-                  </div>
-                  <div class="col-md-8">
-                    <input class="form-control datepk" id="date-order" style="border-radius: 0 !important;" type="text"
-                      placeholder="Hôm nay">
-                  </div>
-
-                </div>
-                <div class="form-group marg-bot-10 clearfix">
-                  <div class="col-md-4" style="padding:0px">
                     <label>NV bán hàng</label>
                   </div>
                   <div class="col-md-8">
-                    <select class="form-control" id="sale_id">
-                      <option value="">--Chọn--</option>
-                      <option value="2">admin</option>
-                      <option value="6">test</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group marg-bot-10 clearfix">
-                  <div class="col-md-4" style="padding:0px">
-                    <label>Ghi chú</label>
-                  </div>
-                  <div class="col-md-8">
-                    <textarea class="form-control" id="note-order" style="border-radius: 0;" rows="3"
-                      cols="20"></textarea>
+                    <input name="nvbanhang" class="form-control" disabled value="{{currentUser.ten}}">
                   </div>
                 </div>
               </div>
@@ -190,10 +224,13 @@
                   </div>
                   <div class="col-md-8">
                     <div class="input-group">
-                      <input name="method-pay" class="payment-method" type="radio" checked="" value="1">
+                      <input name="method-pay" class="payment-method" type="radio" checked  [value]="1"
+                      [(ngModel)]="methodPay">
                       Tiền mặt &nbsp;
-                      <input name="method-pay" class="payment-method" type="radio" value="2"> Thẻ&nbsp;
-                      <input name="method-pay" class="payment-method" type="radio" value="3"> CK&nbsp;
+                      <input name="method-pay" class="payment-method" type="radio" [value]="2"
+                      [(ngModel)]="methodPay"> Thẻ&nbsp;
+                      <input name="method-pay" class="payment-method" type="radio" [value]="3"
+                      [(ngModel)]="methodPay"> CK&nbsp;
                     </div>
 
                   </div>
@@ -204,7 +241,7 @@
                   </div>
                   <div class="col-md-8">
                     <div class="total-money">
-                      0
+                      {{getTotalProdCost() | currency: "VND"}}
                     </div>
                   </div>
                 </div>
@@ -213,8 +250,12 @@
                     <label>Giảm giá</label>
                   </div>
                   <div class="col-md-8">
-                    <input class="form-control text-right txtMoney discount-order" style="border-radius: 0 !important;"
-                      type="text" placeholder="0">
+                    <input class="form-control text-right"
+                    style="border-radius: 0 !important;"
+                    type="number"
+                    placeholder="0"
+                    name="giamgiaBill"
+                    [(ngModel)] = "giamgiaBill">
                   </div>
                 </div>
                 <div class="form-group marg-bot-10 clearfix">
@@ -223,7 +264,7 @@
                   </div>
                   <div class="col-md-8">
                     <div class="total-after-discount">
-                      0
+                      {{getTotalCost() | currency: "VND"}}
                     </div>
                   </div>
                 </div>
@@ -232,16 +273,20 @@
                     <label>Khách đưa</label>
                   </div>
                   <div class="col-md-8">
-                    <input class="form-control text-right txtMoney customer-pay" style="border-radius: 0 !important;"
-                      type="text" placeholder="0">
+                    <input class="form-control text-right"
+                    style="border-radius: 0 !important;"
+                    type="number"
+                    placeholder="0"
+                    name="khachduaBill"
+                    [(ngModel)] = "khachduaBill">
                   </div>
                 </div>
                 <div class="form-group marg-bot-10 clearfix">
                   <div class="col-md-4">
-                    <label class="debt">Còn nợ</label>
+                    <label>Còn nợ</label>
                   </div>
                   <div class="col-md-8">
-                    <div class="debt">0</div>
+                    <div>{{getDebt() | currency: "VND"}}</div>
                   </div>
                 </div>
               </div>
@@ -249,7 +294,7 @@
           </div>
           <div class="col-md-12">
             <div class="btn-groups pull-right" style="margin-bottom: 50px;">
-              <button class="btn btn-primary" type="button"><i class="fa fa-check"></i> Lưu
+              <button class="btn btn-primary" (click)="checkoutBill()"><i class="fa fa-check"></i> Lưu
               </button>
               <a routerLink="../orders">
                 <button class="btn-back btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Hủy

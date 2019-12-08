@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 import { AdminComponent } from './admin.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -23,6 +24,7 @@ import { CategoriesProdComponent } from './products/categories-prod/categories-p
 import { ManufProdComponent } from './products/manuf-prod/manuf-prod.component';
 import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod.component';
 import { ProfilesComponent } from './profiles/profiles.component';
+import { EditOrderComponent } from './orders/edit-order/edit-order.component';
 
 @NgModule({
   imports: [
@@ -31,7 +33,8 @@ import { ProfilesComponent } from './profiles/profiles.component';
     FormsModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    TypeaheadModule.forRoot()
   ],
   declarations: [
     AdminComponent,
@@ -51,7 +54,8 @@ import { ProfilesComponent } from './profiles/profiles.component';
     CategoriesProdComponent,
     ManufProdComponent,
     SuppliersProdComponent,
-    ProfilesComponent
+    ProfilesComponent,
+    EditOrderComponent
   ]
 })
 export class AdminModule {}

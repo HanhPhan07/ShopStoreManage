@@ -12,14 +12,14 @@ import { KhachHang } from 'src/app/_models/khachhang';
 import { User } from 'src/app/_models/user';
 import { BillsBhService } from 'src/app/_services/bills-bh.service';
 import { BillDetailBhService } from 'src/app/_services/bill-detail-bh.service';
+
 @Component({
-  selector: 'app-sell-prod',
-  templateUrl: './sell-prod.component.html',
-  styleUrls: ['./sell-prod.component.scss']
+  selector: 'app-edit-order',
+  templateUrl: './edit-order.component.html',
+  styleUrls: ['./edit-order.component.scss']
 })
+export class EditOrderComponent implements OnInit {
 
-
-export class SellProdComponent implements OnInit {
   modalRef: BsModalRef;
   asyncSelected: string;
   asyncSelectedKhachHang: string;
@@ -51,13 +51,18 @@ export class SellProdComponent implements OnInit {
   }
   ngOnInit() {
     this.i = 0;
-    this.giamgiaBill = 0;
-    this.khachduaBill = 0;
-    this.listchitiethoadon = [];
     this.currentUser = JSON.parse(localStorage.getItem('user'));
+
     this.activatedRoute.data.subscribe(data => {
       this.statesComplex = data.prods;
       this.statesComplexKhachHang = data.custs;
+      this.hoadonbanhang = data.bill;
+      this.asyncSelectedKhachHang = data.bill.khachhang.makhachhang;
+      this.listchitiethoadon = data.bill.chitiethoadons;
+      this.giamgiaBill = data.bill.giamgia;
+      this.khachduaBill = data.bill.khachhangtra;
+      this.khachhang = data.bill.khachhang;
+      this.methodPay = data.bill.loaithanhtoan;
     });
     this.dataSource = Observable.create((observer: any) => {
       // Runs on every search
@@ -74,15 +79,6 @@ export class SellProdComponent implements OnInit {
         mergeMap((token: string) => this.getStatesAsObservableKhachHang(token))
     );
 
-  }
-
-  // Function for get Product
-  loadProducts() {
-    this.productService.getListProduct().subscribe(data => {
-      this.statesComplex = data;
-    },
-      error => console.log(error)
-    );
   }
 
 
@@ -158,23 +154,22 @@ export class SellProdComponent implements OnInit {
     if (this.listchitiethoadon.length === 0) {
       alert('Bạn chưa thêm sản phẩm nào. Vui lòng thêm sản phẩm trước khi Lưu hóa đơn!');
     } else {
-      this.hoadonbanhang = new HoaDonBanHang();
-      this.hoadonbanhang.createdAt = new Date();
+      this.hoadonbanhang.updatedAt = new Date();
       this.hoadonbanhang.giamgia = this.giamgiaBill;
       this.hoadonbanhang.khachhang = this.khachhang;
       this.hoadonbanhang.khachhangtra = this.khachduaBill;
       this.hoadonbanhang.loaithanhtoan = this.methodPay;
-      this.hoadonbanhang.nguoitao = this.currentUser;
-      this.hoadonbanhang.mahoadon = '';
       this.hoadonbanhang.tonggia = this.getTotalCost();
+      this.hoadonbanhang.nguoisua = this.currentUser;
+      this.hoadonbanhang.chitiethoadons = [];
       let currentBillID = 0;
       if (!this.checkInputKhachhang()) {
         alert('Vui lòng chọn khách hàng');
       } else {
-        this.billService.postBill(this.hoadonbanhang).subscribe(data => {
+        this.billService.putBill(this.hoadonbanhang).subscribe(data => {
           currentBillID = data.id;
           this.listchitiethoadon.forEach(x => x.id_hoadon = currentBillID);
-          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe(data => {
+          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe( data => {
             alert('Lưu thành công');
             this.router.navigate(['/admin/orders']);
           },
@@ -194,6 +189,4 @@ export class SellProdComponent implements OnInit {
     return true;
   }
 
-
 }
-
