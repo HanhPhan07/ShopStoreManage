@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,8 +42,25 @@ public class hoadonbanhang {
 	
 	@Column(name = "updated_at",nullable = true)
 	private Date updatedAt;
-	private String nguoisua;
-	private String nguoitao;
+	
+	@ManyToOne
+    @JoinColumn(name = "nguoisua", referencedColumnName= "manhanvien")
+	private users nguoisua;
+	public users getNguoisua() {
+		return nguoisua;
+	}
+	public void setNguoisua(users nguoisua) {
+		this.nguoisua = nguoisua;
+	}
+	@ManyToOne
+    @JoinColumn(name = "nguoitao", referencedColumnName= "manhanvien")
+	private users nguoitao;
+	public users getNguoitao() {
+		return nguoitao;
+	}
+	public void setNguoitao(users nguoitao) {
+		this.nguoitao = nguoitao;
+	}
 	@ManyToOne
     @JoinColumn(name = "makhachhang")
 	private khachhang khachhang;
@@ -59,7 +77,7 @@ public class hoadonbanhang {
 		this.phieuthus = phieuthus;
 	}
 	@Column(nullable = true)
-	@OneToMany( cascade =  CascadeType.ALL )
+	@OneToMany( cascade =  CascadeType.ALL, fetch= FetchType.EAGER )
 	@JoinColumn( name= "id_hoadon", referencedColumnName= "id")
 	private List<chitiethoadonbh> chitiethoadons;
 	
@@ -130,22 +148,10 @@ public class hoadonbanhang {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	public String getNguoisua() {
-		return nguoisua;
-	}
-	public void setNguoisua(String nguoisua) {
-		this.nguoisua = nguoisua;
-	}
-	public String getNguoitao() {
-		return nguoitao;
-	}
-	public void setNguoitao(String nguoitao) {
-		this.nguoitao = nguoitao;
-	}
-
+	
 
 	public hoadonbanhang(int id, String mahoadon,  int loaithanhtoan, long tonggia, long giamgia,
-			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, String nguoisua, String nguoitao) {
+			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, users nguoisua,  users nguoitao) {
 		this.id = id;
 		this.mahoadon = mahoadon;
 		this.loaithanhtoan = loaithanhtoan;

@@ -14,6 +14,7 @@ public class chitiethoadonbh {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
 	private int id_hoadon;
 	
 	@ManyToOne
