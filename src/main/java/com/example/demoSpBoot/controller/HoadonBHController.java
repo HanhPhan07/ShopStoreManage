@@ -45,9 +45,6 @@ public class HoadonBHController {
 	/* ---------------- GET ALL BILL ------------------------ */
 	public ResponseEntity<Page<hoadonbanhang>> findBills(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm, @RequestParam String fromdate,@RequestParam String todate) throws ParseException {
 		Page<hoadonbanhang> listBill = null;
-		System.out.println("searchTerm: "+searchTerm);
-		System.out.println("fromdate: "+fromdate);
-		System.out.println("todate: "+todate);
 		if(fromdate == "" &&todate=="") {
 			listBill= hoadonService.searchBillNoDate(pageNumber,pageSize,searchTerm);
 		}else {

@@ -1,7 +1,6 @@
 package com.example.demoSpBoot.service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demoSpBoot.model.chitiethoadonbh;
 import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.repository.DetailBHRepository;
 import com.example.demoSpBoot.repository.HoadonBHRepository;
@@ -24,11 +21,7 @@ public class HoadonBHService {
 	DetailBHRepository chitietRepo;
 	
 	public Page<hoadonbanhang> findAll(int pageNumber,int pageSize){
-<<<<<<< HEAD
-		Sort sortable = Sort.by("makhachhang").ascending();
-=======
 		Sort sortable = Sort.by("id").descending();
->>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<hoadonbanhang>) hoadonBHRepo.findAll( phantrang);
 	}

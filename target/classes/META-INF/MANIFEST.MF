@@ -3,16 +3,8 @@ Built-By: truon
 Build-Jdk: 13
 Implementation-Title: spring-security-jwt
 Implementation-Version: 0.1.0
-<<<<<<< HEAD
 Implementation-Vendor-Id: org.springframework
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
  -starter-parent/spring-security-jwt
-=======
-Built-By: ADMIN
-Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_212
-Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
- ot-starter-parent/spring-security-jwt
->>>>>>> 16034c87715cb130d8279a8490673579301f9d52
 Created-By: Maven Integration for Eclipse
 
