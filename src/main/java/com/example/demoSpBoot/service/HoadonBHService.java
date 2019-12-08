@@ -24,7 +24,11 @@ public class HoadonBHService {
 	DetailBHRepository chitietRepo;
 	
 	public Page<hoadonbanhang> findAll(int pageNumber,int pageSize){
+<<<<<<< HEAD
+		Sort sortable = Sort.by("makhachhang").ascending();
+=======
 		Sort sortable = Sort.by("id").descending();
+>>>>>>> af2b4a2a1c22463d2fa9bbda9183fcbb72c6fa6b
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<hoadonbanhang>) hoadonBHRepo.findAll( phantrang);
 	}

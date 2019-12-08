@@ -18,7 +18,6 @@ public class KhachHangDTO {
 	private long tonggia;
 	private long tongno;
 	private Date lancuoimuahang;
-	
 	public String getMakhachhang() {
 		return makhachhang;
 	}
