@@ -120,7 +120,8 @@
               />
             </div>
             <div class="form-group col-md-2">
-              <select class="form-control" id="loaiKH">
+              <select class="form-control" [(ngModel)]="fitlerloaikhachhang" (change)="filter()"
+              name="fitlerloaikhachhang">
                 <option value="1">Tất cả</option>
                 <option value="2">KH từng mua hàng</option>
                 <option value="3">KH còn nợ</option>
@@ -148,25 +149,42 @@
               </tr>
             </thead>
             <tbody>
+              <ng-template ngFor let-item [ngForOf]="listCustomers" let-i="index">
               <tr>
-                <th scope="row">id</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th scope="row">{{item.makhachhang}}</th>
+                <td scope="row">{{item.ten}}</td>
+                <td scope="row">{{item.sdt}}</td>
+                <td scope="row">{{item.diachi}}</td>
+                <td scope="row">{{item.createdAt | date:'medium' }}</td>
+                <td scope="row">{{item.tonggia | currency:'VND' }}</td>
+                <td scope="row">{{item.tongno | currency:'VND' }}</td>
+                <td style="text-align: center;">
+                    <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
+                    (click)="editCusromer(item.makhachhang)"></i>
+                  <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteCustomer(item.makhachhang)"></i>
+                </td>
               </tr>
+            </ng-template>
             </tbody>
           </table>
         </div>
         <div class="box-footer">
           <div class="d-flex justify-content-between p-2"></div>
-          <div class="alert alert-info" role="alert">
-            Số khách hàng: <span>3</span> Tổng tiền: <span>1.000.000</span>đ
-            Tổng nợ: <span>0</span>đ
+          <div class="alert alert-info summany-info clearfix" role="alert">
+            <div class="sm-info pull-left">
+                Số khách hàng: <span>{{getTotalCustomers()}}</span> Tổng tiền: <span>{{getTotalMoney() | currency: "VND"}}</span>đ
+                Tổng nợ: <span>{{getTotalDet() | currency: "VND"}}</span>đ
+            </div>
+            <div class="pull-right">
+                <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
+                  lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+                  [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+                  (pageChanged)="pageChanged($event)">
+                </pagination>
+              </div>
+            
           </div>
+          
         </div>
       </form>
     </div>

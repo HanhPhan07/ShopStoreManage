@@ -13,10 +13,10 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { ContentComponent } from './layout/content/content.component';
 import { LeftSideComponent } from './layout/left-side/left-side.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UsersComponent } from './users/users.component';
-import { UserDetailComponent } from './users/user-detail/user-detail.component';
-import { PurchaseHistoryComponent } from './users/user-detail/purchase-history/purchase-history.component';
-import { DebtComponent } from './users/user-detail/debt/debt.component';
+import { CustomersComponent } from './customers/customers.component';
+import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
+import { PurchaseHistoryComponent } from './customers/customer-detail/purchase-history/purchase-history.component';
+import { DebtComponent } from './customers/customer-detail/debt/debt.component';
 import { OrdersComponent } from './orders/orders.component';
 import { SellProdComponent } from './orders/sell-prod/sell-prod.component';
 import { ProductsComponent } from './products/products.component';
@@ -44,8 +44,8 @@ import { EditOrderComponent } from './orders/edit-order/edit-order.component';
     FooterComponent,
     ControlSidebarComponent,
     DashboardComponent,
-    UsersComponent,
-    UserDetailComponent,
+    CustomersComponent,
+    CustomerDetailComponent,
     PurchaseHistoryComponent,
     DebtComponent,
     OrdersComponent,

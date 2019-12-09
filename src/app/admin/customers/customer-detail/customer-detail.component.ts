@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HoaDonBanHang } from '../../../_models/hoadonbanhang';
 @Component({
-  selector: 'app-user-detail',
-  templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.scss']
+  selector: 'app-customer-detail',
+  templateUrl: './customer-detail.component.html',
+  styleUrls: ['./customer-detail.component.scss']
 })
-export class UserDetailComponent implements OnInit {
+export class CustomerDetailComponent implements OnInit {
   id: string;
   modalRef: BsModalRef;
   isPurchaseHistory: boolean;
