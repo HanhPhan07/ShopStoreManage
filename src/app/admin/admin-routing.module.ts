@@ -18,6 +18,7 @@ import { CustomersResolver } from '../_resolver/customer-resolver';
 import { BillBHResolver } from '../_resolver/bill-bh-resolver';
 import { EditBillResolver } from '../_resolver/edit-bill-resolver';
 import { CustomersComponent } from './customers/customers.component';
+import { AllCustomersResolver } from '../_resolver/customer-all-resolver';
 
 
 const routes: Routes = [
@@ -46,12 +47,12 @@ const routes: Routes = [
       {
         path: 'orders/:id',
         component: EditOrderComponent,
-        resolve: {bill: EditBillResolver, prods: ProductsResolver, custs: CustomersResolver}
+        resolve: {bill: EditBillResolver, prods: ProductsResolver, custs: AllCustomersResolver}
       },
       {
         path: 'sell-prod',
         component: SellProdComponent,
-        resolve: {prods: ProductsResolver, custs: CustomersResolver}
+        resolve: {prods: ProductsResolver, custs: AllCustomersResolver}
       },
       {
         path: 'products',

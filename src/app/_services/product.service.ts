@@ -13,7 +13,7 @@ export class ProductService {
 
   constructor( private httpClient: HttpClient ) { }
   getListProduct(): Observable<SanPham[]> {
-    return this.httpClient.get<any>(environment.baseUrl + 'product');
+    return this.httpClient.get<any>(environment.baseUrl + 'allproducts');
   }
 
 }

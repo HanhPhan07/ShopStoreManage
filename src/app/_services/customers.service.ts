@@ -12,6 +12,10 @@ import { KhachHangDTO } from '../_models/khachhangDTO';
 export class CustomersService {
 
   constructor( private httpClient: HttpClient ) { }
+  getAllKHNonPag(): Observable<KhachHang[]> {
+    return this.httpClient.get<any>(environment.baseUrl + 'allcustomers');
+  }
+
   getAllKhachHang(page?: number, pageSize?: number): Observable<PaginatedResult<KhachHangDTO[]>> {
     const paginatedResult: PaginatedResult<KhachHangDTO[]> = new PaginatedResult<KhachHangDTO[]>();
     let params = new HttpParams();

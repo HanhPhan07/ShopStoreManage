@@ -19,10 +19,10 @@ export class OrdersComponent implements OnInit {
   searchTerm: string;
   fitlerloaidonhang: number;
   baseDataListBills: HoaDonBanHang[];
-  listStatusBill = [
-    'Đã giao',
-    'Hoàn thành',
-    'Hủy'
+  listMethodBill = [
+    'Tiền mặt',
+    'Thẻ',
+    'Chuyển khoản'
   ];
   itemsPerPage = 4;
   listSubTrTableBill = [];
