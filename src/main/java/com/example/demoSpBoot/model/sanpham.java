@@ -1,13 +1,16 @@
 package com.example.demoSpBoot.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 @Entity
 public class sanpham {
 	@Id
@@ -25,7 +28,18 @@ public class sanpham {
 	public void setNhasanxuat(nhasanxuat nhasanxuat) {
 		this.nhasanxuat = nhasanxuat;
 	}
-	private String danhmuc;
+	@OneToMany
+	@JoinColumn( name= "id_sanpham", referencedColumnName= "id")
+	private List<chitietdanhmuc> chitietdanhmuc;
+	public List<chitietdanhmuc> getChitietdanhmuc() {
+		return chitietdanhmuc;
+	}
+	
+	
+	
+	public void setChitietdanhmuc(List<chitietdanhmuc> chitietdanhmuc) {
+		this.chitietdanhmuc = chitietdanhmuc;
+	}
 	private String anhsp;
 	private String motasp;
 	private String donvitinh;
@@ -80,12 +94,6 @@ public class sanpham {
 	public nhasanxuat getNhasanxuat() {
 		return nhasanxuat;
 	}
-	public String getDanhmuc() {
-		return danhmuc;
-	}
-	public void setDanhmuc(String danhmuc) {
-		this.danhmuc = danhmuc;
-	}
 	public String getAnhsp() {
 		return anhsp;
 	}
@@ -135,7 +143,7 @@ public class sanpham {
 		this.updatedAt = updatedAt;
 	}
 	public sanpham(int id, String masp, String tensp, long giagoc, long giaban, int soluong, int trangthai,
-			String danhmuc, String anhsp, String motasp, String donvitinh, boolean ishot, boolean isnew,
+			String anhsp, String motasp, String donvitinh, boolean ishot, boolean isnew,
 			boolean displaywebsite, Date createdAt, Date updatedAt, nhasanxuat nhasanxuat) {
 		this.id = id;
 		this.masp = masp;
@@ -144,7 +152,6 @@ public class sanpham {
 		this.giaban = giaban;
 		this.soluong = soluong;
 		this.trangthai = trangthai;
-		this.danhmuc = danhmuc;
 		this.anhsp = anhsp;
 		this.motasp = motasp;
 		this.donvitinh = donvitinh;
