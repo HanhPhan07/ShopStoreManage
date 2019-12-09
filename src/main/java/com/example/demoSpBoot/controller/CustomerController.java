@@ -64,11 +64,29 @@ public class CustomerController {
 	public ResponseEntity<Page<KhachHangDTO>> findCustomersListIndebtedness(@RequestParam int pageNumber, @RequestParam int pageSize) {
         Page<KhachHangDTO> list = customerService.findCustomersIndebtedness(pageNumber, pageSize);
         if (list.isEmpty()) {
-            return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
+        	System.out.print(pageNumber);
+        	System.out.print(pageSize);
+            //return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
+            
+        }
+        return new ResponseEntity<Page<KhachHangDTO>>(list,HttpStatus.OK);
+    }
+	
+	/* ----------------CUSTOMERS (UNINDEBTEDNESS) KHÔNG NỢ ------------------------ */ 
+	@GetMapping("/customers/unindebtedness")
+	
+	public ResponseEntity<Page<KhachHangDTO>> findCustomersListUnIndebtedness(@RequestParam int pageNumber, @RequestParam int pageSize) {
+        Page<KhachHangDTO> list = customerService.findCustomersUnIndebtedness(pageNumber, pageSize);
+        if (list.isEmpty()) {
+        	System.out.print(pageNumber);
+        	System.out.print(pageSize);
+            //return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
+            
         }
         return new ResponseEntity<Page<KhachHangDTO>>(list,HttpStatus.OK);
     }
 
+	
 	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
 	@PostMapping("/customers")
 	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer){
@@ -79,30 +97,6 @@ public class CustomerController {
 		
 	}
 	
-//	
-//	/* ---------------- GET CUSTOMER BY ID ------------------------ */
-//	@GetMapping("/customers/{manhanvien}")
-//	
-//	public ResponseEntity<khachhang> getProductById(
-//            @PathVariable("makhachhang") String makhachhang) {
-//        Optional<khachhang> product = customerService.findByMNV(makhachhang);
-//
-//        if (!product.isPresent()) {
-//            return new ResponseEntity<>(product.get(),
-//                    HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(product.get(), HttpStatus.OK);
-//    }
-//
-//	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
-//	@PostMapping("/customers")
-//	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer) {
-//		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
-//		else {
-//			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
-//		}
-//		
-//	}
 //	
 //	/* ---------------- UPDATE CUSTOMER ------------------------ */
 //	@PutMapping("/customers")
@@ -122,31 +116,12 @@ public class CustomerController {
 //			return new ResponseEntity<khachhang>(HttpStatus.NOT_FOUND);
 //		}
 //	}
-//	
-//	/* ---------------- SREACH CUSTOMER ------------------------ */
-//	@GetMapping("/customers/search/{sreachkeyword}")
-//	public ResponseEntity<List<khachhang>> sreachCustomer(@PathVariable("sreachkeyword") String sreachkeyword) {
-//		List<khachhang> customer=customerService.findKhachHangByTenLike(sreachkeyword);
-//		if(customer.isEmpty()) {
-//			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.NO_CONTENT);
-//		}
-//		else {
-//			return new ResponseEntity<List<khachhang>>(customer,HttpStatus.OK);
-//		}
-//	}
+
 //	@GetMapping("/customers/count")
 //	public long countCustomers() {
 //		 return customerService.count();
 //	}
 	
-//	@GetMapping("/customers/indebtedness")
-//	public ResponseEntity<Long> indebtednessCustomers() {
-//		
-//		if(customerService.sumIndebtedness()>0) return new ResponseEntity<Long>(customerService.sumIndebtedness(),HttpStatus.OK);
-//		else {
-//			return new ResponseEntity<Long>(customerService.sumIndebtedness(),HttpStatus.NO_CONTENT);
-//		}
-//	}
 //	
 //	@GetMapping("/customers/totalmoney")
 //	public ResponseEntity<Long> totalMoney() {

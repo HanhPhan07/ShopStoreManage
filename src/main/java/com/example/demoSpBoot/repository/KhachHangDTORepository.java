@@ -37,10 +37,30 @@ public interface KhachHangDTORepository  extends JpaRepository<KhachHangDTO , St
 					+ "HAVING k.ten LIKE %:ten% ) as temp",nativeQuery = true)
 	Page<KhachHangDTO> findCustomerList(Pageable pageable, String ten);
 	
-	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang,"
+	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
 		+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
 		+ "INNER JOIN hoadonbanhang b "
-		+ "ON k.makhachhang=b.makhachhang  "
-		+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)>0" , nativeQuery = true)
+		+ "ON k.makhachhang=b.makhachhang "
+		+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)>0 ",
+		countQuery= " SELECT COUNT(*) FROM (SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
+				+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
+				+ "INNER JOIN hoadonbanhang b "
+				+ "ON k.makhachhang=b.makhachhang  "
+				+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)>0) as temp " , nativeQuery = true)
 	Page<KhachHangDTO> customerListIndebtedness(Pageable pageable);
+				
+	
+	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
+			+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
+			+ "INNER JOIN hoadonbanhang b "
+			+ "ON k.makhachhang=b.makhachhang "
+			+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)=0 ",
+			countQuery= " SELECT COUNT(*) FROM (SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
+					+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
+					+ "INNER JOIN hoadonbanhang b "
+					+ "ON k.makhachhang=b.makhachhang  "
+					+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)=0) as temp " , nativeQuery = true)
+	Page<KhachHangDTO> customerListUnIndebtedness(Pageable pageable);
+	
+
 }	
