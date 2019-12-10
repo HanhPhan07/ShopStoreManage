@@ -1,5 +1,8 @@
 package com.example.demoSpBoot.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.ProductService;
 
@@ -94,5 +98,16 @@ public class ProductController {
 		else {
 			return new ResponseEntity<sanpham>(HttpStatus.NOT_FOUND);
 		}
+	}
+	@GetMapping("/product/search")
+	/* ---------------- SEARCH ------------------------ */
+	public ResponseEntity<Page<sanpham>> findProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+		Page<sanpham> listBill = null;
+			listBill= productService.searchProduct(pageNumber,pageSize,searchTerm);
+		
+			if(listBill.isEmpty()) {
+				return new ResponseEntity<Page<sanpham>>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<Page<sanpham>>(listBill, HttpStatus.OK);
 	}
 }

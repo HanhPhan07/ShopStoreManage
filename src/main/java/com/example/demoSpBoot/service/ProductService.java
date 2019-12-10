@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.repository.ProductRepository;
 
@@ -57,5 +58,10 @@ public class ProductService {
 			productRepo.delete(product);
 			return true;
 		}
+	}
+	public Page<sanpham> searchProduct( int pageNumber, int pageSize, String searchTerm){
+		Sort sortable = Sort.by("id").descending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		return (Page<sanpham>) productRepo.findBymasportensp(phantrang,searchTerm);
 	}
 }
