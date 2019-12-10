@@ -50,8 +50,8 @@ public class CustomerController {
 	/* ---------------- GET CUSTOMER BY NAME ------------------------ */
 	@GetMapping("/customers/sreach")
 	
-	public ResponseEntity<Page<KhachHangDTO>> findCustomersList(@RequestParam String tenKhachHang,@RequestParam int pageNumber, @RequestParam int pageSize) {
-        Page<KhachHangDTO> list = customerService.findByName(tenKhachHang, pageNumber, pageSize);
+	public ResponseEntity<Page<KhachHangDTO>> findCustomersList(@RequestParam int pageNumber, @RequestParam int pageSize,@RequestParam String searchTerm) {
+        Page<KhachHangDTO> list = customerService.findByName(pageNumber, pageSize,searchTerm);
         if (list.isEmpty()) {
             return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
         }

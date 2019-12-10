@@ -30,11 +30,11 @@ public interface KhachHangDTORepository  extends JpaRepository<KhachHangDTO , St
 			+ "sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang as k "
 			+ "INNER JOIN hoadonbanhang b "
 			+ "ON k.makhachhang=b.makhachhang "
-			+ "GROUP BY (k.makhachhang) HAVING k.ten LIKE %:ten% ",
+			+ "GROUP BY (k.makhachhang) HAVING k.ten LIKE %:ten%" ,
 			countQuery =  "SELECT COUNT(*) FROM ("
 					+ "SELECT k.ten FROM khachhang as k INNER JOIN hoadonbanhang as b "
 					+ "ON k.makhachhang=b.makhachhang GROUP BY (k.makhachhang) "
-					+ "HAVING k.ten LIKE %:ten% ) as temp",nativeQuery = true)
+					+ "HAVING k.ten LIKE  %:ten%  ) as temp",nativeQuery = true)
 	Page<KhachHangDTO> findCustomerList(Pageable pageable, String ten);
 	
 	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
@@ -61,6 +61,9 @@ public interface KhachHangDTORepository  extends JpaRepository<KhachHangDTO , St
 					+ "ON k.makhachhang=b.makhachhang  "
 					+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)=0) as temp " , nativeQuery = true)
 	Page<KhachHangDTO> customerListUnIndebtedness(Pageable pageable);
+	
+	
+	
 	
 
 }	

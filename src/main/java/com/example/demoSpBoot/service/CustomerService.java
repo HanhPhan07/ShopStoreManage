@@ -27,13 +27,14 @@ public class CustomerService {
 	}
 	@Autowired
 	KhachHangDTORepository khachhangDTORes;
+	
 	public Page<KhachHangDTO> findListAll(@RequestParam int pageNumber, @RequestParam int pageSize){
 		Sort sortable = Sort.by("makhachhang").ascending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return  (Page<KhachHangDTO>) khachhangDTORes.customerListAll(phantrang);
 	}
 	
-	public Page<KhachHangDTO> findByName(@RequestParam String tenkhachhang,@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public Page<KhachHangDTO> findByName(@RequestParam int pageNumber, @RequestParam int pageSize,@RequestParam String tenkhachhang) {
 		Sort sortable = Sort.by("makhachhang").ascending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return  (Page<KhachHangDTO>) khachhangDTORes.findCustomerList(phantrang, tenkhachhang);
