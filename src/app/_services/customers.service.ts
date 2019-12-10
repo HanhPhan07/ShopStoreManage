@@ -25,6 +25,32 @@ export class CustomersService {
     }
     return this.httpClient.get<any>(environment.baseUrl + 'customers', { observe: 'response', params })
       .pipe(map(response => {
+        if (response.body != null) {
+          paginatedResult.result = response.body.content;
+          paginatedResult.pagination = {
+            currentPage: response.body.pageable.pageNumber + 1,
+            totalItems: response.body.totalElements,
+            totalPages: response.body.totalPages,
+            itemsPerPage: response.body.pageable.pageSize
+          };
+          return paginatedResult;
+        }
+        }));
+  }
+
+  getKhachHang(page?: number, pageSize?: number, searchTerm?: string): Observable<PaginatedResult<KhachHangDTO[]>> {
+    const paginatedResult: PaginatedResult<KhachHangDTO[]> = new PaginatedResult<KhachHangDTO[]>();
+    let params = new HttpParams();
+    if (page != null && pageSize != null) {
+      params = params.append('pageNumber', (page - 1).toString());
+      params = params.append('pageSize', pageSize.toString());
+    }
+    if (searchTerm != null ) {
+      params = params.append('searchTerm', searchTerm);
+    }
+    return this.httpClient.get<any>(environment.baseUrl + 'customers/sreach', { observe: 'response', params })
+      .pipe(map(response => {
+        if (response.body != null) {
         paginatedResult.result = response.body.content;
         paginatedResult.pagination = {
           currentPage: response.body.pageable.pageNumber + 1,
@@ -32,7 +58,10 @@ export class CustomersService {
           totalPages: response.body.totalPages,
           itemsPerPage: response.body.pageable.pageSize
         };
+      }
         return paginatedResult;
         }));
   }
+
+
 }

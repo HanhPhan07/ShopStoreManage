@@ -13,7 +13,7 @@ import { KhachHangDTO } from '../_models/khachhangDTO';
 export class CustomersResolver implements Resolve<KhachHangDTO[]> {
 
     pageNumber = 1;
-    pageSize = 1;
+    pageSize = 4;
     constructor(
         private custService: CustomersService,
         private router: Router

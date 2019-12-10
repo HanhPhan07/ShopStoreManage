@@ -22,6 +22,8 @@ export class CustomersComponent implements OnInit {
   listCustomers: KhachHangDTO[];
   baseDataListCustomers: KhachHangDTO[];
   fitlerloaikhachhang: number;
+  searchTerm: string;
+
   constructor(
     private modalService: BsModalService,
     private activatedRoute: ActivatedRoute,
@@ -31,16 +33,17 @@ export class CustomersComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
   ngOnInit() {
+    this.fitlerloaikhachhang = 0;
     this.activatedRoute.data.subscribe(data => {
       this.listCustomers = data.customers.result;
       this.pagination = data.customers.pagination;
     });
-    console.log(this.listCustomers);
+    //console.log(this.listCustomers);
 
   }
-  getListCustomers() {
-    this.customers.getAllKhachHang(
-      this.pagination.currentPage, this.pagination.itemsPerPage).subscribe(
+  search() {
+    this.customers.getKhachHang(
+      this.pagination.currentPage, this.pagination.itemsPerPage, this.searchTerm ).subscribe(
         (data: PaginatedResult<KhachHangDTO[]>) => {
           if (typeof(data.pagination) !== 'undefined') {
             this.pagination = data.pagination;
@@ -52,7 +55,7 @@ export class CustomersComponent implements OnInit {
                 itemsPerPage: this.itemsPerPage
               };
           }
-          this.listCustomers = data.result;
+          this.updateListBill(data.result);
       },
         error => console.log(error)
       );
@@ -67,7 +70,7 @@ export class CustomersComponent implements OnInit {
 
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
-    this.getListCustomers();
+    this.search();
   }
 
   getTotalCustomers() {
@@ -96,9 +99,9 @@ export class CustomersComponent implements OnInit {
   }
 
   filter() {
-    if (this.fitlerloaikhachhang == 2) {
+    if (this.fitlerloaikhachhang === 2) {
       this.listCustomers = this.baseDataListCustomers.filter(this.isDebt);
-    } else if (this.fitlerloaikhachhang == 1) {
+    } else if (this.fitlerloaikhachhang === 1) {
       this.listCustomers = this.baseDataListCustomers;
     } else {
       this.listCustomers = this.baseDataListCustomers.filter(this.isNonDebt);
@@ -106,7 +109,7 @@ export class CustomersComponent implements OnInit {
   }
 
   isDebt(customers: KhachHangDTO) {
-    return customers.tongno = 0 ;
+    return customers.tongno === 0 ;
   }
 
   isNonDebt(customers: KhachHangDTO) {

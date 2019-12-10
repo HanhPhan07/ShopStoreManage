@@ -21,14 +21,16 @@ constructor( private httpClient: HttpClient ) { }
     }
     return this.httpClient.get<any>(environment.baseUrl + 'billBHs', { observe: 'response', params })
       .pipe(map(response => {
-        paginatedResult.result = response.body.content;
-        paginatedResult.pagination = {
-          currentPage: response.body.pageable.pageNumber + 1,
-          totalItems: response.body.totalElements,
-          totalPages: response.body.totalPages,
-          itemsPerPage: response.body.pageable.pageSize
-        };
-        return paginatedResult;
+        if (response.body != null) {
+          paginatedResult.result = response.body.content;
+          paginatedResult.pagination = {
+            currentPage: response.body.pageable.pageNumber + 1,
+            totalItems: response.body.totalElements,
+            totalPages: response.body.totalPages,
+            itemsPerPage: response.body.pageable.pageSize
+          };
+          return paginatedResult;
+        }
       }));
   }
 
@@ -80,6 +82,5 @@ constructor( private httpClient: HttpClient ) { }
     headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.httpClient.put(environment.baseUrl + 'billBHs', bill, { headers: headers });
   }
-
 
 }
