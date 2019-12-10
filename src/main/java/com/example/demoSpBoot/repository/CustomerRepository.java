@@ -23,14 +23,6 @@ public interface CustomerRepository extends JpaRepository<khachhang , String>{
 ////	    Long sumMoney();
 ////	    
 //
-////	   
-//	    
-////	    @Query("SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia), MAX(b.created_at),"
-////	    		+ "sum(b.tonggia-b.khachhangtra) FROM khachhang k "
-////	    		+ "INNER JOIN hoadonbanhang b "
-////	    		+ "ON k.makhachhang=b.makhachhang   "
-////	    		+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)=0")
-//	    java.util.List<khachhang> customerListUnIndebtedness();
 
 	    
 }

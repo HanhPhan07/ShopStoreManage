@@ -45,6 +45,12 @@ public class CustomerService {
 		return  (Page<KhachHangDTO>) khachhangDTORes.customerListIndebtedness(phantrang);
     }
 	
+	public Page<KhachHangDTO> findCustomersUnIndebtedness(@RequestParam int pageNumber, @RequestParam int pageSize) {
+		Sort sortable = Sort.by("makhachhang").ascending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		return  (Page<KhachHangDTO>) khachhangDTORes.customerListUnIndebtedness(phantrang);
+    }
+	
 	public List<khachhang> getListAllNonPage(){
 		return customerrepository.findAll();
 	}
@@ -77,9 +83,6 @@ public class CustomerService {
 //		}
 //	}
 //	
-//	public java.util.List<khachhang> findKhachHangByTenLike(String keyword) {
-//		return customerrepository.findCustomerList(keyword);
-//	}
 //	
 //	public long count(){
 //		long count;
