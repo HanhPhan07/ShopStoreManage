@@ -15,53 +15,18 @@ import com.example.demoSpBoot.dto.KhachHangDTO;
 @Repository
 public interface KhachHangDTORepository  extends JpaRepository<KhachHangDTO , String>{
 
-	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi, sum(b.tonggia) as tonggia, MAX(b.created_at) as lancuoimuahang,"
-    		+ "sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang as k "
-    		+ "INNER JOIN hoadonbanhang b "
-    		+ "ON k.makhachhang=b.makhachhang  GROUP BY (k.makhachhang)",
-    		countQuery =  "SELECT COUNT(k.makhachhang)"
-    	    		+ " FROM khachhang as k "
-    	    		+ "INNER JOIN hoadonbanhang b "
-    	    		+ "ON k.makhachhang=b.makhachhang  GROUP BY (k.makhachhang)",nativeQuery = true)
+	@Query(value = "SELECT * FROM (SELECT khachhang.makhachhang, khachhang.ten,khachhang.sdt,khachhang.diachi, sum(b.tonggia) as tonggia, MAX(b.created_at) as lancuoimuahang,sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang INNER JOIN hoadonbanhang b ON khachhang.makhachhang=b.makhachhang GROUP BY (khachhang.makhachhang) UNION ALL (SELECT c.makhachhang, c.ten,c.sdt,c.diachi, 0 as tonggia, NULL as lancuoimuahang, 0 as tongno FROM khachhang as c WHERE (c.makhachhang) NOT IN (SELECT h.makhachhang FROM hoadonbanhang as h GROUP BY h.makhachhang))) as temp ORDER BY temp.makhachhang ASC " ,
+    		countQuery =  "SELECT COUNT(*)"
+    	    		+ " FROM (SELECT khachhang.makhachhang, khachhang.ten,khachhang.sdt,khachhang.diachi, sum(b.tonggia) as tonggia, MAX(b.created_at) as lancuoimuahang,sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang INNER JOIN hoadonbanhang b ON khachhang.makhachhang=b.makhachhang GROUP BY (khachhang.makhachhang) UNION ALL (SELECT c.makhachhang, c.ten,c.sdt,c.diachi, 0 as tonggia, NULL as lancuoimuahang, 0 as tongno FROM khachhang as c WHERE (c.makhachhang) NOT IN (SELECT h.makhachhang FROM hoadonbanhang as h GROUP BY h.makhachhang))) as temp",nativeQuery = true)
 	
 	Page<KhachHangDTO> customerListAll(Pageable pageable);
 	
-	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
-			+ "sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang as k "
-			+ "INNER JOIN hoadonbanhang b "
-			+ "ON k.makhachhang=b.makhachhang "
-			+ "GROUP BY (k.makhachhang) HAVING k.ten LIKE %:ten%" ,
-			countQuery =  "SELECT COUNT(*) FROM ("
-					+ "SELECT k.ten FROM khachhang as k INNER JOIN hoadonbanhang as b "
-					+ "ON k.makhachhang=b.makhachhang GROUP BY (k.makhachhang) "
-					+ "HAVING k.ten LIKE  %:ten%  ) as temp",nativeQuery = true)
+	@Query(value = "SELECT * FROM (SELECT khachhang.makhachhang, khachhang.ten,khachhang.sdt,khachhang.diachi, sum(b.tonggia) as tonggia, MAX(b.created_at) as lancuoimuahang,sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang INNER JOIN hoadonbanhang b ON khachhang.makhachhang=b.makhachhang GROUP BY (khachhang.makhachhang) UNION ALL (SELECT c.makhachhang, c.ten,c.sdt,c.diachi, 0 as tonggia, NULL as lancuoimuahang, 0 as tongno FROM khachhang as c WHERE (c.makhachhang) NOT IN (SELECT h.makhachhang FROM hoadonbanhang as h GROUP BY h.makhachhang))) as temp HAVING temp.ten LIKE %:ten% ORDER BY temp.makhachhang ASC" ,
+			countQuery =  "SELECT COUNT(*) FROM (SELECT * FROM (SELECT khachhang.makhachhang, khachhang.ten,khachhang.sdt,khachhang.diachi, sum(b.tonggia) as tonggia, MAX(b.created_at) as lancuoimuahang,sum(b.tonggia-b.khachhangtra) as tongno FROM khachhang INNER JOIN hoadonbanhang b ON khachhang.makhachhang=b.makhachhang GROUP BY (khachhang.makhachhang) UNION ALL (SELECT c.makhachhang, c.ten,c.sdt,c.diachi, 0 as tonggia, NULL as lancuoimuahang, 0 as tongno FROM khachhang as c WHERE (c.makhachhang) NOT IN (SELECT h.makhachhang FROM hoadonbanhang as h GROUP BY h.makhachhang))) as temp HAVING temp.ten LIKE %:ten% ) as tqq",nativeQuery = true)
 	Page<KhachHangDTO> findCustomerList(Pageable pageable, String ten);
 	
-	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
-		+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
-		+ "INNER JOIN hoadonbanhang b "
-		+ "ON k.makhachhang=b.makhachhang "
-		+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)>0 ",
-		countQuery= " SELECT COUNT(*) FROM (SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
-				+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
-				+ "INNER JOIN hoadonbanhang b "
-				+ "ON k.makhachhang=b.makhachhang  "
-				+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)>0) as temp " , nativeQuery = true)
-	Page<KhachHangDTO> customerListIndebtedness(Pageable pageable);
-				
 	
-	@Query(value = "SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
-			+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
-			+ "INNER JOIN hoadonbanhang b "
-			+ "ON k.makhachhang=b.makhachhang "
-			+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)=0 ",
-			countQuery= " SELECT COUNT(*) FROM (SELECT k.makhachhang, k.ten,k.sdt,k.diachi,sum(b.tonggia) as tonggia , MAX(b.created_at) as lancuoimuahang, "
-					+ "sum(b.tonggia-b.khachhangtra)as tongno FROM khachhang as k "
-					+ "INNER JOIN hoadonbanhang b "
-					+ "ON k.makhachhang=b.makhachhang  "
-					+ "GROUP BY (k.makhachhang) HAVING sum(b.tonggia-b.khachhangtra)=0) as temp " , nativeQuery = true)
-	Page<KhachHangDTO> customerListUnIndebtedness(Pageable pageable);
-	
+
 	
 	
 	

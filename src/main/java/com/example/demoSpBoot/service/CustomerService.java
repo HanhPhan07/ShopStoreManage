@@ -29,28 +29,15 @@ public class CustomerService {
 	KhachHangDTORepository khachhangDTORes;
 	
 	public Page<KhachHangDTO> findListAll(@RequestParam int pageNumber, @RequestParam int pageSize){
-		Sort sortable = Sort.by("makhachhang").ascending();
-		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
 		return  (Page<KhachHangDTO>) khachhangDTORes.customerListAll(phantrang);
 	}
 	
 	public Page<KhachHangDTO> findByName(@RequestParam int pageNumber, @RequestParam int pageSize,@RequestParam String tenkhachhang) {
-		Sort sortable = Sort.by("makhachhang").ascending();
-		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
 		return  (Page<KhachHangDTO>) khachhangDTORes.findCustomerList(phantrang, tenkhachhang);
     }
 	
-	public Page<KhachHangDTO> findCustomersIndebtedness(@RequestParam int pageNumber, @RequestParam int pageSize) {
-		Sort sortable = Sort.by("makhachhang").ascending();
-		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
-		return  (Page<KhachHangDTO>) khachhangDTORes.customerListIndebtedness(phantrang);
-    }
-	
-	public Page<KhachHangDTO> findCustomersUnIndebtedness(@RequestParam int pageNumber, @RequestParam int pageSize) {
-		Sort sortable = Sort.by("makhachhang").ascending();
-		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
-		return  (Page<KhachHangDTO>) khachhangDTORes.customerListUnIndebtedness(phantrang);
-    }
 	
 	public List<khachhang> getListAllNonPage(){
 		return customerrepository.findAll();
@@ -62,48 +49,28 @@ public class CustomerService {
 			return true;
 		}else return false;
 	}
-//
-//	public boolean update(khachhang customer) {
-//
-//		if (!customerrepository.findById(customer.getMakhachhang()).isPresent()) {
-//			return false;
-//		} else {
-//			customerrepository.save(customer);
-//			return true;
-//		}
-//	}
-//
-//	public boolean  delete(String id) {
-//
-//		khachhang customer = customerrepository.findById(id).orElse(null);
-//		if (customer == null) {
-//			return false;
-//		} else {
-//			customerrepository.delete(customer);
-//			return true;
-//		}
-//	}
-//	
-//	
-//	public long count(){
-//		long count;
-//		count=customerrepository.count();
-//		if(count>0) return count;
-//			else {
-//				return 0;
-//			}
-//	}
-	
-//	public Long sumIndebtedness() {
-//		return customerrepository.sumIndebtedness();
-//	}
-//	
-//	public Long totalMoney() {
-//		if(customerrepository.sumMoney()>0) return customerrepository.sumMoney();
-//		else {
-//			return (long) 0;
-//		}
-//	}
+
+	public boolean update(khachhang customer) {
+
+		if (!customerrepository.findById(customer.getMakhachhang()).isPresent()) {
+			return false;
+		} else {
+			customerrepository.save(customer);
+			return true;
+		}
+	}
+
+	public boolean  delete(String id) {
+
+		khachhang customer = customerrepository.findById(id).orElse(null);
+		if (customer == null) {
+			return false;
+		} else {
+			customerrepository.deleteHDBH(id);
+			customerrepository.delete(customer);
+			return true;
+		}
+	}
 	
 	
 }
