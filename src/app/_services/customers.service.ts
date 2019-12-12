@@ -38,17 +38,19 @@ export class CustomersService {
         }));
   }
 
-  getKhachHang(page?: number, pageSize?: number, searchTerm?: string): Observable<PaginatedResult<KhachHangDTO[]>> {
+  getSearchKhachHang(page?: number, pageSize?: number, searchTerm?: string): Observable<PaginatedResult<KhachHangDTO[]>> {
     const paginatedResult: PaginatedResult<KhachHangDTO[]> = new PaginatedResult<KhachHangDTO[]>();
     let params = new HttpParams();
     if (page != null && pageSize != null) {
       params = params.append('pageNumber', (page - 1).toString());
       params = params.append('pageSize', pageSize.toString());
     }
-    if (searchTerm != null ) {
+
+    if (searchTerm != null || typeof(searchTerm) != 'undefined' ) {
       params = params.append('searchTerm', searchTerm);
     }
-    return this.httpClient.get<any>(environment.baseUrl + 'customers/sreach', { observe: 'response', params })
+
+    return this.httpClient.get<any>(environment.baseUrl + 'customers/search', { observe: 'response', params })
       .pipe(map(response => {
         if (response.body != null) {
         paginatedResult.result = response.body.content;
@@ -61,6 +63,16 @@ export class CustomersService {
       }
         return paginatedResult;
         }));
+  }
+
+  deleteCustomer(id: string) {
+    return this.httpClient.delete(environment.baseUrl + 'customers/' + id);
+  }
+
+  addCustomer(customers: KhachHang): any {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.put(environment.baseUrl + 'customers', customers, { headers: headers });
   }
 
 

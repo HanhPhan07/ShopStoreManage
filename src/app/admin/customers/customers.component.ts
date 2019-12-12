@@ -6,6 +6,8 @@ import { CustomersService } from 'src/app/_services/customers.service';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { KhachHang } from 'src/app/_models/khachhang';
 import { KhachHangDTO } from 'src/app/_models/khachhangDTO';
+import { error } from 'util';
+import { TabHeadingDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-customers',
@@ -23,26 +25,34 @@ export class CustomersComponent implements OnInit {
   baseDataListCustomers: KhachHangDTO[];
   fitlerloaikhachhang: number;
   searchTerm: string;
+  customer: KhachHang;
+  ten: string;
+  makhachhang: string;
+  sdt: string;
+  email: string;
+  diachi: string;
+  ngaysinh: Date;
+  gioitinh: boolean;
 
   constructor(
     private modalService: BsModalService,
     private activatedRoute: ActivatedRoute,
-    private customers: CustomersService) { }
+    private customersService: CustomersService) { }
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
   ngOnInit() {
+    this.searchTerm = '' ;
     this.fitlerloaikhachhang = 0;
     this.activatedRoute.data.subscribe(data => {
       this.listCustomers = data.customers.result;
       this.pagination = data.customers.pagination;
     });
-    //console.log(this.listCustomers);
 
   }
   search() {
-    this.customers.getKhachHang(
+    this.customersService.getSearchKhachHang(
       this.pagination.currentPage, this.pagination.itemsPerPage, this.searchTerm ).subscribe(
         (data: PaginatedResult<KhachHangDTO[]>) => {
           if (typeof(data.pagination) !== 'undefined') {
@@ -59,6 +69,29 @@ export class CustomersComponent implements OnInit {
       },
         error => console.log(error)
       );
+      console.log(this.searchTerm);
+      
+  }
+
+  getListCustomers() {
+    this.customersService.getAllKhachHang(
+      this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(
+        (data: PaginatedResult<KhachHangDTO[]>) => {
+          if (typeof(data.pagination) !== 'undefined') {
+            this.pagination = data.pagination;
+          } else {
+              this.pagination = {
+                currentPage: 1,
+                totalItems: 0,
+                totalPages: 0,
+                itemsPerPage: this.itemsPerPage
+              };
+          }
+          this.updateListBill(data.result);
+      },
+      // tslint:disable-next-line: no-shadowed-variable
+      error => console.log(error)
+      );
 
   }
 
@@ -66,9 +99,9 @@ export class CustomersComponent implements OnInit {
     this.searchkey = '';
   }
   editCusromer(khachhang: KhachHang) { }
-  deleteCustomer(ten: string) { }
 
   pageChanged(event: any): void {
+    
     this.pagination.currentPage = event.page;
     this.search();
   }
@@ -99,9 +132,9 @@ export class CustomersComponent implements OnInit {
   }
 
   filter() {
-    if (this.fitlerloaikhachhang === 2) {
+    if (this.fitlerloaikhachhang == 1) {
       this.listCustomers = this.baseDataListCustomers.filter(this.isDebt);
-    } else if (this.fitlerloaikhachhang === 1) {
+    } else if (this.fitlerloaikhachhang == 2) {
       this.listCustomers = this.baseDataListCustomers;
     } else {
       this.listCustomers = this.baseDataListCustomers.filter(this.isNonDebt);
@@ -127,6 +160,44 @@ export class CustomersComponent implements OnInit {
   }
 
 
+  deleteCustomer(makhachhang: string) {
+    if (confirm('Bạn có thực sự muốn xóa khách hàng này ?')) {
+      this.customersService.deleteCustomer(makhachhang).subscribe(() => {
+        this.getListCustomers();
+        alert('Xóa thành công !');
+      },
+        // tslint:disable-next-line: no-shadowed-variable
+        error => {
+          console.log(error);
+          alert('Xóa thất bại !');
+        }
+    );
+    }
+  }
 
+  addcustomer(customer: KhachHang) {
+    if (!this.checkInputCustomer()) {
+      alert('Vui lòng nhập đầy đủ thông tin !' );
+    } else {
+        this.customer = new KhachHang();
+        this.customer.makhachhang = this.makhachhang;
+        this.customer.ten = this.ten;
+        this.customer.sdt = this.sdt;
+        this.customer.email = this.email;
+        this.customer.diachi = this.diachi;
+        this.customer.ngaysinh = this.ngaysinh;
+        this.customer.gioitinh = this.gioitinh;
+        this.customersService.addCustomer(this.customer).subscribe(data => {
+          alert('Thêm thành công !');
+          this.updateListBill(data.result);
+        },
+          error => console.log(error));
+      }
+  }
 
+  checkInputCustomer() {
+    if (this.ten === undefined ||  this.makhachhang === undefined ||
+      this.sdt === undefined || this.gioitinh === undefined ) {return false; }
+    return true;
+  }
 }
