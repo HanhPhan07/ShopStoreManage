@@ -14,8 +14,8 @@ public interface ProductRepository extends JpaRepository<sanpham, Integer>{
 	Optional<sanpham> findBymasp(String masp);
 	Page<sanpham> findAll(Pageable pageable);
 	
-	@Query( value = "SELECT b.* FROM sanpham b WHERE b.masp=:key OR b.tensp=:key",
-			countQuery = "SELECT COUNT(*) FROM (SELECT b.* FROM sanpham b WHERE b.masp=:key OR b.tensp=:key)",
+	@Query( value = "SELECT b.* FROM sanpham b WHERE b.masp=:key OR b.tensp LIKE %:key%",
+			countQuery = "SELECT COUNT(*) FROM (SELECT b.* FROM sanpham b WHERE b.masp=:key OR b.tensp LIKE %:key%)",
 			nativeQuery = true)
 	  
 	Page<sanpham> findBymasportensp(Pageable pageable, String key);
