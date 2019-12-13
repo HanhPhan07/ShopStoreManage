@@ -19,6 +19,7 @@ import { BillBHResolver } from '../_resolver/bill-bh-resolver';
 import { EditBillResolver } from '../_resolver/edit-bill-resolver';
 import { CustomersComponent } from './customers/customers.component';
 import { AllCustomersResolver } from '../_resolver/customer-all-resolver';
+import { CustomersDetailResolver } from '../_resolver/customer-detail-resolver';
 
 
 const routes: Routes = [
@@ -37,7 +38,8 @@ const routes: Routes = [
       },
       {
         path: 'customers/:id',
-        component: CustomerDetailComponent
+        component: CustomerDetailComponent,
+        resolve: {khachhang: CustomersDetailResolver}
       },
       {
         path: 'orders',

@@ -75,5 +75,11 @@ export class CustomersService {
     return this.httpClient.put(environment.baseUrl + 'customers', customers, { headers: headers });
   }
 
+  getCustomer(makhachhang: string): any {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.get(environment.baseUrl + 'customers/' + makhachhang, { headers: headers });
+  }
+
 
 }

@@ -8,6 +8,8 @@ import { KhachHang } from 'src/app/_models/khachhang';
 import { KhachHangDTO } from 'src/app/_models/khachhangDTO';
 import { error } from 'util';
 import { TabHeadingDirective } from 'ngx-bootstrap';
+import { FormGroup, FormControl } from '@angular/forms';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-customers',
@@ -26,6 +28,7 @@ export class CustomersComponent implements OnInit {
   fitlerloaikhachhang: number;
   searchTerm: string;
   customer: KhachHang;
+  addCus: KhachHang;
   ten: string;
   makhachhang: string;
   sdt: string;
@@ -33,10 +36,19 @@ export class CustomersComponent implements OnInit {
   diachi: string;
   ngaysinh: Date;
   gioitinh: boolean;
-
+  addCustomersForm = new FormGroup({
+    makhachhang: new FormControl(''),
+    ten: new FormControl(''),
+    sdt: new FormControl(''),
+    email: new FormControl(''),
+    diachi: new FormControl(''),
+    ngaysinh: new FormControl(''),
+    gioitinh: new FormControl(''),
+  });
   constructor(
     private modalService: BsModalService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private customersService: CustomersService) { }
 
   openModal(template: TemplateRef<any>) {
@@ -49,6 +61,8 @@ export class CustomersComponent implements OnInit {
       this.listCustomers = data.customers.result;
       this.pagination = data.customers.pagination;
     });
+
+    this.baseDataListCustomers = this.listCustomers;
 
   }
   search() {
@@ -69,8 +83,6 @@ export class CustomersComponent implements OnInit {
       },
         error => console.log(error)
       );
-      console.log(this.searchTerm);
-      
   }
 
   getListCustomers() {
@@ -98,10 +110,11 @@ export class CustomersComponent implements OnInit {
   resetFilter() {
     this.searchkey = '';
   }
-  editCusromer(khachhang: KhachHang) { }
+  editCustomer(makhachhang: string) {
+    this.router.navigate(['/admin/customers/' + makhachhang ]);
+   }
 
   pageChanged(event: any): void {
-    
     this.pagination.currentPage = event.page;
     this.search();
   }
@@ -133,19 +146,19 @@ export class CustomersComponent implements OnInit {
 
   filter() {
     if (this.fitlerloaikhachhang == 1) {
-      this.listCustomers = this.baseDataListCustomers.filter(this.isDebt);
-    } else if (this.fitlerloaikhachhang == 2) {
+      this.listCustomers = this.baseDataListCustomers.filter(this.isNonDebt);
+    } else if (this.fitlerloaikhachhang == 0) {
       this.listCustomers = this.baseDataListCustomers;
     } else {
-      this.listCustomers = this.baseDataListCustomers.filter(this.isNonDebt);
+      this.listCustomers = this.baseDataListCustomers.filter(this.isDebt);
     }
   }
 
-  isDebt(customers: KhachHangDTO) {
-    return customers.tongno === 0 ;
+  isNonDebt(customers: KhachHangDTO) {
+    return customers.createdAt != null  ;
   }
 
-  isNonDebt(customers: KhachHangDTO) {
+  isDebt(customers: KhachHangDTO) {
     return customers.tongno > 0 ;
   }
 
@@ -175,29 +188,39 @@ export class CustomersComponent implements OnInit {
     }
   }
 
-  addcustomer(customer: KhachHang) {
-    if (!this.checkInputCustomer()) {
-      alert('Vui lòng nhập đầy đủ thông tin !' );
-    } else {
-        this.customer = new KhachHang();
-        this.customer.makhachhang = this.makhachhang;
-        this.customer.ten = this.ten;
-        this.customer.sdt = this.sdt;
-        this.customer.email = this.email;
-        this.customer.diachi = this.diachi;
-        this.customer.ngaysinh = this.ngaysinh;
-        this.customer.gioitinh = this.gioitinh;
-        this.customersService.addCustomer(this.customer).subscribe(data => {
-          alert('Thêm thành công !');
-          this.updateListBill(data.result);
-        },
-          error => console.log(error));
-      }
+  addValueCustomer() {
+    this.addCustomersForm.controls[' ten '].setValue(this.customer.ten);
+    this.addCustomersForm.controls[' sdt '].setValue(this.customer.sdt);
+    this.addCustomersForm.controls[' email '].setValue(this.customer.email);
+    this.addCustomersForm.controls[' diachi '].setValue(this.customer.diachi);
+    this.addCustomersForm.controls[' ngaysinh '].setValue(this.customer.ngaysinh);
+    this.addCustomersForm.controls[' gioitinh '].setValue(this.customer.gioitinh ? 1 : 0);
   }
 
-  checkInputCustomer() {
-    if (this.ten === undefined ||  this.makhachhang === undefined ||
-      this.sdt === undefined || this.gioitinh === undefined ) {return false; }
-    return true;
+  addCustomer(customer: KhachHang) {
+    // if (!this.checkInputCustomer()) {
+    //   alert('Vui lòng nhập đầy đủ thông tin !' );
+    // } else {
+        this.addCus.ten = this.addCustomersForm.controls[' ten '].value;
+        this.addCus.sdt = this.addCustomersForm.controls[' sdt '].value;
+        this.addCus.email = this.addCustomersForm.controls[' email '].value;
+        this.addCus.diachi = this.addCustomersForm.controls[' diachi '].value;
+        this.addCus.ngaysinh = this.addCustomersForm.controls[' ngaysinh'].value;
+        this.addCus.gioitinh = this.addCustomersForm.controls[' gioitinh'].value;
+        this.customersService.addCustomer(this.customer).subscribe( next => {
+          alert('Thêm thành công !');
+        },
+          error => {
+            alert('Lỗi');
+          }, () => {});
+      //}
   }
+
+  // checkInputCustomer() {
+  //   if (this.ten != null ||  this.makhachhang != null ||
+  //     this.sdt != null || this.gioitinh != null || this.diachi != null ) {return true; }
+  //   return false;
+  // }
+
+
 }
