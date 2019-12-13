@@ -25,6 +25,19 @@ export class ProductsComponent implements OnInit {
   ];
   itemsPerPage = 4;
   listSubTrTableProd = [];
+  product: SanPham;
+  masp: string;
+  tensp: string;
+  soluong: number;
+  giavon: number;
+  giaban: number;
+  danhmuc: string;
+  nhasx: string;
+  motasp: string;
+  anhsanpham: string;
+  hot: boolean;
+  new: boolean;
+  display: boolean;
   constructor(
     private modalService: BsModalService,
     private productService: ProductService,
@@ -149,4 +162,17 @@ export class ProductsComponent implements OnInit {
     this.search();
   }
 
+  addProduct(product: SanPham) {
+    if(!this.checkInputProduct()){
+      alert('Vui lòng nhập đầy đủ thông tin sản phẩm!!')
+    }
+  }
+
+    checkInputProduct(){
+      if (this.masp === undefined || this.tensp === undefined || this.soluong === undefined ||
+        this.giavon === undefined || this.giaban === undefined ||
+        this.danhmuc === undefined || this.nhasx === undefined ||
+        this.hot === undefined || this.new === undefined || this.display === undefined) { return false; }
+      return true;
+    }
 }
