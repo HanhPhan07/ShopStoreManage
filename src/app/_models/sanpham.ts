@@ -1,5 +1,6 @@
 import {DanhMucSP} from './danhmucsp';
 import {NhaSanXuat} from './nhasanxuat'
+import { ChiTietDanhMuc } from './chitietdanhmuc';
 export interface SanPham {
   id: number;
   masp: string;
@@ -8,8 +9,8 @@ export interface SanPham {
   giaban: number;
   soluong: number;
   trangthai: number;
-  nhasx: NhaSanXuat;
-  danhmuc?: DanhMucSP[];
+  nhasanxuat: NhaSanXuat;
+  chitietdanhmuc: ChiTietDanhMuc[];
   anhsp: string;
   motasp: string;
   donvitinh: string;

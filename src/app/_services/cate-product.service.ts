@@ -5,23 +5,21 @@ import { environment } from 'src/environments/environment';
 
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
-import { SanPham } from '../_models/sanpham';
+import { DanhMucSP } from '../_models/danhmucsp';
+
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
-  constructor( private httpClient: HttpClient ) { }
-  getListProduct(): Observable<SanPham[]> {
-    return this.httpClient.get<any>(environment.baseUrl + 'allproducts');
-  }
-  getProductPage(page?: number, pageSize?: number): Observable<PaginatedResult<SanPham[]>> {
-    const paginatedResult: PaginatedResult<SanPham[]> = new PaginatedResult<SanPham[]>();
+export class CateProductService {
+constructor( private httpClient: HttpClient ) { }
+  getCateProductPage(page?: number, pageSize?: number): Observable<PaginatedResult<DanhMucSP[]>> {
+    const paginatedResult: PaginatedResult<DanhMucSP[]> = new PaginatedResult<DanhMucSP[]>();
     let params = new HttpParams();
     if (page != null && pageSize != null) {
       params = params.append('pageNumber', (page - 1).toString());
       params = params.append('pageSize', pageSize.toString());
     }
-    return this.httpClient.get<any>(environment.baseUrl + 'product', { observe: 'response', params })
+    return this.httpClient.get<any>(environment.baseUrl + 'cates', { observe: 'response', params })
       .pipe(map(response => {
         paginatedResult.result = response.body.content;
         paginatedResult.pagination = {
@@ -33,13 +31,13 @@ export class ProductService {
         return paginatedResult;
       }));
   }
-  deleteProduct(id: number) {
-    return this.httpClient.delete(environment.baseUrl + 'product/' + id);
+  deleteCateProduct(id: number) {
+    return this.httpClient.delete(environment.baseUrl + 'cates/' + id);
   }
-  getSearchListProduct(
+  getSearchListCateProduct(
     page?: number, pageSize?: number, searchTerm?: string):
-    Observable<PaginatedResult<SanPham[]>> {
-      const paginatedResult: PaginatedResult<SanPham[]> = new PaginatedResult<SanPham[]>();
+    Observable<PaginatedResult<DanhMucSP[]>> {
+      const paginatedResult: PaginatedResult<DanhMucSP[]> = new PaginatedResult<DanhMucSP[]>();
       let params = new HttpParams();
       if (page != null && pageSize != null) {
         params = params.append('pageNumber', (page - 1).toString());
@@ -48,7 +46,7 @@ export class ProductService {
       if (searchTerm != null) {
         params = params.append('searchTerm', searchTerm);
       }
-      return this.httpClient.get<any>(environment.baseUrl + 'product/search', { observe: 'response', params })
+      return this.httpClient.get<any>(environment.baseUrl + 'cate/search', { observe: 'response', params })
       .pipe(map(response => {
         if (response.body != null) {
           paginatedResult.result = response.body.content;
@@ -62,5 +60,4 @@ export class ProductService {
         return paginatedResult;
       }));
   }
-
 }

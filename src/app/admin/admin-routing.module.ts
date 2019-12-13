@@ -18,6 +18,8 @@ import { ProductsResolver } from '../_resolver/product-resolver';
 import { CustomersResolver } from '../_resolver/customer-resolver';
 import { BillBHResolver } from '../_resolver/bill-bh-resolver';
 import { EditBillResolver } from '../_resolver/edit-bill-resolver';
+import { ProductResolver } from '../_resolver/products-resolver';
+import { CateProductResolver } from '../_resolver/cate-resolver';
 
 const routes: Routes = [
   {
@@ -53,11 +55,13 @@ const routes: Routes = [
       },
       {
         path: 'products',
-        component: ProductsComponent
+        component: ProductsComponent,
+        resolve: {product: ProductResolver}
       },
       {
         path: 'categories-prod',
-        component: CategoriesProdComponent
+        component: CategoriesProdComponent,
+        resolve: {cateProduct: CateProductResolver}
       },
       {
         path: 'manuf-prod',

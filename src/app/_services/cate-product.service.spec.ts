@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { ProductsService } from './products.service';
+import { CateProductService } from './cate-product.service';
 
-describe('Service: Products', () => {
+describe('Service: CateProduct', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ProductsService]
+      providers: [CateProductService]
     });
   });
 
-  it('should ...', inject([ProductsService], (service: ProductsService) => {
+  it('should ...', inject([CateProductService], (service: CateProductService) => {
     expect(service).toBeTruthy();
   }));
 });
