@@ -114,7 +114,7 @@ export class EditOrderComponent implements OnInit {
       this.chitiethoadon.soluong = 1;
       this.chitiethoadon.gia = this.chitiethoadon.sanpham.giaban * this.chitiethoadon.soluong;
       this.i++;
-      //this.chitiethoadon.id = this.i;
+      this.chitiethoadon.id_hoadon = this.hoadonbanhang.id;
       // add ChiTietHoaDon to HoaDon
       this.listchitiethoadon.push(this.chitiethoadon);
     }
@@ -161,21 +161,36 @@ export class EditOrderComponent implements OnInit {
       this.hoadonbanhang.loaithanhtoan = this.methodPay;
       this.hoadonbanhang.tonggia = this.getTotalCost();
       this.hoadonbanhang.nguoisua = this.currentUser;
-      this.hoadonbanhang.chitiethoadons = [];
-      let currentBillID = 0;
+      this.hoadonbanhang.chitiethoadons = this.listchitiethoadon;
       if (!this.checkInputKhachhang()) {
         alert('Vui lòng chọn khách hàng');
       } else {
-        this.billService.putBill(this.hoadonbanhang).subscribe(data => {
-          currentBillID = data.id;
-          this.listchitiethoadon.forEach(x => x.id_hoadon = currentBillID);
-          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe( data => {
-            alert('Lưu thành công');
-            this.router.navigate(['/admin/orders']);
-          },
-            error => console.log(error));
+        this.billService.putBill(this.hoadonbanhang).subscribe(() => {
+          alert('Lưu thành công');
+          this.router.navigate(['/admin/orders']);
+          // currentBillID = data.id;
+          // this.listchitiethoadon.forEach(x => x.id_hoadon = currentBillID);
+          // this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe( () => {
+          //   alert('Lưu thành công');
+          //   this.router.navigate(['/admin/orders']);
+          // },
+          //   error => {
+          //     if (error.status === 400) {
+          //       alert('Số lượng sản phẩm trong Kho không đủ!');
+          //     } else {
+          //       alert('Không thể Lưu hóa đơn lúc này!');
+          //       console.log(error);
+          //     }
+          //   });
         },
-        error => console.log(error));
+        error => {
+          if (error.status === 400) {
+            alert('Số lượng sản phẩm trong Kho không đủ!');
+          } else {
+            alert('Không thể Lưu hóa đơn lúc này!');
+            console.log(error);
+          }
+        });
       }
     }
   }

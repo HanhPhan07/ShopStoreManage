@@ -18,12 +18,12 @@
 
         </div>
       </div>
-      <div class="col-lg-3">
+      <div class="col-lg-3 shadow-left">
         <h4>Chi tiết sản phẩm</h4>
         <p>Tên: {{currentProd.tensp}}</p>
         <p>Số lượng tồn kho: {{currentProd.soluong}}</p>
         <p>Giá bán: {{currentProd.giaban}}</p>
-        <p>Danh mục: <span *ngFor="let cate of currentProd.danhmuc">{{cate.tendanhmuc}}, </span></p>
+        <p>Danh mục: <span *ngFor="let cate of currentProd.chitietdanhmuc">{{cate.danhmucsp.tendanhmuc}}, </span></p>
       </div>
     </div>
 </div>
