@@ -173,11 +173,25 @@ export class SellProdComponent implements OnInit {
         this.billService.postBill(this.hoadonbanhang).subscribe(data => {
           currentBillID = data.id;
           this.listchitiethoadon.forEach(x => x.id_hoadon = currentBillID);
-          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe(data => {
+          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe(() => {
             alert('Lưu thành công');
             this.router.navigate(['/admin/orders']);
           },
-            error => console.log(error));
+            error => {
+              if (error.status === 400) {
+                this.billService.deleteBill(currentBillID).subscribe(() => {
+                  alert('Số lượng sản phẩm trong Kho không đủ!');
+                }, error => {
+                    console.log(error);
+                  }
+                );
+              } else {
+                alert('Không thể Lưu hóa đơn lúc này!');
+                console.log(error);
+              }
+            }
+          );
+
         },
         error => console.log(error));
       }
