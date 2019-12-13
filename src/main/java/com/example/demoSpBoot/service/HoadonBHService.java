@@ -1,7 +1,11 @@
 package com.example.demoSpBoot.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.demoSpBoot.model.chitiethoadonbh;
 import com.example.demoSpBoot.model.hoadonbanhang;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.repository.DetailBHRepository;
 import com.example.demoSpBoot.repository.HoadonBHRepository;
 
@@ -18,7 +24,10 @@ import com.example.demoSpBoot.repository.HoadonBHRepository;
 public class HoadonBHService {
 	@Autowired
 	HoadonBHRepository hoadonBHRepo;
+	@Autowired
 	DetailBHRepository chitietRepo;
+	@Autowired
+	ProductService prdService;
 	
 	public Page<hoadonbanhang> findAll(int pageNumber,int pageSize){
 		Sort sortable = Sort.by("id").descending();
@@ -41,13 +50,39 @@ public class HoadonBHService {
 	}
 
 	public boolean update(hoadonbanhang bill) {
-
+		
 		if (!hoadonBHRepo.findById(bill.getId()).isPresent()) {
 			return false;
 		} else {
+			List<chitiethoadonbh> chitiethds = bill.getChitiethoadons();
+			List<chitiethoadonbh> new_chitiethds = new ArrayList<chitiethoadonbh>();
+			for( @Valid chitiethoadonbh chitiet : chitiethds) {
+				Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());
+				int soluongdetailbill_old=0;
+				Optional<chitiethoadonbh> chitiethd_old = chitietRepo.findById(chitiet.getId());
+				if ( chitiethd_old.isPresent()) {
+					soluongdetailbill_old = chitiethd_old.get().getSoluong();
+				}
+				int soluong = sp.get().getSoluong() + soluongdetailbill_old - chitiet.getSoluong();
+				sp.get().setSoluong(soluong);
+				chitiethoadonbh new_chitiet= new chitiethoadonbh();
+				new_chitiet.setGia(chitiet.getGia());
+				new_chitiet.setGiamgia(chitiet.getGiamgia());
+				new_chitiet.setId_hoadon(chitiet.getId_hoadon());
+				new_chitiet.setSanpham(chitiet.getSanpham());
+				new_chitiet.setSoluong(chitiet.getSoluong());
+				new_chitiethds.add(new_chitiet);
+				prdService.update(sp.get());
+				
+			}
 			hoadonBHRepo.deletechitiethoadon(bill.getId());
+			for (chitiethoadonbh chitiet : new_chitiethds) {
+				chitietRepo.save(chitiet);
+			}
+			
 			bill.setUpdatedAt(new Date());
 			hoadonBHRepo.update(bill.getGiamgia(),bill.getKhachhang().getMakhachhang(),bill.getKhachhangtra(), bill.getLoaithanhtoan(),bill.getNguoisua(),bill.getTonggia(),bill.getTrangthai(),bill.getUpdatedAt(),bill.getId());
+			
 			return true;
 		}
 	}

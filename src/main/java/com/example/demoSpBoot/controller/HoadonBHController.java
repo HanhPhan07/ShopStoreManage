@@ -3,6 +3,7 @@ package com.example.demoSpBoot.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -22,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demoSpBoot.model.chitiethoadonbh;
 import com.example.demoSpBoot.model.hoadonbanhang;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.HoadonBHService;
+import com.example.demoSpBoot.service.ProductService;
 
 @RestController
 @RequestMapping("/ShopStore")
@@ -31,6 +35,8 @@ import com.example.demoSpBoot.service.HoadonBHService;
 public class HoadonBHController {
 	@Autowired
 	HoadonBHService hoadonService;
+	@Autowired
+	ProductService prdService;
 	@GetMapping("/billBHs")
 	/* ---------------- GET ALL BILL ------------------------ */
 	public ResponseEntity<Page<hoadonbanhang>> findAllBills(@RequestParam int pageNumber, @RequestParam int pageSize) {
@@ -87,13 +93,25 @@ public class HoadonBHController {
 	
 	/* ---------------- UPDATE BILL ------------------------ */
 	@PutMapping("/billBHs")
-
 	public ResponseEntity<hoadonbanhang> updateBill(@RequestBody hoadonbanhang bill) {
-		if(hoadonService.update(bill)) return new ResponseEntity<hoadonbanhang>(bill,HttpStatus.OK);
-		else {
-			return new ResponseEntity<hoadonbanhang>(bill,HttpStatus.NOT_FOUND);
+		if(checkSoLuong(bill.getChitiethoadons())) {
+			if(hoadonService.update(bill)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
+			else {
+				return new ResponseEntity<hoadonbanhang>(HttpStatus.BAD_GATEWAY);
+			}
 		}
+		return new ResponseEntity<hoadonbanhang>(HttpStatus.BAD_REQUEST);
+		
 	}
+	
+	private boolean checkSoLuong(List<chitiethoadonbh> chitiets) {
+		for(chitiethoadonbh chitiet : chitiets) {
+			Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());
+			if (sp.get().getSoluong() < chitiet.getSoluong()) return false;
+		}
+		return true;
+	}
+	
 	/* ---------------- DELETE CATE ------------------------ */
 	
 	@DeleteMapping("/billBHs/{id}")
