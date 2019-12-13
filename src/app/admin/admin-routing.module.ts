@@ -3,8 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UsersComponent } from './users/users.component';
-import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { CustomerDetailComponent } from './customers/customer-detail/customer-detail.component';
 import { OrdersComponent } from './orders/orders.component';
 import { SellProdComponent } from './orders/sell-prod/sell-prod.component';
 import { ProductsComponent } from './products/products.component';
@@ -20,6 +19,9 @@ import { BillBHResolver } from '../_resolver/bill-bh-resolver';
 import { EditBillResolver } from '../_resolver/edit-bill-resolver';
 import { ProductResolver } from '../_resolver/products-resolver';
 import { CateProductResolver } from '../_resolver/cate-resolver';
+import { CustomersComponent } from './customers/customers.component';
+import { AllCustomersResolver } from '../_resolver/customer-all-resolver';
+
 
 const routes: Routes = [
   {
@@ -31,12 +33,13 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'users',
-        component: UsersComponent
+        path: 'customers',
+        component: CustomersComponent,
+        resolve: {customers: CustomersResolver }
       },
       {
-        path: 'user/:id',
-        component: UserDetailComponent
+        path: 'customers/:id',
+        component: CustomerDetailComponent
       },
       {
         path: 'orders',
@@ -46,12 +49,12 @@ const routes: Routes = [
       {
         path: 'orders/:id',
         component: EditOrderComponent,
-        resolve: {bill: EditBillResolver, prods: ProductsResolver, custs: CustomersResolver}
+        resolve: {bill: EditBillResolver, prods: ProductsResolver, custs: AllCustomersResolver}
       },
       {
         path: 'sell-prod',
         component: SellProdComponent,
-        resolve: {prods: ProductsResolver, custs: CustomersResolver}
+        resolve: {prods: ProductsResolver, custs: AllCustomersResolver}
       },
       {
         path: 'products',

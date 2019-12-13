@@ -23,8 +23,8 @@
             <div class="form-group col-md-9 padd-0" style="padding-left: 5px;">
               <div class="col-md-9 padd-0">
                 <div class="col-md-4 padd-0">
-                  <select class="form-control" [(ngModel)]="fitlerloaidonhang" (change)="filter()"
-                    name="fitlerloaidonhang">
+                  <select class="form-control"  [(ngModel)]="fitlerloaidonhang" (change)="filter()"
+                  name="fitlerloaidonhang" >
                     <option value="0">Đơn hàng</option>
                     <option value="1">Đơn hàng đã trả hết</option>
                     <option value="2">Đơn hàng còn nợ</option>
@@ -63,7 +63,7 @@
                 <th scope="col">Ngày bán</th>
                 <th scope="col">Thu ngân</th>
                 <th scope="col">Khách hàng</th>
-                <th scope="col">Trạng thái</th>
+                <th scope="col">Cách thanh toán</th>
                 <th scope="col">Tổng tiền</th>
                 <th scope="col">Nợ</th>
                 <th scope="col">Công cụ</th>
@@ -78,7 +78,7 @@
                   <td scope="row">{{item.createdAt | date:'medium'}}</td>
                   <td scope="row">{{item.nguoitao.ten}}</td>
                   <td scope="row">{{item.khachhang.ten}}</td>
-                  <td scope="row">{{listStatusBill[item.trangthai]}}</td>
+                  <td scope="row">{{listMethodBill[item.loaithanhtoan-1]}}</td>
                   <td scope="row">{{item.tonggia | currency: "VND"}}</td>
                   <td scope="row">{{item.tonggia-item.khachhangtra-item.giamgia | currency: "VND"}}</td>
                   <td style="text-align: center;">
@@ -109,22 +109,16 @@
                               <label>{{getTotalChiTietBillByIdBill(item)}} </label>
                             </div>
                             <div class="padding-left-10">
-                              <i class="fa fa-dollar">
-                              </i>
                               <span class="hidden-768">Tiền hàng:
                               </span>
                               <label>{{item.tonggia | currency: "VND"}} </label>
                             </div>
                             <div class="padding-left-10">
-                              <i class="fa fa-dollar">
-                              </i>
                               <span class="hidden-768">Giảm giá:
                               </span>
                               <label>{{item.giamgia | currency: "VND"}} </label>
                             </div>
                             <div class="padding-left-10">
-                              <i class="fa fa-dollar">
-                              </i>
                               <span class="hidden-768">Tổng tiền:
                               </span>
                               <label>{{item.tonggia - item.giamgia | currency: "VND"}} </label>
@@ -167,7 +161,7 @@
                                 <td class="text-center">
                                   {{prod.sanpham.giaban | currency: "VND"}} </td>
                                 <td class="text-center">
-                                  {{prod.gia | currency: "VND"}} </td>
+                                  {{prod.gia * prod.soluong | currency: "VND"}} </td>
                               </tr>
                             </tbody>
                           </table>

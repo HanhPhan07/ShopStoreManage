@@ -48,10 +48,12 @@
           </div>
           <div class="form-group">
             <label for="nhasx">Nhà sản xuất</label>
+            <ng-template ngFor let-item [ngForOf]="listProds" let-i="index">
             <select name="nhasx" class="form-control">
-              <option value="0">Nhà sản xuất</option>
+              <option value="0">{{item.nhasanxuat.tennsx}}</option>
               <option value="1">Samsung</option>
             </select>
+          </ng-template>
           </div>
           <div class="form-group">
             <label for="motasp">Mô tả sản phẩm</label>
@@ -106,9 +108,8 @@
             </select>
           </div>
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
-          <select class="form-control" [(ngModel)]="fitlerdanhmucsp" name="fitlerdanhmucsp" ngFor item [ngForOf]="listProds">
+          <select class="form-control" [(ngModel)]="fitlerdanhmucsp" name="fitlerdanhmucsp">
               <option selected="selected" value="-1">--Danh mục--</option>
-              <*ngFor="let danhmuc of item.chitietdanhmuc>
               <option ></option>
             </select>
           </div>

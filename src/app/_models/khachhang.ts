@@ -1,9 +1,9 @@
-export interface KhachHang {
+export class KhachHang {
   makhachhang: string;
   ten: string;
   sdt: string;
-  email: string;
-  diachi: string;
-  ngaysinh: Date;
+  email?: string;
+  diachi?: string;
+  ngaysinh?: Date;
   gioitinh: boolean;
 }

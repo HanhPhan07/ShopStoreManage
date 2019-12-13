@@ -36,11 +36,12 @@
         <form>
           <div class="form-group">
             <label for="makh">Mã KH</label>
-            <input
+            <input 
               type="text"
               class="form-control"
-              id="makh"
-              placeholder="Mã KH (tự sinh nếu bỏ trống)"
+              id="makhachhang"
+              [(ngModel)] = "customer.makhachhang"
+              placeholder="Nhập mã khách hàng (bắt buộc)"
             />
           </div>
           <div class="form-group">
@@ -48,8 +49,9 @@
             <input
               type="text"
               class="form-control"
-              id="tenkh"
-              placeholder="Nhập tên KH (bắt buộc)"
+              id="ten"
+              [(ngModel)] = "customer.ten"
+              placeholder="Nhập tên khách hàng (bắt buộc)"
             />
           </div>
           <div class="form-group">
@@ -57,7 +59,9 @@
               <input
                 type="text"
                 class="form-control"
-                id="sdtkh"
+                id="sdt"
+                [(ngModel)] = "customer.sdt"
+                placeholder="Nhập số điện thoại (bắt buộc)"
               />
           </div>
           <div class="form-group">
@@ -66,6 +70,7 @@
                 type="email"
                 class="form-control"
                 id="email"
+                [(ngModel)] = "customer.sdt"
               />
           </div>
           <div class="form-group">
@@ -73,7 +78,8 @@
               <input
                 type="text"
                 class="form-control"
-                id="diachikh"
+                id="diachi"
+                [(ngModel)] = "customer.diachi"
               />
           </div>
           <div class="form-group">
@@ -81,26 +87,27 @@
               <input
                 type="datetime"
                 class="form-control"
-                id="ngaysinhkh"
+                id="ngaysinh"
+                [(ngModel)] = "customer.ngaysinh"
               />
           </div>
           <div class="form-group">
               <label>Giới tính</label>
               <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnam" value="1" checked>
+                  <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnam" [value]="1" checked [(ngModel)]="customer.gioitinh">
                   <label class="form-check-label" for="gioitinhnam">
                     Nam
                   </label>
               </div>
               <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnu" value="0">
+                  <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnu" [value]="0" [(ngModel)]="customer.gioitinh">
                   <label class="form-check-label" for="gioitinhnu">
                     Nữ
                   </label>
               </div>
           </div>
           <div class="form-group">
-              <button type="submit" class="btn btn-primary">Lưu</button>
+              <button type="submit" class="btn btn-primary" (click) = "addcustomer()" >Lưu</button>
           </div>
 
         </form>
@@ -116,18 +123,19 @@
                 class="form-control"
                 type="text"
                 name="searchTerm"
-                placeholder="Nhập tên, mã hoặc SDT khách hàng"
+                [(ngModel)]="searchTerm"
+                placeholder="Nhập tên khách hàng"
               />
             </div>
             <div class="form-group col-md-2">
-              <select class="form-control" id="loaiKH">
-                <option value="1">Tất cả</option>
-                <option value="2">KH từng mua hàng</option>
-                <option value="3">KH còn nợ</option>
+              <select class="form-control" [(ngModel)]="fitlerloaikhachhang" (change)="filter()" name="fitlerloaikhachhang"  >
+                <option value="0">Tất cả</option>
+                <option value="1">KH từng mua hàng</option>
+                <option value="2">KH còn nợ</option>
               </select>
             </div>
             <div class="form-group col-md-2">
-              <button type="submit" class="form-control btn btn-primary">
+              <button type="submit" class="form-control btn btn-primary" (click)="search()">
                 Tìm kiếm
               </button>
             </div>
@@ -148,26 +156,41 @@
               </tr>
             </thead>
             <tbody>
+              <ng-template ngFor let-item [ngForOf]="listCustomers" let-i="index">
               <tr>
-                <th scope="row">id</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th scope="row">{{item.makhachhang}}</th>
+                <td scope="row">{{item.ten}}</td>
+                <td scope="row">{{item.sdt}}</td>
+                <td scope="row">{{item.diachi}}</td>
+                <td scope="row">{{item.createdAt | date:'medium' }}</td>
+                <td scope="row">{{item.tonggia | currency:'VND' }}</td>
+                <td scope="row">{{item.tongno | currency:'VND' }}</td>
+                <td style="text-align: center;">
+                    <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
+                    (click)="editCusromer(item.makhachhang)"></i>
+                  <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteCustomer(item.makhachhang)"></i>
+                </td>
               </tr>
+            </ng-template>
             </tbody>
           </table>
         </div>
         <div class="box-footer">
           <div class="d-flex justify-content-between p-2"></div>
-          <div class="alert alert-info" role="alert">
-            Số khách hàng: <span>3</span> Tổng tiền: <span>1.000.000</span>đ
-            Tổng nợ: <span>0</span>đ
+          <div class="alert alert-info summany-info clearfix" role="alert">
+            <div class="sm-info pull-left">
+                Số khách hàng: <span>{{getTotalCustomers()}}</span> Tổng tiền: <span>{{getTotalMoney() | currency: "VND"}}</span>đ
+                Tổng nợ: <span>{{getTotalDet() | currency: "VND"}}</span>đ
+            </div> 
           </div>
-        </div>
+          <div class="pull-right">
+            <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
+              lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+              [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+              (pageChanged)="pageChanged($event)">
+            </pagination>
+          </div> 
+        </div>   
       </form>
     </div>
   </section>
