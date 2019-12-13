@@ -21,6 +21,7 @@ import { BillDetailBhService } from 'src/app/_services/bill-detail-bh.service';
 
 export class SellProdComponent implements OnInit {
   modalRef: BsModalRef;
+  modalRefChooseProd: BsModalRef;
   asyncSelected: string;
   asyncSelectedKhachHang: string;
   typeaheadLoading: boolean;
@@ -172,11 +173,25 @@ export class SellProdComponent implements OnInit {
         this.billService.postBill(this.hoadonbanhang).subscribe(data => {
           currentBillID = data.id;
           this.listchitiethoadon.forEach(x => x.id_hoadon = currentBillID);
-          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe(data => {
+          this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe(() => {
             alert('Lưu thành công');
             this.router.navigate(['/admin/orders']);
           },
-            error => console.log(error));
+            error => {
+              if (error.status === 400) {
+                this.billService.deleteBill(currentBillID).subscribe(() => {
+                  alert('Số lượng sản phẩm trong Kho không đủ!');
+                }, error => {
+                    console.log(error);
+                  }
+                );
+              } else {
+                alert('Không thể Lưu hóa đơn lúc này!');
+                console.log(error);
+              }
+            }
+          );
+
         },
         error => console.log(error));
       }
@@ -192,6 +207,24 @@ export class SellProdComponent implements OnInit {
     return true;
   }
 
+  emitSubmitChooseProd( event: string ) {
+    this.chitiethoadon = new ChiTietHoaDonBH();
+    const prod = this.findProdByMaSP(event);
+    if (prod !== undefined) {
+      this.chitiethoadon.sanpham = prod;
+      this.chitiethoadon.giamgia = 0;
+      this.chitiethoadon.soluong = 1;
+      this.chitiethoadon.gia = this.chitiethoadon.sanpham.giaban * this.chitiethoadon.soluong;
+
+      this.listchitiethoadon.push(this.chitiethoadon);
+    }
+  }
+
+  showPopupChooseProd(event, template: TemplateRef<any>) {
+    if (event.code === 'F2') {
+      this.modalRefChooseProd =  this.modalService.show(template, Object.assign({}, { class: 'gray modal-lg' }));
+    }
+  }
 
 }
 

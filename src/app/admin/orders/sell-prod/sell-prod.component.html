@@ -85,6 +85,11 @@
       </div>
       <!--End form add KH-->
     </ng-template>
+    <!--Choose Prod-->
+    <ng-template #templateChooseProd>
+      <app-choose-prod (SubmitChooseProd)="emitSubmitChooseProd($event)" [listProd]="this.statesComplex"></app-choose-prod>
+    </ng-template>
+
     <div class="row">
       <div class="col-md-8">
         <div class="order-search" style="margin: 10px 0px; position: relative;">
@@ -101,7 +106,8 @@
                   [typeaheadOptionsLimit]="7"
                   [typeaheadScrollable]="true"
                   typeaheadOptionField="masp"
-                  placeholder="Nhập mã sp hoặc tên sp"
+                  placeholder="Nhập mã sp, tên sp hoặc nhấn F2 "
+                  (keydown.f2) = "showPopupChooseProd($event,templateChooseProd)"
                   class="form-control">
             <div *ngIf="typeaheadLoading">Loading</div>
         </div>

@@ -13,7 +13,7 @@ constructor( private httpClient: HttpClient ) { }
 postDetailsBill(bill: ChiTietHoaDonBH[]) {
   const headers = new HttpHeaders();
   headers.set('Content-Type', 'application/json; charset=utf-8');
-  return this.httpClient.post(environment.baseUrl + 'detailsBH', bill, { headers: headers });
+  return this.httpClient.post(environment.baseUrl + 'detailsBH', bill, {observe: 'response', headers: headers });
 }
 
 }

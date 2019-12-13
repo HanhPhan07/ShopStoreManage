@@ -48,10 +48,12 @@
           </div>
           <div class="form-group">
             <label for="nhasx">Nhà sản xuất</label>
+            <ng-template ngFor let-item [ngForOf]="listProds" let-i="index">
             <select name="nhasx" class="form-control">
-              <option value="0">Nhà sản xuất</option>
+              <option value="0">{{item.nhasanxuat.tennsx}}</option>
               <option value="1">Samsung</option>
             </select>
+          </ng-template>
           </div>
           <div class="form-group">
             <label for="motasp">Mô tả sản phẩm</label>
@@ -94,41 +96,21 @@
     <div class="box">
       <div class="box-header">
         <div class="form-group col-md-5 padd-0">
-          <input class="form-control" id="product-search" type="text" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm">
+          <input class="form-control" id="product-search" name="searchTerm" [(ngModel)]="searchTerm" type="text" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm">
         </div>
         <div class="form-group col-md-7 ">
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
-            <select class="form-control" id="search-option-1">
-              <option value="0">Đang kinh doanh</option>
-              <option value="1">Đã ngừng kinh doanh</option>
-              <option value="2">Đã xóa</option>
+            <select class="form-control" [(ngModel)]="filterStatus" (change)="filter()"
+            name="filterStatus">
+              <option value="0">Trạng thái</option>
+              <option value="1">Đang kinh doanh</option>
+              <option value="2">Đã ngừng kinh doanh</option>
             </select>
           </div>
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
-            <select class="form-control search-option-2" id="prd_group_id">
+          <select class="form-control" [(ngModel)]="fitlerdanhmucsp" name="fitlerdanhmucsp">
               <option selected="selected" value="-1">--Danh mục--</option>
-              <optgroup label="Chọn danh mục">
-                <option value="14">Áo </option>
-                <option value="15">|---Áo thun </option>
-                <option value="18">|---|---Áo thun 3 lỗ </option>
-                <option value="26">|---|---|---cứt </option>
-                <option value="27">|---|---|---|---13344 </option>
-                <option value="16">Quần </option>
-                <option value="17">|---Quần Jean </option>
-                <option value="19">Combo </option>
-                <option value="21">Sơn nội thất </option>
-                <option value="22">Sơn ngoại thất </option>
-                <option value="23">Điện Thoại </option>
-                <option value="24">Mỹ phẩm </option>
-                <option value="25">Đồ chơi </option>
-                <option value="28">LK </option>
-                <option value="29">|---LK </option>
-              </optgroup>
-              <optgroup label="------------------------">
-                <option value="product_group" data-toggle="modal" data-target="#list-prd-group">Tạo mới danh
-                  mục
-                </option>
-              </optgroup>
+              <option ></option>
             </select>
           </div>
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
@@ -147,7 +129,7 @@
               </optgroup>
             </select>
           </div>
-          <button class="btn btn-primary btn-large btn-ssup" type="button"><i class="fa fa-search"></i> Tìm kiếm
+          <button class="btn btn-primary btn-large btn-ssup" (click)="search()"><i class="fa fa-search"></i> Tìm kiếm
           </button>
         </div>
       </div>
@@ -165,22 +147,38 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">ten</th>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+              <ng-template ngFor let-item [ngForOf]="listProds" let-i="index">
+                <tr>
+                  <td scope="row">{{item.tensp}}</td>
+                  <th scope="row" (click) = "toggleChiTietSanPham(i)"
+                  >{{item.masp}}</th>
+                  <td scope="row">{{item.soluong}}</td>
+                  <td scope="row">{{item.giaban | currency: "VND"}}</td>
+                  <td scope="row"><span *ngFor="let danhmuc of item.chitietdanhmuc; let i=index">{{danhmuc.danhmucsp.tendanhmuc}}<span *ngIf="i!=item.chitietdanhmuc.length-1">, </span>  </span></td>
+                  <td scope="row">{{item.nhasanxuat.tennsx}}</td>
+                  <td style="text-align: center;">
+                      <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
+                        (click)="editProduct(item.id)"></i>
+                      <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteProduct(item.id)"></i>
+                  </td>
+                </tr>
+              </ng-template>
           </tbody>
         </table>
       </div>
       <div class="box-footer">
         <div class="d-flex justify-content-between p-2"></div>
-        <div class="alert alert-info" role="alert">
-          SL sản phẩm/SL nhà sản xuất: 3/2
+        <div class="alert alert-info summany-info clearfix" role="alert">
+          <div class="sm-info pull-left">
+            SL sản phẩm/SL nhà sản xuất: 3/2
+          </div>
+          <div class="pull-right">
+            <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
+              lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+              [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+              (pageChanged)="pageChanged($event)">
+            </pagination>
+          </div>
         </div>
       </div>
     </div>

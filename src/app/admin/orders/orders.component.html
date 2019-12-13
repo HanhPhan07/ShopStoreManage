@@ -80,7 +80,7 @@
                   <td scope="row">{{item.khachhang.ten}}</td>
                   <td scope="row">{{listMethodBill[item.loaithanhtoan-1]}}</td>
                   <td scope="row">{{item.tonggia | currency: "VND"}}</td>
-                  <td scope="row">{{item.tonggia-item.khachhangtra-item.giamgia | currency: "VND"}}</td>
+                  <td scope="row">{{item.tonggia-item.khachhangtra | currency: "VND"}}</td>
                   <td style="text-align: center;">
                     <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
                       (click)="editBill(item.id)"></i>
