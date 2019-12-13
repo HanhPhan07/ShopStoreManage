@@ -4,6 +4,11 @@
   </h4>
 </div>
 <div class="modal-body">
+    <div class="row form-inline text-center margin-bottom-20">
+      <div class="form-group mb-4">
+          <input type="text" name="searchProdKey" [(ngModel)]="searchProdKey"  class="form-control" (ngModelChange)="filterProd($event)">
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-9">
         <div class="col-lg-4" *ngFor="let item of listProd" >
