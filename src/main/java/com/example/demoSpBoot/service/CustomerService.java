@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,16 +29,19 @@ public class CustomerService {
 	@Autowired
 	KhachHangDTORepository khachhangDTORes;
 	
-	public Page<KhachHangDTO> findListAll(@RequestParam int pageNumber, @RequestParam int pageSize){
+	public Page<KhachHangDTO> findListAll( int pageNumber,  int pageSize){
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
 		return  (Page<KhachHangDTO>) khachhangDTORes.customerListAll(phantrang);
 	}
 	
-	public Page<KhachHangDTO> findByName(@RequestParam int pageNumber, @RequestParam int pageSize,@RequestParam String tenkhachhang) {
+	public Page<KhachHangDTO> findByName(int pageNumber,  int pageSize, String tenkhachhang) {
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
 		return  (Page<KhachHangDTO>) khachhangDTORes.findCustomerList(phantrang, tenkhachhang);
     }
 	
+	public Optional<khachhang> findBymakhachhang(String makhachhang) {
+        return customerrepository.findByMakhachhang(makhachhang);
+    }
 	
 	public List<khachhang> getListAllNonPage(){
 		return customerrepository.findAll();
@@ -45,11 +49,13 @@ public class CustomerService {
 
 	public boolean create(khachhang customer) {
 		if(customerrepository.findById(customer.getMakhachhang()).isPresent()) {
+			String randomString=(new Date()).getTime()+"";
+			customer.setMakhachhang("KH"+randomString);
 			customerrepository.save(customer);
 			return true;
 		}else return false;
 	}
-
+	
 	public boolean update(khachhang customer) {
 
 		if (!customerrepository.findById(customer.getMakhachhang()).isPresent()) {

@@ -25,6 +25,7 @@ public class HoadonBHService {
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<hoadonbanhang>) hoadonBHRepo.findAll( phantrang);
 	}
+	
 	public Optional<hoadonbanhang> findByID(int id) {
         return hoadonBHRepo.findById(id);
     }

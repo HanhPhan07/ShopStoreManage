@@ -1,5 +1,7 @@
 package com.example.demoSpBoot.repository;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +21,7 @@ public interface CustomerRepository extends JpaRepository<khachhang , String>{
 	@Transactional
     @Query(value = "DELETE FROM hoadonbanhang WHERE makhachhang= :id ",nativeQuery = true)
     void deleteHDBH(String id);
-
+	
+	Optional<khachhang> findByMakhachhang( String makhachhang);
 	    
 }

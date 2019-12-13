@@ -2,6 +2,7 @@ package com.example.demoSpBoot.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -59,6 +60,19 @@ public class CustomerController {
             return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<Page<KhachHangDTO>>(list,HttpStatus.OK);
+    }
+	
+	
+	/* ---------------- GET CUSTOMER BY MAKHCHHANG ------------------------ */
+	
+	@GetMapping("/customers/{makhachhang}")
+	
+	public ResponseEntity<Optional<khachhang>> findCustomer(@PathVariable("makhachhang") String makhachhang) {
+        Optional<khachhang> kh = customerService.findBymakhachhang(makhachhang);
+        if (!kh.isPresent()) {
+            return new ResponseEntity<Optional<khachhang>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Optional<khachhang>>(kh,HttpStatus.OK);
     }
 	
 	
