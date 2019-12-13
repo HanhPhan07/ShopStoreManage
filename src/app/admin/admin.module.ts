@@ -25,7 +25,7 @@ import { ManufProdComponent } from './products/manuf-prod/manuf-prod.component';
 import { SuppliersProdComponent } from './products/suppliers-prod/suppliers-prod.component';
 import { ProfilesComponent } from './profiles/profiles.component';
 import { EditOrderComponent } from './orders/edit-order/edit-order.component';
-
+import { ChooseProdComponent } from './orders/sell-prod/choose-prod/choose-prod.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -55,7 +55,8 @@ import { EditOrderComponent } from './orders/edit-order/edit-order.component';
     ManufProdComponent,
     SuppliersProdComponent,
     ProfilesComponent,
-    EditOrderComponent
+    EditOrderComponent,
+    ChooseProdComponent
   ]
 })
 export class AdminModule {}
