@@ -21,6 +21,7 @@ import { BillDetailBhService } from 'src/app/_services/bill-detail-bh.service';
 
 export class SellProdComponent implements OnInit {
   modalRef: BsModalRef;
+  modalRefChooseProd: BsModalRef;
   asyncSelected: string;
   asyncSelectedKhachHang: string;
   typeaheadLoading: boolean;
@@ -192,6 +193,24 @@ export class SellProdComponent implements OnInit {
     return true;
   }
 
+  emitSubmitChooseProd( event: string ) {
+    this.chitiethoadon = new ChiTietHoaDonBH();
+    const prod = this.findProdByMaSP(event);
+    if (prod !== undefined) {
+      this.chitiethoadon.sanpham = prod;
+      this.chitiethoadon.giamgia = 0;
+      this.chitiethoadon.soluong = 1;
+      this.chitiethoadon.gia = this.chitiethoadon.sanpham.giaban * this.chitiethoadon.soluong;
+
+      this.listchitiethoadon.push(this.chitiethoadon);
+    }
+  }
+
+  showPopupChooseProd(event, template: TemplateRef<any>) {
+    if (event.code === 'F2') {
+      this.modalRefChooseProd =  this.modalService.show(template, Object.assign({}, { class: 'gray modal-lg' }));
+    }
+  }
 
 }
 
