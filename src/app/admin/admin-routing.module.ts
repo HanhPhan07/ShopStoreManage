@@ -21,6 +21,7 @@ import { ProductResolver } from '../_resolver/products-resolver';
 import { CateProductResolver } from '../_resolver/cate-resolver';
 import { CustomersComponent } from './customers/customers.component';
 import { AllCustomersResolver } from '../_resolver/customer-all-resolver';
+import { AllCateProductResolver } from '../_resolver/list-all-cate-resolver';
 
 
 const routes: Routes = [
@@ -59,7 +60,7 @@ const routes: Routes = [
       {
         path: 'products',
         component: ProductsComponent,
-        resolve: {product: ProductResolver}
+        resolve: {product: ProductResolver, cates: AllCateProductResolver}
       },
       {
         path: 'categories-prod',

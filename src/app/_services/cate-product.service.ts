@@ -12,6 +12,15 @@ import { DanhMucSP } from '../_models/danhmucsp';
 })
 export class CateProductService {
 constructor( private httpClient: HttpClient ) { }
+
+  getListCate(): Observable<DanhMucSP[]> {
+    return this.httpClient.get<any>(environment.baseUrl + 'allcates');
+  }
+  getListCateArr(): Observable<DanhMucSP[]> {
+    return this.httpClient.get<any>(environment.baseUrl + 'allcates', { observe: 'response' }).pipe(map(response => {
+      return response.body;
+    }));
+  }
   getCateProductPage(page?: number, pageSize?: number): Observable<PaginatedResult<DanhMucSP[]>> {
     const paginatedResult: PaginatedResult<DanhMucSP[]> = new PaginatedResult<DanhMucSP[]>();
     let params = new HttpParams();

@@ -4,6 +4,13 @@ import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { SanPham } from 'src/app/_models/sanpham';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/_services/product.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ChiTietDanhMuc } from 'src/app/_models/chitietdanhmuc';
+import { NhaCungCap } from 'src/app/_models/nhacungcap';
+import { NhaSanXuat } from 'src/app/_models/nhasanxuat';
+import { CateProductService } from 'src/app/_services/cate-product.service';
+import { DanhMucSP } from 'src/app/_models/danhmucsp';
+import { ManufProdService } from 'src/app/_services/manuf-prod.service';
 
 @Component({
   selector: 'app-products',
@@ -23,25 +30,43 @@ export class ProductsComponent implements OnInit {
     'Đang kinh doanh',
     'Đã ngừng kinh doanh'
   ];
+  listCateProd: DanhMucSP[];
+  listManufProd: NhaSanXuat[];
   itemsPerPage = 4;
   listSubTrTableProd = [];
-  product: SanPham;
-  masp: string;
-  tensp: string;
-  soluong: number;
-  giavon: number;
-  giaban: number;
-  danhmuc: string;
-  nhasx: string;
-  motasp: string;
-  anhsanpham: string;
-  hot: boolean;
-  new: boolean;
-  display: boolean;
+  productAdd: SanPham;
+  addProdForm = new FormGroup({
+    masp: new FormControl({value: ''}),
+    tensp: new FormControl('', Validators.required),
+    soluong: new FormControl('', Validators.required),
+    giavon: new FormControl('', Validators.required),
+    giaban: new FormControl('', Validators.required),
+    danhmuc: new FormControl('', Validators.required),
+    nhasx: new FormControl('', Validators.required),
+    hot: new FormControl('', Validators.required),
+    new: new FormControl('', Validators.required),
+    display: new FormControl('', Validators.required),
+    anhsp: new FormControl(''),
+    motasp: new FormControl('')
+  });
+    masp: string;
+    tensp: string;
+    soluong: number;
+    giavon: number;
+    giaban: number;
+    danhmuc: ChiTietDanhMuc;
+    nhasx: NhaSanXuat;
+    hot: boolean;
+    new: boolean;
+    display: boolean;
+    anhsp: string;
+    motasp: string;
   constructor(
     private modalService: BsModalService,
     private productService: ProductService,
     private router: Router,
+    private cateProdService: CateProductService,
+    private manufProdService: ManufProdService,
     private activatedRoute: ActivatedRoute) { }
 
   openModal(template: TemplateRef<any>) {
@@ -63,12 +88,45 @@ export class ProductsComponent implements OnInit {
     this.activatedRoute.data.subscribe(data => {
         this.listProds = data.product.result;
         this.pagination = data.product.pagination;
+        //this.listCateProd = data.cates;
      });
-    //console.log(this.listProds);
+    this.getListCateProd();
+    this.getListManufProd();
+  }
+
+  createProduct() {
+    this.addProdForm.controls['masp'].value();
+    this.addProdForm.controls['tensp'].value();
+    this.addProdForm.controls['soluong'].value();
+    this.addProdForm.controls['giavon'].value();
+    this.addProdForm.controls['giaban'].value();
+    this.addProdForm.controls['danhmuc'].value();
+    this.addProdForm.controls['nhasx'].value();
+    this.addProdForm.controls['hot'].value();
+    this.addProdForm.controls['new'].value();
+    this.addProdForm.controls['display'].value();
+    this.addProdForm.controls['anhsp'].value();
+    this.addProdForm.controls['motasp'].value();
   }
   toggleChiTietSanPham(id: number) {
     this.listSubTrTableProd[id] = !this.listSubTrTableProd[id];
   }
+
+  getListCateProd() {
+    this.cateProdService.getListCateArr().subscribe(
+      data => {
+        this.listCateProd = data;
+      }
+    );
+  }
+  getListManufProd() {
+    this.manufProdService.getListManu().subscribe(
+      data => {
+        this.listManufProd = data;
+      }
+    );
+  }
+
 
   editProduct(maSP: number) {
     this.router.navigate(['/admin/products/' + maSP]);
@@ -162,13 +220,7 @@ export class ProductsComponent implements OnInit {
     this.search();
   }
 
-  addProduct(product: SanPham) {
-    if(!this.checkInputProduct()){
-      alert('Vui lòng nhập đầy đủ thông tin sản phẩm!!')
-    }
-  }
-
-    checkInputProduct(){
+    checkInputProduct() {
       if (this.masp === undefined || this.tensp === undefined || this.soluong === undefined ||
         this.giavon === undefined || this.giaban === undefined ||
         this.danhmuc === undefined || this.nhasx === undefined ||

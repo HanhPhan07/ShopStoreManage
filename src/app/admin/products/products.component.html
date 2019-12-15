@@ -23,69 +23,81 @@
       </div>
       <!--Form Add SP-->
       <div class="modal-body">
-        <form>
+        <form [formGroup]="addProdForm" (ngSubmit)="createProduct()">
           <div class="form-group">
             <label for="masp">Mã sản phẩm</label>
-            <input type="text" class="form-control" id="masp" placeholder="Mã tự sinh nếu bỏ trống" [(ngModel)] = "product.masp"/>
+            <input type="text" class="form-control" id="masp" 
+            placeholder="Mã tự sinh nếu bỏ trống" formControlName="masp">
           </div>
           <div class="form-group">
             <label for="tensp">Tên sản phẩm</label>
-            <input type="text" class="form-control" id="tensp" placeholder="Nhập tên SP (bắt buộc)" [(ngModel)] = "product.tensp"/>
+            <input type="text" class="form-control" id="tensp" 
+            placeholder="Nhập tên SP (bắt buộc)" formControlName="tensp"/>
           </div>
           <div class="form-group">
             <label for="sdtkh">Số lượng</label>
-            <input type="number" class="form-control" name="soluong" [(ngModel)] = "product.soluong"/>
+            <input type="number" class="form-control"
+             name="soluong" formControlName="soluong"/>
           </div>
           <div class="form-group form-inline">
             <label for="giavon">Giá vốn</label>
-            <input type="number" class="form-control" name="giavon" [(ngModel)] = "product.giagoc"/>
+            <input type="number" class="form-control"
+             name="giavon" formControlName="giavon"/>
             <label for="giaban">Giá bán</label>
-            <input type="number" class="form-control" name="giaban" [(ngModel)] = "product.giaban"/>
+            <input type="number" 
+            class="form-control" name="giaban" formControlName="giaban"/>
           </div>
           <div class="form-group">
             <label for="danhmuc">Danh mục</label>
-            <input type="text" class="form-control" id="danhmuc" [(ngModel)] = "product.chitietdanhmuc"/>
+            <div class="form-check">
+              <div *ngFor="let item of listCateProd">
+              <input class="form-check-input" type="checkbox" value="{{item.id}}" formControlName="danhmuc"/>
+              <label class="form-check-label">
+                {{item.tendanhmuc}}
+              </label>
+            </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="nhasx">Nhà sản xuất</label>
-            <select name="nhasx" class="form-control" id="nhasx" [(ngModel)] = "product.nhasanxuat">
-            <ng-template ngFor let-item [ngForOf]="listProds" let-i="index">
-              <option value="0">{{item.nhasanxuat.tennsx}}</option>
+            <select name="nhasx" class="form-control" id="nhasx" formControlName="nhasx">
+            <ng-template *ngFor="let item of listManufProd">
+              <option value="{{item.id}}">{{item.tennsx}}</option>
             </ng-template>
           </select>
           </div>
           <div class="form-group">
             <label for="motasp">Mô tả sản phẩm</label>
-            <textarea type="text" class="form-control" id="motasp" [(ngModel)] = "product.motasp">
+            <textarea type="text" class="form-control" id="motasp" formControlName="motasp">
                     </textarea>
           </div>
           <div class="form-group">
             <label for="anhsp">Ảnh sản phẩm</label>
-            <input type="text" class="form-control" id="anhsp" [(ngModel)] = "product.anhsp"/>
+            <input type="text" class="form-control" id="anhsp" formControlName="anhsp"/>
           </div>
           <div class="form-group">
             <label>Gắn nhãn</label>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="ishot" value="1" [(ngModel)] = "product.ishot">
+              <input class="form-check-input" type="checkbox" name="ishot" value="1" formControlName="hot">
               <label class="form-check-label" for="ishot">
                 is Hot
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="isnew" value="1" [(ngModel)] = "product.isnew">
+              <input class="form-check-input" type="checkbox" name="isnew" value="1" formControlName="new">
               <label class="form-check-label" for="isnew">
                 is New
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="displaywebsite" value="1" [(ngModel)] = "product.displaywebsite">
+              <input class="form-check-input" type="checkbox" name="displaywebsite" value="1" formControlName="display">
               <label class="form-check-label" for="displaywebsite">
                 Hiển thị trên website
               </label>
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary" (click) = "addProduct()">Lưu</button>
+            <button type="submit" class="btn btn-primary" (click) = "createProduct()">Lưu</button>
           </div>
 
         </form>
@@ -110,9 +122,9 @@
           <select class="form-control" [(ngModel)]="fitlerdanhmucsp" name="fitlerdanhmucsp">
               <option selected="selected" value="-1">--Danh mục--</option>
               <optgroup>
-                <ng-template ngFor let-item [ngForOf]="listProds" let-i="index">
-                  <option value="0"><span *ngFor="let danhmuc of item.chitietdanhmuc; let i=index">{{danhmuc.danhmucsp.tendanhmuc}}</span></option>
-                </ng-template>
+                <div *ngFor="let item of listCateProd">
+                  <option value="{{item.id}}">{{item.tendanhmuc}}</option>
+                </div>
               </optgroup>
             </select>
           </div>
