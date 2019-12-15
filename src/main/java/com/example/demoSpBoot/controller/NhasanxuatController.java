@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.nhasanxuat;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.NhasanxuatService;
 
 @RestController
@@ -28,6 +30,17 @@ import com.example.demoSpBoot.service.NhasanxuatService;
 public class NhasanxuatController {
 	@Autowired
 	NhasanxuatService nsxService;
+	@GetMapping("/allNSX")
+	/* ---------------- GET ALL PRODUCT ------------------------ */
+	public ResponseEntity<List<nhasanxuat>> findAllNSX() {
+		
+		List<nhasanxuat> listNSX= nsxService.findAllNSX();
+		if(listNSX.isEmpty()) {
+			return new ResponseEntity<List<nhasanxuat>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<nhasanxuat>>(listNSX, HttpStatus.OK);
+	}
+	
 	@GetMapping("/NSXs")
 	/* ---------------- GET ALL NSX ------------------------ */
 	public ResponseEntity<Page<nhasanxuat>> findAllNSXs(@RequestParam int pageNumber, @RequestParam int pageSize) {

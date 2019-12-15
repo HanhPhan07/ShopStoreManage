@@ -1,6 +1,5 @@
 package com.example.demoSpBoot.repository;
 
-import java.sql.Date;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;

@@ -10,5 +10,5 @@ import com.example.demoSpBoot.model.danhmucsp;
 @Repository
 public interface CateRepository extends JpaRepository<danhmucsp, Integer>{
 	Page<danhmucsp> findAll(Pageable pageable);	  
-	Page<danhmucsp> findByidContaining(Pageable pageable, String searchTerm);
+	Page<danhmucsp> findBytendanhmucContaining(Pageable pageable, String searchTerm);
 }

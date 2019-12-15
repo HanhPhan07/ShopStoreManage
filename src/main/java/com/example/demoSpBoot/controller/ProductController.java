@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.ProductService;
+
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/ShopStore")
@@ -109,5 +113,26 @@ public class ProductController {
 				return new ResponseEntity<Page<sanpham>>(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<Page<sanpham>>(listBill, HttpStatus.OK);
+	}
+	
+	//upload anhsp
+	private static final Logger logger = Logger.getLogger(ProductController.class.getName());
+	@PostMapping("/upload")
+	public ResponseEntity<String> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+		if (file == null) {
+			throw new RuntimeException("You must select the a file for uploading");
+		}
+		InputStream inputStream = file.getInputStream();
+		String originalName = file.getOriginalFilename();
+		String name = file.getName();
+		String contentType = file.getContentType();
+		long size = file.getSize();
+		logger.info("inputStream: " + inputStream);
+		logger.info("originalName: " + originalName);
+		logger.info("name: " + name);
+		logger.info("contentType: " + contentType);
+		logger.info("size: " + size);
+		// Do processing with uploaded file data in Service layer
+		return new ResponseEntity<String>(originalName, HttpStatus.OK);
 	}
 }
