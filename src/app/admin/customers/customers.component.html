@@ -33,24 +33,24 @@
       </div>
       <!--Form Add KH-->
       <div class="modal-body">
-        <form>
-          <div class="form-group">
+        <form [formGroup]="addCustomersForm" (ngSubmit)="addCustomer()">
+          <!-- <div class="form-group">
             <label for="makh">Mã KH</label>
             <input 
               type="text"
               class="form-control"
               id="makhachhang"
-              [(ngModel)] = "customer.makhachhang"
+              formControlName="makhachhang"
               placeholder="Nhập mã khách hàng (bắt buộc)"
             />
-          </div>
+          </div> -->
           <div class="form-group">
             <label for="tenkh">Tên KH</label>
             <input
               type="text"
               class="form-control"
               id="ten"
-              [(ngModel)] = "customer.ten"
+              formControlName="ten"
               placeholder="Nhập tên khách hàng (bắt buộc)"
             />
           </div>
@@ -60,7 +60,7 @@
                 type="text"
                 class="form-control"
                 id="sdt"
-                [(ngModel)] = "customer.sdt"
+                formControlName="sdt"
                 placeholder="Nhập số điện thoại (bắt buộc)"
               />
           </div>
@@ -70,7 +70,7 @@
                 type="email"
                 class="form-control"
                 id="email"
-                [(ngModel)] = "customer.sdt"
+                formControlName="email"
               />
           </div>
           <div class="form-group">
@@ -79,7 +79,7 @@
                 type="text"
                 class="form-control"
                 id="diachi"
-                [(ngModel)] = "customer.diachi"
+                formControlName="diachi"
               />
           </div>
           <div class="form-group">
@@ -88,26 +88,26 @@
                 type="datetime"
                 class="form-control"
                 id="ngaysinh"
-                [(ngModel)] = "customer.ngaysinh"
+                formControlName="ngaysinh"
               />
           </div>
           <div class="form-group">
               <label>Giới tính</label>
               <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnam" [value]="1" checked [(ngModel)]="customer.gioitinh">
+                  <input class="form-check-input" type="radio" name="gioitinh" id="gioitinhnam" checked [value]="1"  formControlName="gioitinh">
                   <label class="form-check-label" for="gioitinhnam">
                     Nam
                   </label>
               </div>
               <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnu" [value]="0" [(ngModel)]="customer.gioitinh">
+                  <input class="form-check-input" type="radio" name="gioitinh" id="gioitinhnu" [value]="0" formControlName="gioitinh">
                   <label class="form-check-label" for="gioitinhnu">
                     Nữ
                   </label>
               </div>
           </div>
           <div class="form-group">
-              <button type="submit" class="btn btn-primary" (click) = "addcustomer()" >Lưu</button>
+              <button type="submit" class="btn btn-primary"  >Lưu</button>
           </div>
 
         </form>
@@ -167,7 +167,7 @@
                 <td scope="row">{{item.tongno | currency:'VND' }}</td>
                 <td style="text-align: center;">
                     <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
-                    (click)="editCusromer(item.makhachhang)"></i>
+                    (click)="editCustomer(item.makhachhang)"></i>
                   <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteCustomer(item.makhachhang)"></i>
                 </td>
               </tr>

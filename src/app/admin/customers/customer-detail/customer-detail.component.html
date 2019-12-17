@@ -108,61 +108,46 @@
           <div class="col-lg-6">
             <div class="form-group">
                 <label class="col-md-4">Tên khách hàng: </label>
-                <div class="col-md-8">Tên</div>
+                <div class="col-md-8">{{usersdetail.ten}}</div>
             </div>
           </div>
           <div class="col-lg-6">
               <div class="form-group">
                   <label class="col-md-4">Mã khách hàng: </label>
-                  <div class="col-md-8">{{id}}</div>
+                  <div class="col-md-8">{{usersdetail.makhachhang}}</div>
               </div>
           </div>
           <div class="col-lg-6">
               <div class="form-group">
                   <label class="col-md-4">Điện thoại: </label>
-                  <div class="col-md-8">012345678</div>
+                  <div class="col-md-8">{{usersdetail.sdt}}</div>
               </div>
           </div>
           <div class="col-lg-6">
               <div class="form-group">
                   <label class="col-md-4">Email: </label>
-                  <div class="col-md-8">mail</div>
+                  <div class="col-md-8">{{usersdetail.email}}</div>
               </div>
           </div>
           <div class="col-lg-6">
               <div class="form-group">
                   <label class="col-md-4">Giới tính: </label>
                   <div class="col-md-8">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="khgioitinh"
-                      id="khgioitinh1"
-                      value="1"
-                      checked
-                    />
-                    Nam
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="khgioitinh"
-                      id="khgioitinh2"
-                      value="0"
-                    />
-                    Nữ
+                    <span *ngIf="usersdetail.gioitinh ">Nam</span>
+                    <span *ngIf="!usersdetail.gioitinh ">Nữ</span>
                   </div>
               </div>
           </div>
           <div class="col-lg-6">
               <div class="form-group">
                   <label class="col-md-4">Ngày sinh: </label>
-                  <div class="col-md-8">1997</div>
+                  <div class="col-md-8">{{usersdetail.ngaysinh  | date:'medium'}}</div>
               </div>
           </div>
           <div class="col-lg-6">
               <div class="form-group">
                   <label class="col-md-4">Địa chỉ: </label>
-                  <div class="col-md-8">abc</div>
+                  <div class="col-md-8">{{usersdetail.diachi}}</div>
               </div>
           </div>
 

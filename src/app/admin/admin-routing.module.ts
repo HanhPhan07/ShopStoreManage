@@ -22,6 +22,7 @@ import { CateProductResolver } from '../_resolver/cate-resolver';
 import { CustomersComponent } from './customers/customers.component';
 import { AllCustomersResolver } from '../_resolver/customer-all-resolver';
 import { AllCateProductResolver } from '../_resolver/list-all-cate-resolver';
+import { CustomersDetailResolver } from '../_resolver/customer-detail-resolver';
 
 
 const routes: Routes = [
@@ -40,7 +41,8 @@ const routes: Routes = [
       },
       {
         path: 'customers/:id',
-        component: CustomerDetailComponent
+        component: CustomerDetailComponent,
+        resolve: {khachhang: CustomersDetailResolver}
       },
       {
         path: 'orders',
@@ -61,6 +63,11 @@ const routes: Routes = [
         path: 'products',
         component: ProductsComponent,
         resolve: {product: ProductResolver, cates: AllCateProductResolver}
+      },
+      {
+        path: 'products/:id',
+        component: ProductsComponent,
+        resolve: {product: ProductsResolver}
       },
       {
         path: 'categories-prod',
