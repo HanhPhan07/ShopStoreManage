@@ -16,12 +16,16 @@ import com.example.demoSpBoot.dto.KhachHangDTO;
 import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.repository.CustomerRepository;
+import com.example.demoSpBoot.repository.HoadonBHRepository;
 import com.example.demoSpBoot.repository.KhachHangDTORepository;
 
 @Service
 public class CustomerService {
 	@Autowired
 	CustomerRepository customerrepository;
+	@Autowired
+	HoadonBHRepository hoadonBHRepository;
+	
 	
 	public java.util.List<khachhang> getListAll(){
 		return  customerrepository.findAll();
@@ -39,6 +43,21 @@ public class CustomerService {
 		return  (Page<KhachHangDTO>) khachhangDTORes.findCustomerList(phantrang, tenkhachhang);
     }
 	
+	public Page<hoadonbanhang> findBillByCustomer(String makhachhang, int pageNumber,  int pageSize) {
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
+		return  (Page<hoadonbanhang>) hoadonBHRepository.fintCustomerBill(makhachhang,phantrang);
+    }
+	
+	public Page<hoadonbanhang> findBillByCustomer2(String makhachhang, int pageNumber,  int pageSize) {
+		
+		Sort sortable = Sort.by("createdAt").descending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		khachhang khachhang = findBymakhachhang(makhachhang).get();
+		
+		Page<hoadonbanhang> kqPage= hoadonBHRepository.findHoadonbanhangByKhachhangIs(phantrang,khachhang);
+		return  kqPage;
+    }
+	
 	public Optional<khachhang> findBymakhachhang(String makhachhang) {
         return customerrepository.findByMakhachhang(makhachhang);
     }
@@ -48,12 +67,10 @@ public class CustomerService {
 	}
 
 	public boolean create(khachhang customer) {
-		if(customerrepository.findById(customer.getMakhachhang()).isPresent()) {
-			String randomString=(new Date()).getTime()+"";
-			customer.setMakhachhang("KH"+randomString);
-			customerrepository.save(customer);
-			return true;
-		}else return false;
+		String randomString=(new Date()).getTime()+"";
+		customer.setMakhachhang("KH"+randomString);
+		customerrepository.save(customer);
+		return true;
 	}
 	
 	public boolean update(khachhang customer) {

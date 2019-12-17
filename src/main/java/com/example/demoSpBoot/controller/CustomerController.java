@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.dto.KhachHangDTO;
+import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.service.CustomerService;
 
@@ -75,13 +76,27 @@ public class CustomerController {
         return new ResponseEntity<Optional<khachhang>>(kh,HttpStatus.OK);
     }
 	
+/* ---------------- GET BILL CUSTOMER BY MAKHCHHANG ------------------------ */
+	
+	@GetMapping("/customers/bill/{makhachhang}")
+	
+	public ResponseEntity<Page<hoadonbanhang>> findBillByCustomer(@PathVariable("makhachhang") String makhachhang,@RequestParam int pageNumber, @RequestParam int pageSize) {
+		Page<hoadonbanhang> kh = customerService.findBillByCustomer2(makhachhang,pageNumber, pageSize);
+        if (kh.isEmpty()) {
+        	
+            return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
+        }
+        
+        return new ResponseEntity<Page<hoadonbanhang>>(kh,HttpStatus.OK);
+    }
+	
 	
 	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
 	@PostMapping("/customers")
 	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer){
 		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
 		else {
-			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<khachhang>(HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -92,7 +107,7 @@ public class CustomerController {
 	public ResponseEntity<khachhang> updateCustomer(@RequestBody khachhang customer) {
 		if(customerService.update(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
 		else {
-			return new ResponseEntity<khachhang>(customer,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<khachhang>(customer,HttpStatus.BAD_REQUEST);
 		}
 	}
 	/* ---------------- DELETE CUSTOMER ------------------------ */

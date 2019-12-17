@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demoSpBoot.model.hoadonbanhang;
+import com.example.demoSpBoot.model.khachhang;
 import com.example.demoSpBoot.model.users;
 
 @Repository
@@ -27,6 +28,8 @@ public interface HoadonBHRepository extends JpaRepository<hoadonbanhang, Integer
 	  Page<hoadonbanhang> findByMahoadonContainingAndCreatedAtBetween(Pageable pageable, String searchTerm, Date fromdate,Date todate);
 	  
 	  Page<hoadonbanhang> findByMahoadonContaining(Pageable pageable, String searchTerm);
+	  
+	  Page<hoadonbanhang> findHoadonbanhangByKhachhangIs(Pageable pageable, khachhang khachhang);
 	  
 	  @Modifying
 	  @Transactional
@@ -42,5 +45,10 @@ public interface HoadonBHRepository extends JpaRepository<hoadonbanhang, Integer
 	  @Transactional
 	  @Query(value="update hoadonbanhang set giamgia= ?1 , makhachhang= ?2 , khachhangtra= ?3 , loaithanhtoan= ?4 , nguoisua= ?5 , tonggia= ?6 , trangthai= ?7 , updated_at= ?8 where id= ?9 ")
 	  void update(long giamgia, String makhachhang, long khachhangtra, int loaithanhtoan, users nguoisua, long tonggia, int trangthai, java.util.Date update, int id);
+	  
+	  @Query(value = "SELECT * FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang ORDER BY hoadonbanhang.created_at DESC",
+			  countQuery = "SELECT COUNT(*) FROM (SELECT hoadonbanhang.mahoadon FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang ORDER BY hoadonbanhang.created_at DESC) as temp ",
+			  nativeQuery = true)
+	  Page<hoadonbanhang> fintCustomerBill(String makhachhang, Pageable pageable);
 	  
 }
