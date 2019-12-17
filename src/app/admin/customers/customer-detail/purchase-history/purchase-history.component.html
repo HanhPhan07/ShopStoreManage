@@ -27,16 +27,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">id</th>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            <ng-template ngFor let-item [ngForOf]="listCusBill" let-i="index" >
+              <tr>
+                <th scope="row"></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </ng-template>
           </tbody>
         </table>
       </div>

@@ -51,7 +51,7 @@ export class ProductsComponent implements OnInit {
         this.listProds = data.product.result;
         this.pagination = data.product.pagination;
      });
-    //console.log(this.listProds);
+    console.log(this.listProds);
   }
   toggleChiTietSanPham(id: number) {
     this.listSubTrTableProd[id] = !this.listSubTrTableProd[id];

@@ -197,21 +197,24 @@ export class CustomersComponent implements OnInit {
     this.addCustomersForm.controls[' gioitinh '].setValue(this.customer.gioitinh ? 1 : 0);
   }
 
-  addCustomer(customer: KhachHang) {
+  addCustomer() {
     // if (!this.checkInputCustomer()) {
     //   alert('Vui lòng nhập đầy đủ thông tin !' );
     // } else {
-        this.addCus.ten = this.addCustomersForm.controls[' ten '].value;
-        this.addCus.sdt = this.addCustomersForm.controls[' sdt '].value;
-        this.addCus.email = this.addCustomersForm.controls[' email '].value;
-        this.addCus.diachi = this.addCustomersForm.controls[' diachi '].value;
-        this.addCus.ngaysinh = this.addCustomersForm.controls[' ngaysinh'].value;
-        this.addCus.gioitinh = this.addCustomersForm.controls[' gioitinh'].value;
+        this.customer =  new KhachHang();
+        this.customer.ten = this.addCustomersForm.controls['ten'].value;
+        this.customer.sdt = this.addCustomersForm.controls['sdt'].value;
+        this.customer.email = this.addCustomersForm.controls['email'].value;
+        this.customer.diachi = this.addCustomersForm.controls['diachi'].value;
+        this.customer.ngaysinh = this.addCustomersForm.controls['ngaysinh'].value;
+        this.customer.gioitinh = this.addCustomersForm.controls['gioitinh'].value;
         this.customersService.addCustomer(this.customer).subscribe( next => {
           alert('Thêm thành công !');
-        },
-          error => {
-            alert('Lỗi');
+          this.getListCustomers();
+          this.modalRef.hide();
+        }, error => {
+            alert('Thêm thất bại');
+            console.log(error);
           }, () => {});
       //}
   }

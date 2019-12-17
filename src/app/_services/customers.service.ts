@@ -72,7 +72,7 @@ export class CustomersService {
   addCustomer(customers: KhachHang): any {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json; charset=utf-8');
-    return this.httpClient.put(environment.baseUrl + 'customers', customers, { headers: headers });
+    return this.httpClient.post(environment.baseUrl + 'customers', customers, { headers: headers });
   }
 
   getCustomer(makhachhang: string): any {
