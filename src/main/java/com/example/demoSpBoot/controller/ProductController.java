@@ -6,12 +6,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +35,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.ProductService;
 
+import lombok.var;
+
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/ShopStore")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
+	
 	@Autowired
 	ProductService productService;
 	
@@ -110,4 +132,76 @@ public class ProductController {
 			}
 			return new ResponseEntity<Page<sanpham>>(listBill, HttpStatus.OK);
 	}
+	
+	//upload anhsp
+	private static final Logger logger = Logger.getLogger(ProductController.class.getName());
+	@SuppressWarnings("null")
+	@PostMapping("/upload")
+	public ResponseEntity<String> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+		if (file == null) {
+			throw new RuntimeException("You must select the a file for uploading");
+		}
+		MultipartFile multipartFile = file;
+		InputStream inputStream = file.getInputStream();
+		String fileName = multipartFile.getOriginalFilename();
+		String[] arrOfStr = fileName.split("[.]+");
+		String newName = "";
+		for (int i = 0; i < arrOfStr.length-1; i++) {
+			newName +=arrOfStr[i];
+		}
+		newName += "_" + (new Date()).getTime() + "." + arrOfStr[arrOfStr.length-1] ;
+		File folder = new File(this.getFolderUpload(),newName);
+		multipartFile.transferTo(folder);
+		String name = file.getName();
+		String contentType = file.getContentType();
+		long size = file.getSize();
+		logger.info("inputStream: " + inputStream);
+		logger.info("name: " + name);
+		logger.info("contentType: " + contentType);
+		logger.info("size: " + size);
+		// Do processing with uploaded file data in Service layer
+		return new ResponseEntity<String>("http://localhost:8090/ShopStore/images?fileName="+ newName, HttpStatus.OK);
+	}
+	public File getFolderUpload() throws IOException {
+		ClassPathResource imgFile = new ClassPathResource("uploads");
+	    File folderUpload = imgFile.getFile();
+	    if (!folderUpload.exists()) {
+	      folderUpload.mkdirs();
+	    }
+	    return folderUpload;
+	  }
+	
+	
+	@RequestMapping(value = "/images", method = RequestMethod.GET,
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@RequestParam("fileName") String fileName) throws IOException {
+
+    	ClassPathResource imgFile = new ClassPathResource("uploads/" + fileName);
+    	File file = imgFile.getFile();
+    	String contentType = Files.probeContentType(file.toPath());
+        byte[] bytes = StreamUtils.copyToByteArray(((ClassPathResource) imgFile).getInputStream());
+        MediaType mt;
+        switch (contentType) {
+	        case "image/png":
+	        	mt = MediaType.IMAGE_PNG;
+	        	break;
+	        case "image/jpg":
+	        	mt = MediaType.IMAGE_JPEG;
+	        	break;
+	        case "image/jpeg":
+	        	mt = MediaType.IMAGE_JPEG;
+	        	break;
+	        case "image/gif":
+	        	mt = MediaType.IMAGE_GIF;
+	        	break;
+	        default:
+	        	mt = MediaType.IMAGE_JPEG;
+	        	break;
+        }
+        return ResponseEntity
+                .ok()
+                .contentType(mt)
+                .body(bytes);
+    }
+
 }

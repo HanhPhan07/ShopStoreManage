@@ -1,5 +1,7 @@
 package com.example.demoSpBoot.controller;
 
+import java.text.ParseException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.danhmucsp;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.CateService;
 
 @RestController
@@ -28,6 +31,18 @@ import com.example.demoSpBoot.service.CateService;
 public class CateController {
 	@Autowired
 	CateService cateService;
+	@GetMapping("/allcates")
+	/* ---------------- GET ALL PRODUCT ------------------------ */
+	public ResponseEntity<List<danhmucsp>> findAllProduct() {
+		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
+		
+		List<danhmucsp> listCate= cateService.findAllCate();
+		if(listCate.isEmpty()) {
+			return new ResponseEntity<List<danhmucsp>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<danhmucsp>>(listCate, HttpStatus.OK);
+	}
+	
 	@GetMapping("/cates")
 	public ResponseEntity<Page<danhmucsp>> findAllCates(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
@@ -79,5 +94,16 @@ public class CateController {
 		else {
 			return new ResponseEntity<danhmucsp>(HttpStatus.NOT_FOUND);
 		}
+	}
+	@GetMapping("/cate/search")
+	/* ---------------- SEARCH ------------------------ */
+	public ResponseEntity<Page<danhmucsp>> findProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+		Page<danhmucsp> listCate = null;
+			listCate= cateService.searchCate(pageNumber, pageSize, searchTerm);
+		
+			if(listCate.isEmpty()) {
+				return new ResponseEntity<Page<danhmucsp>>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<Page<danhmucsp>>(listCate, HttpStatus.OK);
 	}
 }

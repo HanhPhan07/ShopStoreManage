@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demoSpBoot.model.nhasanxuat;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.repository.NhasanxuatRepository;
 
 @Service
 public class NhasanxuatService {
 	@Autowired
 	NhasanxuatRepository nhasxRepo;
+	public List<nhasanxuat> findAllNSX(){
+		return (List<nhasanxuat>) nhasxRepo.findAll();
+	}
 	public Page<nhasanxuat> findAll(int pageNumber,int pageSize){
 		Sort sortable = Sort.by("id").ascending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
