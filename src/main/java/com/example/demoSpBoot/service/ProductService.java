@@ -35,6 +35,8 @@ public class ProductService {
 		if(!productRepo.findBymasp(product.getMasp()).isPresent())
 		{
 		productRepo.save(product);
+		product.getId();
+		
 			return true;
 		}else return false;
 	}
@@ -55,6 +57,7 @@ public class ProductService {
 		if (product == null) {
 			return false;
 		} else {
+			productRepo.deleteDetailCate(id);
 			productRepo.delete(product);
 			return true;
 		}

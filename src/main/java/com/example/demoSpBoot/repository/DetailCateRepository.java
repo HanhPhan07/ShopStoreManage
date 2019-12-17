@@ -9,4 +9,5 @@ import com.example.demoSpBoot.model.chitietdanhmuc;
 public interface DetailCateRepository extends JpaRepository<chitietdanhmuc, Integer>{
 	Page<chitietdanhmuc> findAll(Pageable pageable);
 	Page<chitietdanhmuc> findByidContaining(Pageable pageable, String searchTerm);
+	
 }

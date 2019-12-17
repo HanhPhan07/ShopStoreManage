@@ -6,12 +6,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +46,7 @@ import java.util.logging.Logger;
 @RequestMapping("/ShopStore")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
+	
 	@Autowired
 	ProductService productService;
 	
@@ -117,22 +129,61 @@ public class ProductController {
 	
 	//upload anhsp
 	private static final Logger logger = Logger.getLogger(ProductController.class.getName());
+	@SuppressWarnings("null")
 	@PostMapping("/upload")
 	public ResponseEntity<String> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
 		if (file == null) {
 			throw new RuntimeException("You must select the a file for uploading");
 		}
+		MultipartFile multipartFile = file;
 		InputStream inputStream = file.getInputStream();
+		String fileName = multipartFile.getOriginalFilename();
 		String originalName = file.getOriginalFilename();
+		File folder = new File(this.getFolderUpload(),fileName);
+		multipartFile.transferTo(folder);
+		Resource filePath=multipartFile.getResource();
 		String name = file.getName();
 		String contentType = file.getContentType();
 		long size = file.getSize();
+		URL url = Resources.getResource("file name")
 		logger.info("inputStream: " + inputStream);
 		logger.info("originalName: " + originalName);
 		logger.info("name: " + name);
 		logger.info("contentType: " + contentType);
 		logger.info("size: " + size);
 		// Do processing with uploaded file data in Service layer
-		return new ResponseEntity<String>(originalName, HttpStatus.OK);
+		return new ResponseEntity<String>(filePath.getURI().toString(), HttpStatus.OK);
 	}
+	public File getFolderUpload() {
+	    File folderUpload = new File(System.getProperty("user.home") + "/Uploads");
+	    if (!folderUpload.exists()) {
+	      folderUpload.mkdirs();
+	    }
+	    System.out.print(folderUpload.getPath());
+	    return folderUpload;
+	  }
+	@GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException {
+        // Load file as Resource
+        Resource resource = new UrlResource(getFolderUpload().getPath().toString()+"\\"+fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            logger.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
 }

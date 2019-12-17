@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.chitiethoadonbh;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.DetailBHService;
+import com.example.demoSpBoot.service.ProductService;
 
 @RestController
 @RequestMapping("/ShopStore")
@@ -26,6 +28,8 @@ import com.example.demoSpBoot.service.DetailBHService;
 public class DetailBHController {
 	@Autowired
 	DetailBHService detailBHService;
+	@Autowired
+	ProductService prdService;
 	@GetMapping("/detailBH")
 	public ResponseEntity<Page<chitiethoadonbh>> findAllCates(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
@@ -61,9 +65,25 @@ public class DetailBHController {
 	
 	@PostMapping("/detailsBH")
 	public ResponseEntity<Boolean> saveDetailsBill(@Valid @RequestBody chitiethoadonbh[] chitiets) {
-		for( @Valid chitiethoadonbh chitiet : chitiets) {
-			if(!detailBHService.create(chitiet)) return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
-		} 
-		return new ResponseEntity<>(true,HttpStatus.OK);
+		if (checkSoLuong(chitiets)) {
+			for( @Valid chitiethoadonbh chitiet : chitiets) {
+					Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());
+					if(!detailBHService.create(chitiet)) return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
+					int soluong = sp.get().getSoluong() - chitiet.getSoluong();
+					sp.get().setSoluong(soluong);
+					prdService.update(sp.get());
+			}
+			return new ResponseEntity<>(true,HttpStatus.OK);
+		}
+		return new ResponseEntity<>(true,HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	private boolean checkSoLuong(chitiethoadonbh[] chitiets) {
+		for(chitiethoadonbh chitiet : chitiets) {
+			Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());
+			if (sp.get().getSoluong() < chitiet.getSoluong()) return false;
+		}
+		return true;
 	}
 }
