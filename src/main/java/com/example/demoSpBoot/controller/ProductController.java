@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Array;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demoSpBoot.dto.UploadResponse;
 import com.example.demoSpBoot.model.hoadonbanhang;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.ProductService;
@@ -96,9 +98,12 @@ public class ProductController {
 	/* ---------------- CREATE NEW PRODUCT ------------------------ */
 	@PostMapping("/product")
 	public ResponseEntity<sanpham> saveProduct(@Valid @RequestBody sanpham product) {
-		if(productService.create(product)) return new ResponseEntity<sanpham>(product,HttpStatus.OK);
+		if(productService.create(product)) {
+			product.getId();
+			return new ResponseEntity<sanpham>(product,HttpStatus.OK);
+		}
 		else {
-			return new ResponseEntity<sanpham>(product,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<sanpham>(product,HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -134,15 +139,12 @@ public class ProductController {
 	}
 	
 	//upload anhsp
-	private static final Logger logger = Logger.getLogger(ProductController.class.getName());
-	@SuppressWarnings("null")
 	@PostMapping("/upload")
-	public ResponseEntity<String> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<UploadResponse> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
 		if (file == null) {
 			throw new RuntimeException("You must select the a file for uploading");
 		}
 		MultipartFile multipartFile = file;
-		InputStream inputStream = file.getInputStream();
 		String fileName = multipartFile.getOriginalFilename();
 		String[] arrOfStr = fileName.split("[.]+");
 		String newName = "";
@@ -152,15 +154,9 @@ public class ProductController {
 		newName += "_" + (new Date()).getTime() + "." + arrOfStr[arrOfStr.length-1] ;
 		File folder = new File(this.getFolderUpload(),newName);
 		multipartFile.transferTo(folder);
-		String name = file.getName();
-		String contentType = file.getContentType();
-		long size = file.getSize();
-		logger.info("inputStream: " + inputStream);
-		logger.info("name: " + name);
-		logger.info("contentType: " + contentType);
-		logger.info("size: " + size);
+		UploadResponse uploadResponse=new UploadResponse(newName, "http://localhost:8090/ShopStore/images?fileName="+ newName);
 		// Do processing with uploaded file data in Service layer
-		return new ResponseEntity<String>("http://localhost:8090/ShopStore/images?fileName="+ newName, HttpStatus.OK);
+		return new ResponseEntity<UploadResponse>(uploadResponse, HttpStatus.OK);
 	}
 	public File getFolderUpload() throws IOException {
 		ClassPathResource imgFile = new ClassPathResource("uploads");

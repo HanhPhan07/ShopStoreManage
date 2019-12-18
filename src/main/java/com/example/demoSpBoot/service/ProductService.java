@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,14 +32,12 @@ public class ProductService {
         return productRepo.findById(id);
     }
 
-	public boolean create(sanpham product) {
-		if(!productRepo.findBymasp(product.getMasp()).isPresent())
-		{
-		productRepo.save(product);
-		product.getId();
-		
+	public boolean create(sanpham product) {		
+			String randomString=(new Date()).getTime()+"";
+			product.setCreatedAt(new Date());
+			product.setMasp("SP"+randomString);
+			productRepo.save(product);
 			return true;
-		}else return false;
 	}
 
 	public boolean update(sanpham product) {
