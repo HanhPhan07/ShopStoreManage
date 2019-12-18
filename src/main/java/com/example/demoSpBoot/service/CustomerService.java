@@ -96,6 +96,11 @@ public class CustomerService {
 			return true;
 		}
 	}
+
+
+	public Optional<KhachHangDTO> getCustomerDebt(String makhachhang) {
+		return khachhangDTORes.findDtoById(makhachhang);
+	}
 	
 	
 }
