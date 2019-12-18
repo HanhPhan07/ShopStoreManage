@@ -20,7 +20,7 @@ import com.example.demoSpBoot.model.users;
 @Repository
 public interface HoadonBHRepository extends JpaRepository<hoadonbanhang, Integer>{
 		
-		Page<hoadonbanhang> findAll(Pageable pageable);
+	Page<hoadonbanhang> findAll(Pageable pageable);
 		
 	//@Query("SELECT e FROM hoadonbanhang e WHERE e.mahoadon = :mahoadon")
 	  Optional<hoadonbanhang> findBymahoadon(String mahoadon);
@@ -46,9 +46,10 @@ public interface HoadonBHRepository extends JpaRepository<hoadonbanhang, Integer
 	  @Query(value="update hoadonbanhang set giamgia= ?1 , makhachhang= ?2 , khachhangtra= ?3 , loaithanhtoan= ?4 , nguoisua= ?5 , tonggia= ?6 , trangthai= ?7 , updated_at= ?8 where id= ?9 ")
 	  void update(long giamgia, String makhachhang, long khachhangtra, int loaithanhtoan, users nguoisua, long tonggia, int trangthai, java.util.Date update, int id);
 	  
-	  @Query(value = "SELECT * FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang ORDER BY hoadonbanhang.created_at DESC",
-			  countQuery = "SELECT COUNT(*) FROM (SELECT hoadonbanhang.mahoadon FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang ORDER BY hoadonbanhang.created_at DESC) as temp ",
+	  @Query(value = "SELECT * FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang AND (hoadonbanhang.tonggia-hoadonbanhang.khachhangtra)>0   ORDER BY hoadonbanhang.created_at DESC",
+			  countQuery = "SELECT COUNT(*) FROM (SELECT * FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang AND (hoadonbanhang.tonggia-hoadonbanhang.khachhangtra)>0   ORDER BY hoadonbanhang.created_at DESC) as temp ",
 			  nativeQuery = true)
-	  Page<hoadonbanhang> fintCustomerBill(String makhachhang, Pageable pageable);
+	  Page<hoadonbanhang> fintCustomerBillDebt(String makhachhang, Pageable pageable);
+	  
 	  
 }

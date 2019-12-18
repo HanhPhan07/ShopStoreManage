@@ -76,12 +76,26 @@ public class CustomerController {
         return new ResponseEntity<Optional<khachhang>>(kh,HttpStatus.OK);
     }
 	
-/* ---------------- GET BILL CUSTOMER BY MAKHCHHANG ------------------------ */
+	/* ---------------- GET BILL CUSTOMER BY MAKHCHHANG ------------------------ */
 	
 	@GetMapping("/customers/bill/{makhachhang}")
 	
 	public ResponseEntity<Page<hoadonbanhang>> findBillByCustomer(@PathVariable("makhachhang") String makhachhang,@RequestParam int pageNumber, @RequestParam int pageSize) {
 		Page<hoadonbanhang> kh = customerService.findBillByCustomer2(makhachhang,pageNumber, pageSize);
+        if (kh.isEmpty()) {
+        	
+            return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
+        }
+        
+        return new ResponseEntity<Page<hoadonbanhang>>(kh,HttpStatus.OK);
+    }
+	
+/* ---------------- GET BILL CUSTOMER BY MAKHCHHANG ------------------------ */
+	
+	@GetMapping("/customers/bill/debt/{makhachhang}")
+	
+	public ResponseEntity<Page<hoadonbanhang>> findBillCustomerDebt(@PathVariable("makhachhang") String makhachhang,@RequestParam int pageNumber, @RequestParam int pageSize) {
+		Page<hoadonbanhang> kh = customerService.findBillCusDebt(makhachhang,pageNumber, pageSize);
         if (kh.isEmpty()) {
         	
             return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);

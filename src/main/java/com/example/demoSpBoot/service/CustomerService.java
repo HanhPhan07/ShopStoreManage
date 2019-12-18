@@ -38,18 +38,20 @@ public class CustomerService {
 		return  (Page<KhachHangDTO>) khachhangDTORes.customerListAll(phantrang);
 	}
 	
+	
 	public Page<KhachHangDTO> findByName(int pageNumber,  int pageSize, String tenkhachhang) {
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
 		return  (Page<KhachHangDTO>) khachhangDTORes.findCustomerList(phantrang, tenkhachhang);
     }
 	
-	public Page<hoadonbanhang> findBillByCustomer(String makhachhang, int pageNumber,  int pageSize) {
+	
+	
+	public Page<hoadonbanhang> findBillCusDebt(String tenkhachhang,int pageNumber,  int pageSize) {
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize);
-		return  (Page<hoadonbanhang>) hoadonBHRepository.fintCustomerBill(makhachhang,phantrang);
+		return  (Page<hoadonbanhang>) hoadonBHRepository.fintCustomerBillDebt(tenkhachhang,phantrang);
     }
 	
 	public Page<hoadonbanhang> findBillByCustomer2(String makhachhang, int pageNumber,  int pageSize) {
-		
 		Sort sortable = Sort.by("createdAt").descending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		khachhang khachhang = findBymakhachhang(makhachhang).get();
