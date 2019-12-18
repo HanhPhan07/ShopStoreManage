@@ -3,6 +3,7 @@ import { BillsBhService } from 'src/app/_services/bills-bh.service';
 import { HoaDonBanHang } from 'src/app/_models/hoadonbanhang';
 import { Pagination, PaginatedResult } from '../../_models/pagination';
 import { ActivatedRoute, Router } from '@angular/router';
+import { KhachHang } from 'src/app/_models/khachhang';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -23,6 +24,10 @@ export class OrdersComponent implements OnInit {
     'Tiền mặt',
     'Thẻ',
     'Chuyển khoản'
+  ];
+  listStatusBill = [
+    'Khởi tạo',
+    'Hoàn thành'
   ];
   itemsPerPage = 4;
   listSubTrTableBill = [];
@@ -250,12 +255,22 @@ export class OrdersComponent implements OnInit {
 
   getTotalDebt() {
     let total = 0;
-    if ( this.listBills != null ) {
-      for (const bill of this.listBills) {
-        total += (bill.tonggia - bill.khachhangtra - bill.giamgia);
+    if (this.listBills != null) {
+      for (const customerBillsDebt of this.listBills) {
+        total += this.getDebt(customerBillsDebt);
       }
     }
     return total;
+  }
+
+  getDebt(hoadonbanhang: HoaDonBanHang) {
+    let tongphieuthu = 0;
+    if (hoadonbanhang.phieuthus != null) {
+      hoadonbanhang.phieuthus.forEach(element => {
+        tongphieuthu += element.sotienthu;
+      });
+    }
+    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu ;
   }
   getTotalBills() {
     if (this.listBills != null) {
@@ -312,6 +327,5 @@ export class OrdersComponent implements OnInit {
     }
 
   }
-
 
 }

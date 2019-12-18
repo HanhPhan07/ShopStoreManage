@@ -31,54 +31,92 @@
           <h4 class="modal-title pull-left">
             <strong>Tạo mới khách hàng</strong>
           </h4>
-          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <button
+            type="button"
+            class="close pull-right"
+            aria-label="Close"
+            (click)="modalRef.hide()"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <!--Form Add KH-->
         <div class="modal-body">
-          <form>
-            <div class="form-group">
+          <form [formGroup]="addCustomersForm" (ngSubmit)="addCustomer()">
+            <!-- <div class="form-group">
               <label for="makh">Mã KH</label>
-              <input type="text" class="form-control" id="makh" placeholder="Mã KH (tự sinh nếu bỏ trống)" />
-            </div>
+              <input
+                type="text"
+                class="form-control"
+                id="makhachhang"
+                formControlName="makhachhang"
+                placeholder="Nhập mã khách hàng (bắt buộc)"
+              />
+            </div> -->
             <div class="form-group">
               <label for="tenkh">Tên KH</label>
-              <input type="text" class="form-control" id="tenkh" placeholder="Nhập tên KH (bắt buộc)" />
+              <input
+                type="text"
+                class="form-control"
+                id="ten"
+                formControlName="ten"
+                placeholder="Nhập tên khách hàng (bắt buộc)"
+              />
             </div>
             <div class="form-group">
-              <label for="sdtkh">Số điện thoại</label>
-              <input type="text" class="form-control" id="sdtkh" />
+                <label for="sdtkh">Số điện thoại</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="sdt"
+                  formControlName="sdt"
+                  placeholder="Nhập số điện thoại (bắt buộc)"
+                />
             </div>
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" />
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                />
             </div>
             <div class="form-group">
-              <label for="diachikh">Địa chỉ</label>
-              <input type="text" class="form-control" id="diachikh" />
+                <label for="diachikh">Địa chỉ</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="diachi"
+                  formControlName="diachi"
+                />
             </div>
             <div class="form-group">
-              <label for="ngaysinhkh">Ngày sinh</label>
-              <input type="datetime" class="form-control" id="ngaysinhkh" />
+                <label for="ngaysinhkh">Ngày sinh</label>
+                <input
+                  bsDatepicker
+                  class="form-control"
+                  placement="top"
+                  formControlName="ngaysinh"
+                />
             </div>
             <div class="form-group">
-              <label>Giới tính</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnam" value="1" checked>
-                <label class="form-check-label" for="gioitinhnam">
-                  Nam
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="gioitinhkh" id="gioitinhnu" value="0">
-                <label class="form-check-label" for="gioitinhnu">
-                  Nữ
-                </label>
-              </div>
+                <label>Giới tính</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gioitinh" id="gioitinhnam" checked [value]="1"  formControlName="gioitinh">
+                    <label class="form-check-label" for="gioitinhnam">
+                      Nam
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gioitinh" id="gioitinhnu" [value]="0" formControlName="gioitinh">
+                    <label class="form-check-label" for="gioitinhnu">
+                      Nữ
+                    </label>
+                </div>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary">Lưu</button>
+                <button type="submit" class="btn btn-primary"  >Lưu</button>
             </div>
 
           </form>
@@ -89,7 +127,7 @@
         <div class="col-md-8">
           <div class="order-search" style="margin: 10px 0px; position: relative;">
             <ng-template #customItemTemplate let-model="item" let-index="index">
-              <h5>{{model.masp}}-{{model.tensp}}-{{model.giaban | currency: "VND"}}</h5>
+              <h5><img src="{{model.anhsp}}" width="150px">{{model.masp}}-{{model.tensp}}-{{model.giaban | currency: "VND"}}- SL:{{model.soluong}}</h5>
             </ng-template>
 
             <input [(ngModel)]="asyncSelected"
@@ -111,8 +149,9 @@
               <thead>
                 <tr>
                   <th class="text-center">STT</th>
-                  <th>Mã hàng</th>
+                  <th>Mã sản phẩm</th>
                   <th>Tên sản phẩm</th>
+                  <th>Ảnh sản phẩm</th>
                   <th class="text-center">Số lượng</th>
                   <th class="text-center">Giá bán</th>
                   <th class="text-center">Giảm giá</th>
@@ -120,11 +159,12 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody id="pro_search_append">
+              <tbody>
                   <tr *ngFor = "let chitiet of listchitiethoadon; index as i">
                     <th class="text-center">{{ i }}</th>
                     <th>{{chitiet.sanpham.masp}}</th>
                     <th>{{chitiet.sanpham.tensp}}</th>
+                    <th><img src="{{chitiet.sanpham.anhsp}}" width="50px"></th>
                     <th class="text-center">
                       <input
                       type="number"
@@ -152,6 +192,28 @@
             <div class="alert alert-success" role="alert" style="margin-top: 30px;">Gõ mã hoặc tên sản phẩm vào hộp
               tìm kiếm để thêm hàng vào đơn hàng
             </div>
+            <!--Show list phieuthu-->
+            <table class="table table-bordered table-striped" *ngIf="hoadonbanhang.phieuthus.length!=0">
+              <thead>
+                <tr>
+                  <th class="text-center">STT</th>
+                  <th>Mã phiếu thu</th>
+                  <th>Ngày thu</th>
+                  <th class="text-center">Số tiền thu</th>
+                  <th class="text-center">Hình thức thu</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor = "let chitiet of hoadonbanhang.phieuthus; index as i">
+                    <th class="text-center">{{ i }}</th>
+                    <th class="text-center">{{ chitiet.maphieuthu }}</th>
+                    <th class="text-center">{{ chitiet.ngaythu | date:'medium'}}</th>
+                    <th class="text-center">{{ chitiet.sotienthu | currency: "VND"}}</th>
+                    <th class="text-center">{{ listMethodBill[chitiet.hinhthucthu] }}</th>
+                  </tr>
+              </tbody>
+            </table>
+            <!--end Show list phieuthu-->
           </div>
         </div>
         <div class="col-md-4">
@@ -164,7 +226,7 @@
                       <label>Khách hàng</label>
                     </div>
                     <div class="col-md-8">
-                      <div class="col-md-10 padd-0" style="position: relative;">
+                      <div class="col-md-10 padd-0" style="position: relative; padding-left: 0;">
                         <ng-template #customItemTemplateKhachHang let-model="item" let-index="index">
                           <h6>{{model.makhachhang}}</h6>
                           <p><strong>{{model.ten}}</strong></p>

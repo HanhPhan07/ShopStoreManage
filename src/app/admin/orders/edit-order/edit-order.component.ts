@@ -12,6 +12,8 @@ import { KhachHang } from 'src/app/_models/khachhang';
 import { User } from 'src/app/_models/user';
 import { BillsBhService } from 'src/app/_services/bills-bh.service';
 import { BillDetailBhService } from 'src/app/_services/bill-detail-bh.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import { CustomersService } from 'src/app/_services/customers.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -37,12 +39,28 @@ export class EditOrderComponent implements OnInit {
   giamgiaBill: number;
   khachduaBill: number;
   currentUser: User;
+  customerAdd: KhachHang;
+  addCustomersForm = new FormGroup({
+    makhachhang: new FormControl(''),
+    ten: new FormControl(''),
+    sdt: new FormControl(''),
+    email: new FormControl(''),
+    diachi: new FormControl(''),
+    ngaysinh: new FormControl(''),
+    gioitinh: new FormControl(''),
+  });
+  listMethodBill = [
+    'Tiền mặt',
+    'Thẻ',
+    'Chuyển khoản'
+  ];
   constructor(
     private modalService: BsModalService,
     private productService: ProductService,
     private activatedRoute: ActivatedRoute,
     private billService: BillsBhService,
     private detailBillService: BillDetailBhService,
+    private customersService: CustomersService,
     private router: Router
     ) {}
 
@@ -147,12 +165,21 @@ export class EditOrderComponent implements OnInit {
     return this.getTotalProdCost() - this.giamgiaBill;
   }
   getDebt() {
-    return this.getTotalCost() - this.khachduaBill;
+    let tongphieuthu = 0;
+    if (this.hoadonbanhang.phieuthus != null) {
+      this.hoadonbanhang.phieuthus.forEach(element => {
+        tongphieuthu += element.sotienthu;
+      });
+    }
+    return this.getTotalCost() - this.khachduaBill - tongphieuthu ;
   }
+
 
   checkoutBill() {
     if (this.listchitiethoadon.length === 0) {
       alert('Bạn chưa thêm sản phẩm nào. Vui lòng thêm sản phẩm trước khi Lưu hóa đơn!');
+    } else if (this.getDebt() < 0) {
+      alert('Số tiền còn nợ không được âm!');
     } else {
       this.hoadonbanhang.updatedAt = new Date();
       this.hoadonbanhang.giamgia = this.giamgiaBill;
@@ -160,6 +187,7 @@ export class EditOrderComponent implements OnInit {
       this.hoadonbanhang.khachhangtra = this.khachduaBill;
       this.hoadonbanhang.loaithanhtoan = this.methodPay;
       this.hoadonbanhang.tonggia = this.getTotalCost();
+      this.hoadonbanhang.trangthai = 1;
       this.hoadonbanhang.nguoisua = this.currentUser;
       this.hoadonbanhang.chitiethoadons = this.listchitiethoadon;
       if (!this.checkInputKhachhang()) {
@@ -168,20 +196,6 @@ export class EditOrderComponent implements OnInit {
         this.billService.putBill(this.hoadonbanhang).subscribe(() => {
           alert('Lưu thành công');
           this.router.navigate(['/admin/orders']);
-          // currentBillID = data.id;
-          // this.listchitiethoadon.forEach(x => x.id_hoadon = currentBillID);
-          // this.detailBillService.postDetailsBill(this.listchitiethoadon).subscribe( () => {
-          //   alert('Lưu thành công');
-          //   this.router.navigate(['/admin/orders']);
-          // },
-          //   error => {
-          //     if (error.status === 400) {
-          //       alert('Số lượng sản phẩm trong Kho không đủ!');
-          //     } else {
-          //       alert('Không thể Lưu hóa đơn lúc này!');
-          //       console.log(error);
-          //     }
-          //   });
         },
         error => {
           if (error.status === 400) {
@@ -204,4 +218,33 @@ export class EditOrderComponent implements OnInit {
     return true;
   }
 
+  addCustomer() {
+    this.customerAdd =  new KhachHang();
+    this.customerAdd.ten = this.addCustomersForm.controls['ten'].value;
+    this.customerAdd.sdt = this.addCustomersForm.controls['sdt'].value;
+    this.customerAdd.email = this.addCustomersForm.controls['email'].value;
+    this.customerAdd.diachi = this.addCustomersForm.controls['diachi'].value;
+    this.customerAdd.ngaysinh = this.addCustomersForm.controls['ngaysinh'].value;
+    this.customerAdd.gioitinh = this.addCustomersForm.controls['gioitinh'].value;
+    this.customersService.addCustomer(this.customerAdd).subscribe( next => {
+      alert('Thêm thành công !');
+      this.asyncSelectedKhachHang = next.makhachhang;
+      this.khachhang = next;
+      this.getListCustomers();
+      this.modalRef.hide();
+    }, error => {
+        alert('Thêm thất bại');
+        console.log(error);
+      }, () => {});
+  }
+
+  getListCustomers() {
+    this.customersService.getAllKHNonPag().subscribe(
+        (data: KhachHang[]) => {
+          this.statesComplexKhachHang = data;
+      },
+      error => console.log(error)
+      );
+
+  }
 }
