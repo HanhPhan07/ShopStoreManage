@@ -2,7 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter  } from '@angular/core';
 import { HoaDonBanHang } from '../../../../_models/hoadonbanhang';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PurchaseHistoryService } from 'src/app/_services/purchase-history.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { PurchaseHistoryService } from 'src/app/_services/purchase-history.servi
 })
 export class PurchaseHistoryComponent implements OnInit {
   @Input() listOrder: HoaDonBanHang[];
+  
   @Output('chageToDebt') change = new EventEmitter<boolean>();
 
   id: string;
@@ -22,8 +23,14 @@ export class PurchaseHistoryComponent implements OnInit {
   baseDataListBills: HoaDonBanHang[];
   listCusBill: HoaDonBanHang[];
   activatedRoute: ActivatedRoute;
+  listMethodBill = [
+    'Tiền mặt',
+    'Thẻ',
+    'Chuyển khoản'
+  ];
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private purchaseHistoryService: PurchaseHistoryService
   ) {}
 
@@ -33,7 +40,6 @@ export class PurchaseHistoryComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
-    
     this.pagination = {
               currentPage: 1,
               totalItems: 0,
@@ -62,13 +68,13 @@ export class PurchaseHistoryComponent implements OnInit {
               itemsPerPage: this.itemsPerPage
             };
           }
-          this.updateListProduct(data.result);
+          this.updateListPurchase(data.result);
         },
         error => console.log(error)
       );
   }
 
-  updateListProduct(data) {
+  updateListPurchase(data) {
     this.listCusBill = data;
     this.baseDataListBills = [];
     if (data != null ) {
@@ -79,4 +85,38 @@ export class PurchaseHistoryComponent implements OnInit {
     console.log(data);
   }
 
+  editCustomer(mahoadon: string) {
+    this.router.navigate(['/admin/orders/' + mahoadon ]);
+  }
+
+  getTotalCusBill() {
+    if (this.listCusBill != null) {
+      return this.listCusBill.length;
+    }
+  }
+
+  getTotalMoney() {
+    let total = 0;
+    if (this.listCusBill != null) {
+      for (const customerBills of this.listCusBill) {
+        total += customerBills.tonggia;
+      }
+    }
+    return total;
+  }
+
+  getTotalDet() {
+    let total = 0;
+    if (this.listCusBill != null) {
+      for (const customerBills of this.listCusBill) {
+        total += (customerBills.tonggia - customerBills.khachhangtra);
+      }
+    }
+    return total;
+  }
+
+  pageChanged(event: any): void {
+    this.pagination.currentPage = event.page;
+    this.getCustomerBills(this.id);
+  }
 }

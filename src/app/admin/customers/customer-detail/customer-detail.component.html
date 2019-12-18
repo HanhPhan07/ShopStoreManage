@@ -155,10 +155,10 @@
       </div>
     </div>
     <div *ngIf=(isPurchaseHistory)>
-        <app-purchase-history (chageToDebt)="emitChangeDebt($event)" [listOrder]="getListAllOrder()"></app-purchase-history>
+        <app-purchase-history (chageToDebt)="emitChangeDebt($event)"></app-purchase-history>
     </div>
     <div *ngIf=(!isPurchaseHistory)>
-        <app-debt (chageToPurchaseHistory)="emitChangeDebt($event)" [listOrder]="getListOrderDebt()"></app-debt>
+        <app-debt (chageToPurchaseHistory)="emitChangeDebt($event)" ></app-debt>
     </div>
   </section>
   <!-- /.content -->

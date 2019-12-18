@@ -19,7 +19,7 @@
               <th scope="col">Mã đơn hàng</th>
               <th scope="col">Ngày bán</th>
               <th scope="col">Thu ngân</th>
-              <th scope="col">Trạng thái</th>
+              <th scope="col">Thanh Toán</th>
               <th scope="col">Tổng tiền</th>
               <th scope="col">Khách trả</th>
               <th scope="col">Nợ</th>
@@ -29,14 +29,17 @@
           <tbody>
             <ng-template ngFor let-item [ngForOf]="listCusBill" let-i="index" >
               <tr>
-                <th scope="row"></th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th scope="row">{{item.mahoadon}}</th>
+                <td scope="row">{{item.createdAt | date:'medium'}}</td>
+                <td scope="row">{{item.nguoitao.ten}}</td> 
+                <td scope="row">{{listMethodBill[item.loaithanhtoan]}}</td>
+                <td scope="row">{{item.tonggia | currency:'VND' }}</td>
+                <td scope="row">{{item.khachhangtra | currency:'VND' }}</td>
+                <td scope="row">{{ (item.tonggia-item.khachhangtra-item.phieuthus.sotienthu) | currency:'VND' }}</td>
+                <td style="text-align: center;">
+                  <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
+                  (click)="editCustomer(item.id)"></i>
+              </td>
               </tr>
             </ng-template>
           </tbody>
@@ -44,9 +47,18 @@
       </div>
       <div class="box-footer">
         <div class="d-flex justify-content-between p-2"></div>
-        <div class="alert alert-info" role="alert">
-          Tổng số đơn hàng: <span>3</span> Tổng tiền: <span>1.000.000</span>đ
-          Tổng nợ: <span>0</span>đ
+        <div class="alert alert-info summany-info clearfix" role="alert">
+          <div class="sm-info pull-left">
+            Tổng số đơn hàng: <span>{{getTotalCusBill()}}</span> Tổng tiền: <span>{{getTotalMoney() | currency: "VND"}}</span>đ
+              Tổng nợ: <span>{{getTotalDet() | currency: "VND"}}</span>đ
+          </div> 
         </div>
+        <div class="pull-right">
+          <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
+            lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+            [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+            (pageChanged)="pageChanged($event)">
+          </pagination>
+        </div> 
       </div>
 </div>

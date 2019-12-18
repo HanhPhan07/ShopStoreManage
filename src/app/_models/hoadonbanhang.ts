@@ -1,6 +1,8 @@
 import {KhachHang} from './khachhang';
 import {User} from './user';
 import { ChiTietHoaDonBH } from './chitiethoadonbh';
+import { PhieuThu } from './phieuthu';
+
 export class HoaDonBanHang {
   id: number;
   mahoadon?: string;
@@ -15,4 +17,5 @@ export class HoaDonBanHang {
   nguoisua?: User;
   nguoitao: User;
   chitiethoadons?: ChiTietHoaDonBH[];
+  phieuthus?: PhieuThu;
 }
