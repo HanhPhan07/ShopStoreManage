@@ -17,5 +17,5 @@ export class HoaDonBanHang {
   nguoisua?: User;
   nguoitao: User;
   chitiethoadons?: ChiTietHoaDonBH[];
-  phieuthus?: PhieuThu;
+  phieuthus?: PhieuThu[];
 }

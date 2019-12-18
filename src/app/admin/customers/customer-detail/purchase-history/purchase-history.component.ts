@@ -105,14 +105,24 @@ export class PurchaseHistoryComponent implements OnInit {
     return total;
   }
 
-  getTotalDet() {
+  getTotalDebt() {
     let total = 0;
     if (this.listCusBill != null) {
-      for (const customerBills of this.listCusBill) {
-        total += (customerBills.tonggia - customerBills.khachhangtra);
+      for (const customerBillsDebt of this.listCusBill) {
+        total += this.getDebt(customerBillsDebt);
       }
     }
     return total;
+  }
+
+  getDebt(hoadonbanhang: HoaDonBanHang) {
+    let tongphieuthu = 0;
+    if (hoadonbanhang.phieuthus != null) {
+      hoadonbanhang.phieuthus.forEach(element => {
+        tongphieuthu += element.sotienthu;
+      });
+    }
+    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu ;
   }
 
   pageChanged(event: any): void {

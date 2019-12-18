@@ -108,14 +108,24 @@ export class DebtComponent implements OnInit {
     return total;
   }
 
-  getTotalDet() {
+  getTotalDebt() {
     let total = 0;
     if (this.listCusBillDebt != null) {
       for (const customerBillsDebt of this.listCusBillDebt) {
-        total += (customerBillsDebt.tonggia - customerBillsDebt.khachhangtra - customerBillsDebt.phieuthus.sotienthu);
+        total += this.getDebt(customerBillsDebt);
       }
     }
     return total;
+  }
+
+  getDebt(hoadonbanhang: HoaDonBanHang) {
+    let tongphieuthu = 0;
+    if (hoadonbanhang.phieuthus != null) {
+      hoadonbanhang.phieuthus.forEach(element => {
+        tongphieuthu += element.sotienthu;
+      });
+    }
+    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu ;
   }
 
 }

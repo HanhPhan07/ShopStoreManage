@@ -63,7 +63,7 @@
             <td scope="row">{{item.trangthai}}</td>
             <td scope="row">{{item.tonggia | currency:'VND' }}</td>
             <td scope="row">{{item.khachhangtra | currency:'VND' }}</td>
-            <td scope="row">{{item.tonggia-item.khachhangtra-item.phieuthus.sotienthu| currency:'VND' }}</td>
+            <td scope="row">{{getDebt(item)}}</td>
             <td>
               <input type="number " class="form-control" value="0" max="{{item.tonggia-item.khachhangtra | currency:'VND' }}" >
             </td>
@@ -82,7 +82,7 @@
     <div class="alert alert-info summany-info clearfix" role="alert">
       <div class="sm-info pull-left">
         Tổng số đơn hàng: <span>{{getTotalCusBill()}}</span> Tổng tiền: <span>{{getTotalMoney() | currency: "VND"}}</span>đ
-          Tổng nợ: <span>{{getTotalDet() | currency: "VND"}}</span>đ
+          Tổng nợ: <span>{{getTotalDebt() | currency: "VND"}}</span>đ
       </div> 
     </div>
     <div class="pull-right">
