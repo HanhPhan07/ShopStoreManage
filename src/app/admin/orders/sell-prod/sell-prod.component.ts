@@ -41,6 +41,7 @@ export class SellProdComponent implements OnInit {
   khachduaBill: number;
   currentUser: User;
   customerAdd: KhachHang;
+  ghichu: string;
   addCustomersForm = new FormGroup({
     makhachhang: new FormControl(''),
     ten: new FormControl(''),
@@ -69,6 +70,7 @@ export class SellProdComponent implements OnInit {
     this.khachduaBill = 0;
     this.listchitiethoadon = [];
     this.methodPay = 1;
+    this.ghichu = '';
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.activatedRoute.data.subscribe(data => {
       this.statesComplex = data.prods;
@@ -178,6 +180,7 @@ export class SellProdComponent implements OnInit {
           if (confirm('Khách hàng này có tổng dư nợ trên 1 triệu đồng, bạn thực sự muốn thanh toán?')) {
             this.hoadonbanhang = new HoaDonBanHang();
             this.hoadonbanhang.createdAt = new Date();
+            this.hoadonbanhang.ghichu = this.ghichu;
             this.hoadonbanhang.giamgia = this.giamgiaBill;
             this.hoadonbanhang.khachhang = this.khachhang;
             this.hoadonbanhang.khachhangtra = this.khachduaBill;
@@ -232,6 +235,7 @@ export class SellProdComponent implements OnInit {
       this.hoadonbanhang.khachhangtra = this.khachduaBill;
       this.hoadonbanhang.loaithanhtoan = this.methodPay;
       this.hoadonbanhang.nguoitao = this.currentUser;
+      this.hoadonbanhang.ghichu = this.ghichu;
       this.hoadonbanhang.mahoadon = '';
       this.hoadonbanhang.trangthai = 0;
       this.hoadonbanhang.tonggia = this.getTotalCost();
@@ -322,6 +326,46 @@ export class SellProdComponent implements OnInit {
       },
       error => console.log(error)
       );
+  }
+
+  completeBill() {
+    // => status to 3
+    this.saveBill(3);
+  }
+
+  saveBill(status: number) {
+    if (this.listchitiethoadon.length === 0) {
+      alert('Bạn chưa thêm sản phẩm nào. Vui lòng thêm sản phẩm trước khi Lưu hóa đơn!');
+    } else if (this.getDebt() < 0) {
+      alert('Số tiền còn nợ không được âm!');
+    } else {
+      this.hoadonbanhang.updatedAt = new Date();
+      this.hoadonbanhang.giamgia = this.giamgiaBill;
+      this.hoadonbanhang.khachhang = this.khachhang;
+      this.hoadonbanhang.khachhangtra = this.khachduaBill;
+      this.hoadonbanhang.loaithanhtoan = this.methodPay;
+      this.hoadonbanhang.tonggia = this.getTotalCost();
+      this.hoadonbanhang.trangthai = status;
+      this.hoadonbanhang.ghichu = this.ghichu;
+      this.hoadonbanhang.nguoisua = this.currentUser;
+      this.hoadonbanhang.chitiethoadons = this.listchitiethoadon;
+      if (!this.checkInputKhachhang()) {
+        alert('Vui lòng chọn khách hàng');
+      } else {
+        this.billService.putBill(this.hoadonbanhang).subscribe(() => {
+          alert('Lưu thành công');
+          this.router.navigate(['/admin/orders']);
+        },
+        error => {
+          if (error.status === 400) {
+            alert('Số lượng sản phẩm trong Kho không đủ!');
+          } else {
+            alert('Không thể Lưu hóa đơn lúc này!');
+            console.log(error);
+          }
+        });
+      }
+    }
   }
 }
 

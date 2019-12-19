@@ -40,6 +40,7 @@ export class EditOrderComponent implements OnInit {
   khachduaBill: number;
   currentUser: User;
   customerAdd: KhachHang;
+  ghichu: string;
   addCustomersForm = new FormGroup({
     makhachhang: new FormControl(''),
     ten: new FormControl(''),
@@ -53,6 +54,14 @@ export class EditOrderComponent implements OnInit {
     'Tiền mặt',
     'Thẻ',
     'Chuyển khoản'
+  ];
+  listStatusBill = [
+    'Khởi tạo',
+    'Đang xử lý',
+    'Đang giao',
+    'Hoàn thành',
+    'Tạm dừng',
+    'Đã hủy'
   ];
   constructor(
     private modalService: BsModalService,
@@ -70,7 +79,6 @@ export class EditOrderComponent implements OnInit {
   ngOnInit() {
     this.i = 0;
     this.currentUser = JSON.parse(localStorage.getItem('user'));
-
     this.activatedRoute.data.subscribe(data => {
       this.statesComplex = data.prods;
       this.statesComplexKhachHang = data.custs;
@@ -81,6 +89,7 @@ export class EditOrderComponent implements OnInit {
       this.khachduaBill = data.bill.khachhangtra;
       this.khachhang = data.bill.khachhang;
       this.methodPay = data.bill.loaithanhtoan;
+      this.ghichu = data.bill.ghichu;
     });
     this.dataSource = Observable.create((observer: any) => {
       // Runs on every search
@@ -181,13 +190,14 @@ export class EditOrderComponent implements OnInit {
     } else if (this.getDebt() < 0) {
       alert('Số tiền còn nợ không được âm!');
     } else {
+      this.hoadonbanhang.ghichu = this.ghichu;
       this.hoadonbanhang.updatedAt = new Date();
       this.hoadonbanhang.giamgia = this.giamgiaBill;
       this.hoadonbanhang.khachhang = this.khachhang;
       this.hoadonbanhang.khachhangtra = this.khachduaBill;
       this.hoadonbanhang.loaithanhtoan = this.methodPay;
       this.hoadonbanhang.tonggia = this.getTotalCost();
-      this.hoadonbanhang.trangthai = 1;
+      this.hoadonbanhang.trangthai = this.hoadonbanhang.trangthai == 0 ? 1 : this.hoadonbanhang.trangthai;
       this.hoadonbanhang.nguoisua = this.currentUser;
       this.hoadonbanhang.chitiethoadons = this.listchitiethoadon;
       if (!this.checkInputKhachhang()) {
@@ -246,5 +256,74 @@ export class EditOrderComponent implements OnInit {
       error => console.log(error)
       );
 
+  }
+
+  completeBill() {
+    // => status to 3
+    this.saveBill(3);
+  }
+
+  deliveringBill() {
+    // => status to 2
+    this.saveBill(2);
+  }
+
+  onHoldBill() {
+    // => status to 4
+    this.saveBill(4);
+  }
+
+  cancleBill() {
+    this.hoadonbanhang.updatedAt = new Date();
+    this.hoadonbanhang.trangthai = 5;
+    this.hoadonbanhang.ghichu = this.ghichu;
+    this.hoadonbanhang.nguoisua = this.currentUser;
+    this.billService.cancleBill(this.hoadonbanhang).subscribe(() => {
+      alert('Lưu thành công');
+      this.router.navigate(['/admin/orders']);
+    },
+    error => {
+      if (error.status === 400) {
+        alert('Số lượng sản phẩm trong Kho không đủ!');
+      } else {
+        alert('Không thể Lưu hóa đơn lúc này!');
+        console.log(error);
+      }
+    });
+  }
+
+  saveBill(status: number) {
+    if (this.listchitiethoadon.length === 0) {
+      alert('Bạn chưa thêm sản phẩm nào. Vui lòng thêm sản phẩm trước khi Lưu hóa đơn!');
+    } else if (this.getDebt() < 0) {
+      alert('Số tiền còn nợ không được âm!');
+    } else {
+      this.hoadonbanhang.ghichu = this.ghichu;
+      this.hoadonbanhang.updatedAt = new Date();
+      this.hoadonbanhang.giamgia = this.giamgiaBill;
+      this.hoadonbanhang.khachhang = this.khachhang;
+      this.hoadonbanhang.khachhangtra = this.khachduaBill;
+      this.hoadonbanhang.loaithanhtoan = this.methodPay;
+      this.hoadonbanhang.tonggia = this.getTotalCost();
+      this.hoadonbanhang.trangthai = status;
+      this.hoadonbanhang.nguoisua = this.currentUser;
+      this.hoadonbanhang.chitiethoadons = this.listchitiethoadon;
+      if (!this.checkInputKhachhang()) {
+        alert('Vui lòng chọn khách hàng');
+      } else {
+        this.billService.putBill(this.hoadonbanhang).subscribe(() => {
+          alert('Lưu thành công');
+          this.router.navigate(['/admin/orders']);
+        },
+        error => {
+          if (error.status === 400) {
+            alert('Số lượng sản phẩm trong Kho không đủ!');
+          } else {
+            alert('Không thể Lưu hóa đơn lúc này!');
+            console.log(error);
+          }
+        });
+      }
+    }
   }
 }
