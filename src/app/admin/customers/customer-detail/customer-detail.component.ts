@@ -25,7 +25,6 @@ export class CustomerDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private modalService: BsModalService,
-    //private customersBillService: CustomersBillService
   ) {}
 
   openModal(template: TemplateRef<any>) {
@@ -40,22 +39,13 @@ export class CustomerDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
-     
   }
 
   emitChangeDebt(event: boolean) {
     this.isPurchaseHistory = event;
   }
 
-  getListAllOrder() {
-    return this.listOrder;
-  }
 
-  getListOrderDebt() {
-    return this.listOrder.filter(e => (e.tonggia - e.giamgia - e.khachhangtra) < 0);
-  }
-
-  
 
   updateListProduct(data) {
     this.listCusBill = data;

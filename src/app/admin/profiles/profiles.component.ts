@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { UsersService } from '../../_services/users.service';
 import { AuthService } from '../../_services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profiles',
   templateUrl: './profiles.component.html',
@@ -23,7 +24,10 @@ export class ProfilesComponent implements OnInit {
     gioitinh:  new FormControl(''),
     ngaysinh:  new FormControl(''),
   });
-  constructor( private userService: UsersService, private authService: AuthService) {}
+  constructor(
+    private userService: UsersService,
+    private authService: AuthService,
+    private router: Router) {}
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
@@ -38,10 +42,9 @@ export class ProfilesComponent implements OnInit {
     this.profileForm.controls['email'].setValue(this.currentUser.email);
     this.profileForm.controls['diachi'].setValue(this.currentUser.diachi);
     this.profileForm.controls['gioitinh'].setValue(this.currentUser.gioitinh ? 1 : 0);
-    this.profileForm.controls['ngaysinh'].setValue(this.currentUser.ngaysinh);
+    const ngsinh = new Date(this.currentUser.ngaysinh);
+    this.profileForm.controls['ngaysinh'].setValue(ngsinh);
   }
-
-
 
   updateUser() {
     this.userUpdate.manhanvien = this.currentUser.manhanvien;
@@ -55,9 +58,10 @@ export class ProfilesComponent implements OnInit {
     this.userService.updateUser(this.userUpdate).subscribe(next => {
       this.currentUser = this.userUpdate;
       localStorage.setItem('user', JSON.stringify(this.currentUser));
-      alert('Update Successfully');
+      alert('Update thành công');
+      this.router.navigate(['/admin']);
     }, error => {
-      alert('Login Fail');
+      alert('Update Fail');
     }, () => {});
   }
 }

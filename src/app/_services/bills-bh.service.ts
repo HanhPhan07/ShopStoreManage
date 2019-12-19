@@ -23,6 +23,7 @@ constructor( private httpClient: HttpClient ) { }
       .pipe(map(response => {
         if (response.body != null) {
           paginatedResult.result = response.body.content;
+          paginatedResult.totalElements = response.body.totalElements;
           paginatedResult.pagination = {
             currentPage: response.body.pageable.pageNumber + 1,
             totalItems: response.body.totalElements,
@@ -83,4 +84,9 @@ constructor( private httpClient: HttpClient ) { }
     return this.httpClient.put(environment.baseUrl + 'billBHs', bill, { headers: headers });
   }
 
+  cancleBill(bill: HoaDonBanHang): any {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.put(environment.baseUrl + 'billBHs/cancle', bill, { headers: headers });
+  }
 }

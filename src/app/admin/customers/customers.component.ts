@@ -28,7 +28,6 @@ export class CustomersComponent implements OnInit {
   fitlerloaikhachhang: number;
   searchTerm: string;
   customer: KhachHang;
-  addCus: KhachHang;
   ten: string;
   makhachhang: string;
   sdt: string;
@@ -188,19 +187,7 @@ export class CustomersComponent implements OnInit {
     }
   }
 
-  addValueCustomer() {
-    this.addCustomersForm.controls[' ten '].setValue(this.customer.ten);
-    this.addCustomersForm.controls[' sdt '].setValue(this.customer.sdt);
-    this.addCustomersForm.controls[' email '].setValue(this.customer.email);
-    this.addCustomersForm.controls[' diachi '].setValue(this.customer.diachi);
-    this.addCustomersForm.controls[' ngaysinh '].setValue(this.customer.ngaysinh);
-    this.addCustomersForm.controls[' gioitinh '].setValue(this.customer.gioitinh ? 1 : 0);
-  }
-
   addCustomer() {
-    // if (!this.checkInputCustomer()) {
-    //   alert('Vui lòng nhập đầy đủ thông tin !' );
-    // } else {
         this.customer =  new KhachHang();
         this.customer.ten = this.addCustomersForm.controls['ten'].value;
         this.customer.sdt = this.addCustomersForm.controls['sdt'].value;
@@ -216,14 +203,5 @@ export class CustomersComponent implements OnInit {
             alert('Thêm thất bại');
             console.log(error);
           }, () => {});
-      //}
   }
-
-  // checkInputCustomer() {
-  //   if (this.ten != null ||  this.makhachhang != null ||
-  //     this.sdt != null || this.gioitinh != null || this.diachi != null ) {return true; }
-  //   return false;
-  // }
-
-
 }

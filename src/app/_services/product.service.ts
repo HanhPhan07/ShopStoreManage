@@ -26,6 +26,7 @@ export class ProductService {
     return this.httpClient.get<any>(environment.baseUrl + 'product', { observe: 'response', params })
       .pipe(map(response => {
         paginatedResult.result = response.body.content;
+        paginatedResult.totalElements = response.body.totalElements;
         paginatedResult.pagination = {
           currentPage: response.body.pageable.pageNumber + 1,
           totalItems: response.body.totalElements,

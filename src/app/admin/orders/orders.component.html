@@ -63,7 +63,7 @@
                 <th scope="col">Ngày bán</th>
                 <th scope="col">Thu ngân</th>
                 <th scope="col">Khách hàng</th>
-                <th scope="col">Cách thanh toán</th>
+                <th scope="col">Trạng thái</th>
                 <th scope="col">Tổng tiền</th>
                 <th scope="col">Nợ</th>
                 <th scope="col">Công cụ</th>
@@ -78,9 +78,9 @@
                   <td scope="row">{{item.createdAt | date:'medium'}}</td>
                   <td scope="row">{{item.nguoitao.ten}}</td>
                   <td scope="row">{{item.khachhang.ten}}</td>
-                  <td scope="row">{{listMethodBill[item.loaithanhtoan-1]}}</td>
+                  <td scope="row">{{listStatusBill[item.trangthai]}}</td>
                   <td scope="row">{{item.tonggia | currency: "VND"}}</td>
-                  <td scope="row">{{item.tonggia-item.khachhangtra | currency: "VND"}}</td>
+                  <td scope="row">{{getDebt(item) | currency: "VND"}}</td>
                   <td style="text-align: center;">
                     <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
                       (click)="editBill(item.id)"></i>
@@ -126,7 +126,7 @@
                             <div class="padding-left-10">
                               <i class="fa fa-clock-o"></i>
                               <span class="hidden-768">Còn nợ: </span>
-                              <label>{{item.tonggia-item.khachhangtra-item.giamgia | currency: "VND"}} </label>
+                              <label>{{getDebt(item) | currency: "VND"}} </label>
                             </div>
                           </div>
                           <table class="table table-striped table-bordered table-hover dataTable">
