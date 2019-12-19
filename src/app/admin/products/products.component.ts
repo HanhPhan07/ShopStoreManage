@@ -115,7 +115,6 @@ export class ProductsComponent implements OnInit {
     this.activatedRoute.data.subscribe(data => {
         this.listProds = data.product.result;
         this.pagination = data.product.pagination;
-        //this.listCateProd = data.cates;
      });
     this.getListCateProd();
     this.getListManufProd();
@@ -163,7 +162,7 @@ export class ProductsComponent implements OnInit {
       this.productAdd.anhsp = response.fileDownloadUri;
       this.productService.addProduct(this.productAdd).subscribe( next => {
         this.addProdForm.controls['danhmuc'].value.forEach(y => {
-          let danhmuc: DanhMucSP = this.listCateProd.find(x=>x.id==y);
+          let danhmuc: DanhMucSP = this.listCateProd.find(x => x.id === y);
           let chitietdanhmuc: ChiTietDanhMuc = {
             id_sanpham: next.id,
             danhmucsp: danhmuc
@@ -181,7 +180,6 @@ export class ProductsComponent implements OnInit {
           console.log(error);
         }, () => {});
     });
-    
   }
 
   selectFile(event) {
@@ -318,30 +316,22 @@ export class ProductsComponent implements OnInit {
         );
   }
   filter() {
-    if (this.filterStatus == 2) {
+    if (this.filterStatus === 2) {
       this.listProds = this.baseDataListProds.filter(this.isNonSale);
-    } else if (this.filterStatus == 0) {
+    } else if (this.filterStatus === 0) {
       this.listProds = this.baseDataListProds;
     } else {
       this.listProds = this.baseDataListProds.filter(this.isSale);
     }
   }
-  isSale(sanpham: SanPham){
-    return sanpham.trangthai == 1;
+  isSale(sanpham: SanPham) {
+    return sanpham.trangthai === 1;
   }
-  isNonSale(sanpham: SanPham){
-    return sanpham.trangthai == 2;
+  isNonSale(sanpham: SanPham) {
+    return sanpham.trangthai === 2;
   }
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
     this.search();
   }
-
-    checkInputProduct() {
-      if (this.masp === undefined || this.tensp === undefined || this.soluong === undefined ||
-        this.giavon === undefined || this.giaban === undefined ||
-        this.danhmuc === undefined || this.nhasx === undefined ||
-        this.hot === undefined || this.new === undefined || this.display === undefined) { return false; }
-      return true;
-    }
 }
