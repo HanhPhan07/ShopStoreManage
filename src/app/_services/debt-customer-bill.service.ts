@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HoaDonBanHang } from '../_models/hoadonbanhang';
 import { PaginatedResult } from '../_models/pagination';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { KhachHang } from '../_models/khachhang';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,12 @@ import { Observable } from 'rxjs';
 export class DebtCustomerBillService {
 
 constructor(private httpClient: HttpClient) { }
+
+updateCustomer(khachhang: KhachHang) {
+  const headers = new HttpHeaders();
+  headers.set('Content-Type', 'application/json; charset=utf-8');
+  return this.httpClient.put(environment.baseUrl + 'customers', khachhang, { headers: headers });
+}
 
 getListCustomerBillDebt(makhachhang?: string, page?: number, pageSize?: number): Observable<PaginatedResult<HoaDonBanHang[]>> {
   const paginatedResult: PaginatedResult<HoaDonBanHang[]> = new PaginatedResult<HoaDonBanHang[]>();

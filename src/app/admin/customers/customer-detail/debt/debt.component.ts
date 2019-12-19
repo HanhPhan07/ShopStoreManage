@@ -26,6 +26,11 @@ export class DebtComponent implements OnInit {
     'Chuyển khoản'
   ];
 
+  listStatusBill = [
+    'Khởi tạo',
+    'Hoàn thành'
+  ];
+
 
   constructor(
     private router: Router,
@@ -126,6 +131,10 @@ export class DebtComponent implements OnInit {
       });
     }
     return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu ;
+  }
+
+  getDate() {
+    return Date.now();
   }
 
 }
