@@ -4,6 +4,8 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HoaDonBanHang } from '../../../_models/hoadonbanhang';
 import { KhachHang } from 'src/app/_models/khachhang';
 import { CustomersService } from 'src/app/_services/customers.service';
+import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
+
 @Component({
   selector: 'app-customer-detail',
   templateUrl: './customer-detail.component.html',
@@ -11,14 +13,19 @@ import { CustomersService } from 'src/app/_services/customers.service';
 })
 export class CustomerDetailComponent implements OnInit {
   id: string;
+  pagination: Pagination;
   modalRef: BsModalRef;
   isPurchaseHistory: boolean;
   listOrder: HoaDonBanHang[];
   usersdetail: KhachHang;
+  itemsPerPage = 4;
+  baseDataListProds: HoaDonBanHang[];
+  listCusBill: HoaDonBanHang[];
+  activatedRoute: any;
   constructor(
     private route: ActivatedRoute,
     private modalService: BsModalService,
-    private customersService: CustomersService
+    //private customersBillService: CustomersBillService
   ) {}
 
   openModal(template: TemplateRef<any>) {
@@ -33,8 +40,7 @@ export class CustomerDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
-    //this.getCustomer(this.id);
-    console.log(this.usersdetail);
+     
   }
 
   emitChangeDebt(event: boolean) {
@@ -49,11 +55,17 @@ export class CustomerDetailComponent implements OnInit {
     return this.listOrder.filter(e => (e.tonggia - e.giamgia - e.khachhangtra) < 0);
   }
 
-  getCustomer(makhachhang: string){
-    this.customersService.getCustomer(makhachhang).subscribe( data => {
-      this.usersdetail = data;
-    },
-    error => console.log(error)
-    );
+  
+
+  updateListProduct(data) {
+    this.listCusBill = data;
+    this.baseDataListProds = [];
+    if (data != null ) {
+      this.listCusBill.forEach(x => {
+        this.baseDataListProds.push(x);
+      });
+    }
+    console.log(this.listCusBill);
   }
+
 }

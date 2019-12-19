@@ -35,19 +35,15 @@ export class ProductService {
         return paginatedResult;
       }));
   }
-  addProduct(product: SanPham){
+  addProduct(product: SanPham): Observable<any> {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.httpClient.post(environment.baseUrl + 'product', product, { headers: headers });
   }
-  uploadFile(file: File): Observable<HttpEvent<{}>> {
+  uploadFile(file: File): any {
     const formdata: FormData = new FormData();
     formdata.append('file', file);
-    const req = new HttpRequest('POST', '<Server URL of the file upload>', formdata, {
-      reportProgress: true,
-      responseType: 'text'
-    });
-    return this.http.request(req);
+    return this.httpClient.post(environment.baseUrl + 'upload', formdata);
   }
   updateProduct(product: SanPham) {
     const headers = new HttpHeaders();

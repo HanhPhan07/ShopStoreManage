@@ -17,7 +17,7 @@ export class DebtComponent implements OnInit {
     this.change.emit(value);
   }
 
-  debt(){
+  debt() {
     return 1;
   }
 }

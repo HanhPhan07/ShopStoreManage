@@ -25,11 +25,6 @@
       <div class="modal-body">
         <form [formGroup]="addProdForm" (ngSubmit)="createProduct()">
           <div class="form-group">
-            <label for="masp">Mã sản phẩm</label>
-            <input type="text" class="form-control" id="masp" 
-            placeholder="Nhập mã sản phẩm" formControlName="masp"/>
-          </div>
-          <div class="form-group">
             <label for="tensp">Tên sản phẩm</label>
             <input type="text" class="form-control" id="tensp" 
             placeholder="Nhập tên SP (bắt buộc)" formControlName="tensp"/>
@@ -51,7 +46,7 @@
             <label for="danhmuc">Danh mục</label>
             <div class="form-check">
               <div *ngFor="let item of listCateProd">
-              <input class="form-check-input" type="checkbox" value="{{item.id}}" formControlName="danhmuc"/>
+              <input class="form-check-input" type="checkbox" value="{{item.id}}" (change)="onCheckChange($event)"/>
               <label class="form-check-label">
                 {{item.tendanhmuc}}
               </label>
@@ -63,6 +58,11 @@
             <select name="nhasx" class="form-control" id="nhasx" formControlName="nhasx">
               <option *ngFor="let item of listManufProd" value="{{item.id}}">{{item.tennsx}}</option>  
           </select>
+          <div class="form-group">
+            <label for="motasp">Đơn vị tính</label>
+            <textarea type="text" class="form-control" id="donvitinh" formControlName="donvitinh">
+                    </textarea>
+          </div>
           </div>
           <div class="form-group">
             <label for="motasp">Mô tả sản phẩm</label>
@@ -97,7 +97,7 @@
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary" (click) = "createProduct()">Lưu</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
           </div>
 
         </form>
@@ -144,7 +144,7 @@
             <label for="danhmuc">Danh mục</label>
             <div class="form-check">
               <div *ngFor="let item of listCateProd">
-              <input class="form-check-input" type="checkbox" value="{{item.id}}" formControlName="danhmuc"/>
+              <input class="form-check-input" type="checkbox" value="{{item.id}}" formControlName="danhmuc[]"/>
               <label class="form-check-label">
                 {{item.tendanhmuc}}
               </label>
@@ -153,7 +153,7 @@
           </div>
           <div class="form-group">
             <label for="nhasx">Nhà sản xuất</label>
-            <select name="nhasx" class="form-control" id="nhasx" formControlName="nhasx">
+            <select name="nhasx" class="form-control"  formControlName="nhasx">
               <option *ngFor="let item of listManufProd" value="{{item.id}}">{{item.tennsx}}</option>  
           </select>
           </div>
@@ -216,7 +216,7 @@
             </select>
           </div>
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
-            <select class="form-control search-option-3" id="prd_manufacture_id">
+            <select class="form-control search-option-3" >
               <option selected="selected" value="0">--Nhà sản xuất--</option>
               <option *ngFor="let item of listManufProd" value="{{item.id}}">{{item.tennsx}}</option>
             </select>

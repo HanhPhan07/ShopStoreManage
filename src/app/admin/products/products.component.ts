@@ -4,13 +4,14 @@ import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { SanPham } from 'src/app/_models/sanpham';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/_services/product.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ChiTietDanhMuc } from 'src/app/_models/chitietdanhmuc';
 import { NhaSanXuat } from 'src/app/_models/nhasanxuat';
 import { CateProductService } from 'src/app/_services/cate-product.service';
 import { DanhMucSP } from 'src/app/_models/danhmucsp';
 import { ManufProdService } from 'src/app/_services/manuf-prod.service';
 import { HttpResponse } from '@angular/common/http';
+import { CateDetailProductService } from 'src/app/_services/cate-detail-product.service';
 
 @Component({
   selector: 'app-products',
@@ -37,13 +38,13 @@ export class ProductsComponent implements OnInit {
   listSubTrTableProd = [];
   productAdd: SanPham;
   addProdForm = new FormGroup({
-    masp: new FormControl('', Validators.required),
     tensp: new FormControl('', Validators.required),
     soluong: new FormControl('', Validators.required),
     giavon: new FormControl('', Validators.required),
     giaban: new FormControl('', Validators.required),
-    danhmuc: new FormControl('', Validators.required),
+    danhmuc: new FormArray([]),
     nhasx: new FormControl('', Validators.required),
+    donvitinh: new FormControl('', Validators.required),
     hot: new FormControl('', Validators.required),
     new: new FormControl('', Validators.required),
     display: new FormControl('', Validators.required),
@@ -58,7 +59,7 @@ export class ProductsComponent implements OnInit {
     soluong: new FormControl('', Validators.required),
     giavon: new FormControl('', Validators.required),
     giaban: new FormControl('', Validators.required),
-    danhmuc: new FormControl('', Validators.required),
+    danhmuc: new FormArray([]),
     nhasx: new FormControl('', Validators.required),
     hot: new FormControl('', Validators.required),
     new: new FormControl('', Validators.required),
@@ -88,7 +89,8 @@ export class ProductsComponent implements OnInit {
     private router: Router,
     private cateProdService: CateProductService,
     private manufProdService: ManufProdService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private cateDetailProd: CateDetailProductService) { }
 
   openModal(template: TemplateRef<any>) {
     this.modalRefAddProd = this.modalService.show(template);
@@ -121,35 +123,72 @@ export class ProductsComponent implements OnInit {
     this.productEdit = this.productCurrent;
     //this.updateValueProdForm();
   }
-
-  createProduct(product: SanPham) {
-    product.masp = this.addProdForm.controls[' masp '].value();
-    product.tensp = this.addProdForm.controls[' tensp '].value();
-    product.soluong = this.addProdForm.controls[' soluong '].value();
-    product.giagoc = this.addProdForm.controls[' giavon '].value();
-    product.giaban = this.addProdForm.controls[' giaban '].value();
-    //product.chitietdanhmuc = this.addProdForm.controls[' danhmuc '].value();
-    product.nhasanxuat = this.addProdForm.controls[' nhasx '].value();
-    product.ishot = this.addProdForm.controls[' hot '].value();
-    product.isnew = this.addProdForm.controls[' new '].value();
-    product.displaywebsite = this.addProdForm.controls[' display '].value();
-    product.anhsp = this.addProdForm.controls[' anhsp '].value();
-    product.motasp = this.addProdForm.controls[' motasp '].value();
+  onCheckChange(event) {
+    let formArray: FormArray = this.addProdForm.get('danhmuc') as FormArray;
+    /* Selected */
+    if (event.target.checked) {
+      // Add a new control in the arrayForm
+      formArray.push(new FormControl(event.target.value));
+    } else {
+      // find the unselected element
+      let i = 0;
+      formArray.controls.forEach((ctrl: FormControl) => {
+        if (ctrl.value === event.target.value) {
+          // Remove the unselected element from the arrayForm
+          formArray.removeAt(i);
+          return;
+        }
+        i++;
+      });
+    }
+  }
+  createProduct() {
+    this.productAdd = new SanPham();
+    this.productAdd.tensp = this.addProdForm.controls['tensp'].value;
+    this.productAdd.soluong = this.addProdForm.controls['soluong'].value;
+    this.productAdd.giagoc = this.addProdForm.controls['giavon'].value;
+    this.productAdd.giaban = this.addProdForm.controls['giaban'].value;
+    console.log(this.addProdForm.controls['danhmuc'].value);
+    let productManu = this.listManufProd.find( x => {
+      return x.id == this.addProdForm.controls['nhasx'].value;
+    });
+    this.productAdd.nhasanxuat = productManu;
+    this.productAdd.donvitinh = this.addProdForm.controls['donvitinh'].value;
+    this.productAdd.ishot = this.addProdForm.controls['hot'].value;
+    this.productAdd.isnew = this.addProdForm.controls['new'].value;
+    this.productAdd.displaywebsite = this.addProdForm.controls['display'].value;
+    this.productAdd.motasp = this.addProdForm.controls['motasp'].value;
     this.currentFile = this.selectedFiles.item(0);
     this.productService.uploadFile(this.currentFile).subscribe(response => {
-      //this.selectedFiles.value = '';
+      this.productAdd.anhsp = response.fileDownloadUri;
+      this.productService.addProduct(this.productAdd).subscribe( next => {
+        this.addProdForm.controls['danhmuc'].value.forEach(y => {
+          let danhmuc: DanhMucSP = this.listCateProd.find(x=>x.id==y);
+          let chitietdanhmuc: ChiTietDanhMuc = {
+            id_sanpham: next.id,
+            danhmucsp: danhmuc
+          };
+          this.cateDetailProd.addCateDetailProd(chitietdanhmuc).subscribe(() => {
+            alert('Thêm thành công !');
+            this.getListProduct();
+            this.modalRefAddProd.hide();
+          },
+          error => console.log(error));
+        });
+      },
+        error => {
+          alert('Lỗi');
+          console.log(error);
+        }, () => {});
     });
-    this.productService.addProduct(product).subscribe( next => {
-      alert('Thêm thành công !');
-    },
-      error => {
-        alert('Lỗi');
-      }, () => {});
+    
   }
 
   selectFile(event) {
     this.selectedFiles = event.target.files;
   }
+
+
 
   toggleChiTietSanPham(id: number) {
     this.listSubTrTableProd[id] = !this.listSubTrTableProd[id];
@@ -166,7 +205,6 @@ export class ProductsComponent implements OnInit {
     this.manufProdService.getListManu().subscribe(
       data => {
         this.listManufProd = data;
-        console.log(this.listManufProd);
       }
     );
   }
@@ -253,7 +291,6 @@ export class ProductsComponent implements OnInit {
         this.listSubTrTableProd.push(false);
       });
     }
-    console.log(this.listProds);
   }
   resetFilter() {
     this.searchTerm = '';
