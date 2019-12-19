@@ -27,6 +27,7 @@ export class CustomersService {
       .pipe(map(response => {
         if (response.body != null) {
           paginatedResult.result = response.body.content;
+          paginatedResult.totalElements = response.body.totalElements;
           paginatedResult.pagination = {
             currentPage: response.body.pageable.pageNumber + 1,
             totalItems: response.body.totalElements,

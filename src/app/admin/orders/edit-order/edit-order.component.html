@@ -10,10 +10,29 @@
           <div class="col-md-6">
             <div class="right-action text-right">
               <div class="btn-groups">
-                <button class="btn btn-primary" (click)="checkoutBill()"><i class="fa fa-check"></i> Lưu
+                <button
+                *ngIf="hoadonbanhang.trangthai!=3 && hoadonbanhang.trangthai!=5"
+                class="btn btn-success"
+                (click)="completeBill()"><i class="fa fa-check"></i> Hoàn thành
+                </button>
+                <button
+                *ngIf="hoadonbanhang.trangthai!=2 && hoadonbanhang.trangthai!=5 && hoadonbanhang.trangthai!=3"
+                class="btn btn-info" (click)="deliveringBill()"><i class="fa fa-truck"></i> Đang giao
+                </button>
+                <button
+                *ngIf="hoadonbanhang.trangthai!=4 && hoadonbanhang.trangthai!=5 && hoadonbanhang.trangthai!=3"
+                class="btn btn-warning" (click)="onHoldBill()"><i class="fa fa-pause"></i> Tạm dừng
+                </button>
+                <button
+                *ngIf="hoadonbanhang.trangthai!=5"
+                class="btn btn-danger" (click)="cancleBill()"><i class="fa fa-ban"></i> Hủy
+                </button>
+                <button
+                *ngIf="hoadonbanhang.trangthai!=3 && hoadonbanhang.trangthai!=5"
+                class="btn btn-primary" (click)="checkoutBill()"><i class="fa fa-save"></i> Lưu
                 </button>
                 <a routerLink="../../orders">
-                  <button class="btn-back btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Hủy
+                  <button class="btn-back btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Thoát
                   </button>
                 </a>
               </div>
@@ -269,6 +288,14 @@
                       <input name="nvbanhang" class="form-control" disabled value="{{hoadonbanhang.nguoitao.ten}}">
                     </div>
                   </div>
+                  <div class="form-group marg-bot-10 clearfix">
+                    <div class="col-md-4" style="padding:0px">
+                      <label>Ghi chú</label>
+                    </div>
+                    <div class="col-md-8">
+                      <textarea name="ghichu" class="form-control" [(ngModel)]="ghichu"></textarea>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -356,10 +383,12 @@
             </div>
             <div class="col-md-12">
               <div class="btn-groups pull-right" style="margin-bottom: 50px;">
-                <button class="btn btn-primary" (click)="checkoutBill()"><i class="fa fa-check"></i> Lưu
+                <button
+                *ngIf="hoadonbanhang.trangthai!=3 && hoadonbanhang.trangthai!=5"
+                class="btn btn-primary" (click)="checkoutBill()"><i class="fa fa-save"></i> Lưu
                 </button>
                 <a routerLink="../../orders">
-                  <button class="btn-back btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Hủy
+                  <button class="btn-back btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Thoát
                   </button>
                 </a>
               </div>

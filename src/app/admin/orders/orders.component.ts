@@ -27,7 +27,11 @@ export class OrdersComponent implements OnInit {
   ];
   listStatusBill = [
     'Khởi tạo',
-    'Hoàn thành'
+    'Đang xử lý',
+    'Đang giao',
+    'Hoàn thành',
+    'Tạm dừng',
+    'Đã hủy'
   ];
   itemsPerPage = 4;
   listSubTrTableBill = [];
