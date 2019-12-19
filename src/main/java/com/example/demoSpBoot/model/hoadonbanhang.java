@@ -34,7 +34,13 @@ public class hoadonbanhang {
 	private long giamgia;
 	private long khachhangtra;
 	private int trangthai;
-	
+	private String ghichu;
+	public String getGhichu() {
+		return ghichu;
+	}
+	public void setGhichu(String ghichu) {
+		this.ghichu = ghichu;
+	}
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at")
 	private Date createdAt;
@@ -151,8 +157,9 @@ public class hoadonbanhang {
 	
 
 	public hoadonbanhang(int id, String mahoadon,  int loaithanhtoan, long tonggia, long giamgia,
-			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, users nguoisua,  users nguoitao) {
+			long khachhangtra, int trangthai, Date createdAt, Date updatedAt, users nguoisua,  users nguoitao, String ghichu) {
 		this.id = id;
+		this.ghichu = ghichu;
 		this.mahoadon = mahoadon;
 		this.loaithanhtoan = loaithanhtoan;
 		this.tonggia = tonggia;
