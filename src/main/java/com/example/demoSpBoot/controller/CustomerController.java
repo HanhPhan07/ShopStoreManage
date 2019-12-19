@@ -104,6 +104,15 @@ public class CustomerController {
         return new ResponseEntity<Page<hoadonbanhang>>(kh,HttpStatus.OK);
     }
 	
+	@GetMapping("/customers/totaldebt/{makhachhang}")
+	public ResponseEntity<KhachHangDTO> getCustomerDebt(@PathVariable("makhachhang") String makhachhang) {
+		Optional<KhachHangDTO> kh = customerService.getCustomerDebt(makhachhang);
+        if (!kh.isPresent()) {
+            return new ResponseEntity<KhachHangDTO>(HttpStatus.NO_CONTENT);
+        }
+        
+        return new ResponseEntity<KhachHangDTO>(kh.get(),HttpStatus.OK);
+    }
 	
 	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
 	@PostMapping("/customers")

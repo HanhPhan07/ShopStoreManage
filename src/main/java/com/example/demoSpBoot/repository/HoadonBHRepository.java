@@ -43,8 +43,8 @@ public interface HoadonBHRepository extends JpaRepository<hoadonbanhang, Integer
 	  
 	  @Modifying
 	  @Transactional
-	  @Query(value="update hoadonbanhang set giamgia= ?1 , makhachhang= ?2 , khachhangtra= ?3 , loaithanhtoan= ?4 , nguoisua= ?5 , tonggia= ?6 , trangthai= ?7 , updated_at= ?8 where id= ?9 ")
-	  void update(long giamgia, String makhachhang, long khachhangtra, int loaithanhtoan, users nguoisua, long tonggia, int trangthai, java.util.Date update, int id);
+	  @Query(value="update hoadonbanhang set giamgia= ?1 , makhachhang= ?2 , khachhangtra= ?3 , loaithanhtoan= ?4 , nguoisua= ?5 , tonggia= ?6 , trangthai= ?7 , updated_at= ?8, ghichu= ?10 where id= ?9 ")
+	  void update(long giamgia, String makhachhang, long khachhangtra, int loaithanhtoan, users nguoisua, long tonggia, int trangthai, java.util.Date update, int id, String ghichu);
 	  
 	  @Query(value = "SELECT * FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang AND (hoadonbanhang.tonggia-hoadonbanhang.khachhangtra)>0   ORDER BY hoadonbanhang.created_at DESC",
 			  countQuery = "SELECT COUNT(*) FROM (SELECT * FROM hoadonbanhang  INNER JOIN users ON hoadonbanhang.nguoitao=users.manhanvien  WHERE makhachhang=:makhachhang AND (hoadonbanhang.tonggia-hoadonbanhang.khachhangtra)>0   ORDER BY hoadonbanhang.created_at DESC) as temp ",

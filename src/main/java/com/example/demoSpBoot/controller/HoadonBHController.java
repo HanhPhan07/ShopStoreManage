@@ -104,6 +104,14 @@ public class HoadonBHController {
 		
 	}
 	
+	@PutMapping("/billBHs/cancle")
+	public ResponseEntity<hoadonbanhang> cancleBill(@RequestBody hoadonbanhang bill) {
+		if(hoadonService.cancleBill(bill)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
+		else {
+			return new ResponseEntity<hoadonbanhang>(HttpStatus.BAD_GATEWAY);
+		}
+	}
+	
 	private boolean checkSoLuong(List<chitiethoadonbh> chitiets) {
 		for(chitiethoadonbh chitiet : chitiets) {
 			Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());

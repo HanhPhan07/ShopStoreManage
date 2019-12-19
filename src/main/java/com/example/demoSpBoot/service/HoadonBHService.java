@@ -49,7 +49,7 @@ public class HoadonBHService {
 			}
 		else return false;
 	}
-
+	
 	public boolean update(hoadonbanhang bill) {
 		
 		if (!hoadonBHRepo.findById(bill.getId()).isPresent()) {
@@ -82,12 +82,38 @@ public class HoadonBHService {
 			}
 			
 			bill.setUpdatedAt(new Date());
-			hoadonBHRepo.update(bill.getGiamgia(),bill.getKhachhang().getMakhachhang(),bill.getKhachhangtra(), bill.getLoaithanhtoan(),bill.getNguoisua(),bill.getTonggia(),bill.getTrangthai(),bill.getUpdatedAt(),bill.getId());
+			hoadonBHRepo.update(bill.getGiamgia(),bill.getKhachhang().getMakhachhang(),bill.getKhachhangtra(), bill.getLoaithanhtoan(),bill.getNguoisua(),bill.getTonggia(),bill.getTrangthai(),bill.getUpdatedAt(),bill.getId(),bill.getGhichu());
 			
 			return true;
 		}
 	}
-
+	
+	public boolean cancleBill(hoadonbanhang bill) {
+		
+		if (!hoadonBHRepo.findById(bill.getId()).isPresent()) {
+			return false;
+		} else {
+			List<chitiethoadonbh> chitiethds = bill.getChitiethoadons();
+			List<chitiethoadonbh> new_chitiethds = new ArrayList<chitiethoadonbh>();
+			for( @Valid chitiethoadonbh chitiet : chitiethds) {
+				Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());
+				int soluongdetailbill_old=0;
+				Optional<chitiethoadonbh> chitiethd_old = chitietRepo.findById(chitiet.getId());
+				if ( chitiethd_old.isPresent()) {
+					soluongdetailbill_old = chitiethd_old.get().getSoluong();
+				}
+				int soluong = sp.get().getSoluong() + soluongdetailbill_old;
+				sp.get().setSoluong(soluong);
+				prdService.update(sp.get());
+				
+			}
+			bill.setUpdatedAt(new Date());
+			hoadonBHRepo.update(bill.getGiamgia(),bill.getKhachhang().getMakhachhang(),bill.getKhachhangtra(), bill.getLoaithanhtoan(),bill.getNguoisua(),bill.getTonggia(),bill.getTrangthai(),bill.getUpdatedAt(),bill.getId(),bill.getGhichu());
+			
+			return true;
+		}
+	}
+	
 	public boolean delete(int id) {
 
 		hoadonbanhang bill = hoadonBHRepo.findById(id).orElse(null);
