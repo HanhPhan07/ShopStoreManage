@@ -21,6 +21,7 @@ import { CateDetailProductService } from 'src/app/_services/cate-detail-product.
 export class ProductsComponent implements OnInit {
   modalRefAddProd: BsModalRef;
   modalRefEditProd: BsModalRef;
+  id: string;
   pagination: Pagination;
   listProds: SanPham[];
   searchTerm: string;
@@ -28,10 +29,6 @@ export class ProductsComponent implements OnInit {
   // fitlernhasx: number;
   baseDataListProds: SanPham[];
   filterStatus: number;
-  listStatusProd = [
-    'Đang kinh doanh',
-    'Đã ngừng kinh doanh'
-  ];
   listCateProd: DanhMucSP[];
   listManufProd: NhaSanXuat[];
   itemsPerPage = 4;
@@ -67,18 +64,6 @@ export class ProductsComponent implements OnInit {
     anhsp: new FormControl(''),
     motasp: new FormControl('')
   });
-    masp: string;
-    tensp: string;
-    soluong: number;
-    giavon: number;
-    giaban: number;
-    danhmuc: ChiTietDanhMuc;
-    nhasx: NhaSanXuat;
-    hot: boolean;
-    new: boolean;
-    display: boolean;
-    anhsp: string;
-    motasp: string;
 
     selectedFiles: FileList;
     currentFile: File;
@@ -110,17 +95,21 @@ export class ProductsComponent implements OnInit {
       totalPages: 0,
       itemsPerPage: this.itemsPerPage
     };
+    this.activatedRoute.params.subscribe(params => {
+      this.id = params.id;
+    });
+
     this.resetFilter();
-    this.baseDataListProds = [];
     this.activatedRoute.data.subscribe(data => {
         this.listProds = data.product.result;
         this.pagination = data.product.pagination;
+        this.productCurrent = data.sanpham;
      });
+    this.baseDataListProds = this.listProds;
     this.getListCateProd();
     this.getListManufProd();
-    this.productCurrent = JSON.parse(localStorage.getItem('sanpham'));
     this.productEdit = this.productCurrent;
-    //this.updateValueProdForm();
+    this.updateValueProdForm();
   }
   onCheckChange(event) {
     let formArray: FormArray = this.addProdForm.get('danhmuc') as FormArray;
@@ -207,45 +196,45 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-
-  editProduct(maSP: number) {
-    //this.router.navigate(['/admin/products/' + maSP]);
+  updateValueProdForm() {
+    this.editProdForm.controls['masp'].setValue(this.productCurrent.masp);
+    this.editProdForm.controls['tensp'].setValue(this.productCurrent.tensp);
+    this.editProdForm.controls['soluong'].setValue(this.productCurrent.soluong);
+    this.editProdForm.controls['giavon'].setValue(this.productCurrent.giagoc);
+    this.editProdForm.controls['giaban'].setValue(this.productCurrent.giaban);
+    this.editProdForm.controls['danhmuc'].setValue(this.productCurrent.chitietdanhmuc);
+    this.editProdForm.controls['nhasx'].setValue(this.productCurrent.nhasanxuat);
+    this.editProdForm.controls['donvitinh'].setValue(this.productCurrent.donvitinh);
+    this.editProdForm.controls['hot'].setValue(this.productCurrent.ishot);
+    this.editProdForm.controls['new'].setValue(this.productCurrent.isnew);
+    this.editProdForm.controls['display'].setValue(this.productCurrent.displaywebsite);
+    this.editProdForm.controls['anhsp'].setValue(this.productCurrent.anhsp);
+    this.editProdForm.controls['motasp'].setValue(this.productCurrent.motasp);
   }
-  // updateValueProdForm() {
-  //   this.editProdForm.controls[' masp '].setValue(this.productCurrent.masp);
-  //   this.editProdForm.controls[' tensp '].setValue(this.productCurrent.tensp);
-  //   this.editProdForm.controls[' soluong '].setValue(this.productCurrent.soluong);
-  //   this.editProdForm.controls[' giavon '].setValue(this.productCurrent.giagoc);
-  //   this.editProdForm.controls[' giaban '].setValue(this.productCurrent.giaban);
-  //   this.editProdForm.controls[' danhmuc '].setValue(this.productCurrent.chitietdanhmuc);
-  //   this.editProdForm.controls[' nhasx '].setValue(this.productCurrent.nhasanxuat);
-  //   this.editProdForm.controls[' hot '].setValue(this.productCurrent.ishot);
-  //   this.editProdForm.controls[' new '].setValue(this.productCurrent.isnew);
-  //   this.editProdForm.controls[' display '].setValue(this.productCurrent.displaywebsite);
-  //   this.editProdForm.controls[' anhsp '].setValue(this.productCurrent.anhsp);
-  //   this.editProdForm.controls[' motasp '].setValue(this.productCurrent.motasp);
-  // }
-  // updateProduct() {
-  //   this.productEdit.masp = this.productCurrent.masp;
-  //   this.productEdit.tensp = this.editProdForm.controls[' tensp '].value;
-  //   this.productEdit.soluong = this.editProdForm.controls[' soluong '].value;
-  //   this.productEdit.giagoc = this.editProdForm.controls[' giavon '].value;
-  //   this.productEdit.giaban = this.editProdForm.controls[' giaban '].value;
-  //   this.productEdit.chitietdanhmuc = this.editProdForm.controls[' danhmuc '].value;
-  //   this.productEdit.nhasanxuat = this.editProdForm.controls[' nhasx '].value;
-  //   this.productEdit.ishot = this.editProdForm.controls[' hot '].value;
-  //   this.productEdit.isnew = this.editProdForm.controls[' new '].value;
-  //   this.productEdit.displaywebsite = this.editProdForm.controls[' display '].value;
-  //   this.productEdit.anhsp = this.editProdForm.controls[' anhsp '].value;
-  //   this.productEdit.motasp = this.editProdForm.controls[' motasp '].value;
-  //   this.productService.updateProduct(this.productEdit).subscribe(next => {
-  //   this.productCurrent = this.productEdit;
-  //   localStorage.setItem('sanpham', JSON.stringify(this.productCurrent));
-  //   alert('Update Successfully');
-  //   }, error => {
-  //     alert('Error');
-  //   }, () => {});
-  // }
+  updateProduct() {
+    this.productEdit.masp = this.productCurrent.masp;
+    this.productEdit.tensp = this.editProdForm.controls['tensp'].value;
+    this.productEdit.soluong = this.editProdForm.controls['soluong'].value;
+    this.productEdit.giagoc = this.editProdForm.controls['giavon'].value;
+    this.productEdit.giaban = this.editProdForm.controls['giaban'].value;
+    this.productEdit.chitietdanhmuc = this.editProdForm.controls['danhmuc'].value;
+    this.productEdit.nhasanxuat = this.editProdForm.controls['nhasx'].value;
+    this.productEdit.donvitinh = this.editProdForm.controls['donvitinh'].value;
+    this.productEdit.ishot = this.editProdForm.controls['hot'].value;
+    this.productEdit.isnew = this.editProdForm.controls['new'].value;
+    this.productEdit.displaywebsite = this.editProdForm.controls['display'].value;
+    this.productEdit.anhsp = this.editProdForm.controls['anhsp'].value;
+    this.productEdit.motasp = this.editProdForm.controls['motasp'].value;
+    this.productService.updateProduct(this.productEdit).subscribe(next => {
+      this.productCurrent = this.productEdit;
+      alert('Update Successfully');
+      this.getListProduct();
+      this.modalRefAddProd.hide();
+      }, error => {
+        alert('Error');
+        console.log(error);
+      }, () => {});
+  }
 
   deleteProduct(id: number) {
     if (confirm('Bạn thực sự muốn xóa sản phẩm này?')) {
@@ -328,7 +317,7 @@ export class ProductsComponent implements OnInit {
     return sanpham.trangthai === 1;
   }
   isNonSale(sanpham: SanPham) {
-    return sanpham.trangthai === 2;
+    return sanpham.trangthai === 0;
   }
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
