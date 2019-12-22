@@ -49,7 +49,7 @@ export class CustomerDetailComponent implements OnInit {
     private debtCustomerBillService: DebtCustomerBillService,
   ) {}
 
-  openModal(template: TemplateRef<any>) {
+  openModal(template: TemplateRef<any>, masp: string) {
     this.modalRef = this.modalService.show(template);
   }
 

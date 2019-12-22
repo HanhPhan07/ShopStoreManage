@@ -2,10 +2,10 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Danh sách sản phẩm
+      Thông tin chi tiết sản phẩm
       <span class="pull-right">
         <a class="btn btn-block btn-primary" (click)="openModal(templateAddProd)">
-          <i class="fa fa-edit"></i> Thêm mới
+          <i class="fa fa-edit"></i> Sửa
         </a>
       </span>
     </h1>
@@ -15,15 +15,19 @@
     <ng-template #templateAddProd>
       <div class="modal-header">
         <h4 class="modal-title pull-left">
-          <strong>Tạo mới sản phẩm</strong>
+          <strong>Sửa thông tin sản phẩm</strong>
         </h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefAddProd.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <!--Form Add SP-->
+      <!--Form Edit SP-->
       <div class="modal-body">
-        <form [formGroup]="addProdForm" (ngSubmit)="createProduct()">
+        <form [formGroup]="editProdForm" (ngSubmit)="editProduct()">
+          <div class="form-group">
+            <label for="masp">Mã sản phẩm</label>
+            <input type="text" class="form-control" id="masp" formControlName="masp"/>
+          </div>
           <div class="form-group">
             <label for="tensp">Tên sản phẩm</label>
             <input type="text" class="form-control" id="tensp" 
@@ -101,67 +105,40 @@
 
         </form>
       </div>
-      <!--End form add KH-->
+      <!--End form edit SP-->
     </ng-template>
     <div class="box">
-      <div class="box-header">
-        <div class="form-group col-md-5 padd-0">
-          <input class="form-control" id="product-search" name="searchTerm" [(ngModel)]="searchTerm" type="text" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm">
-        </div>
-        <div class="form-group col-md-7 ">
-          <div class="col-md-3 padd-0" style="margin-right: 10px;">
-            <select class="form-control" [(ngModel)]="filterStatus" (change)="filter()"
-            name="filterStatus">
-              <option value="0">Trạng thái</option>
-              <option value="1">Đang kinh doanh</option>
-              <option value="2">Đã ngừng kinh doanh</option>
-            </select>
-          </div>
-          <div class="col-md-3 padd-0" style="margin-right: 10px;">
-          <select class="form-control" >
-              <option selected="selected" value="0">--Danh mục--</option>
-              <option *ngFor="let item of listCateProd" value="{{item.id}}">{{item.tendanhmuc}}</option>
-            </select>
-          </div>
-          <div class="col-md-3 padd-0" style="margin-right: 10px;">
-            <select class="form-control search-option-3" >
-              <option selected="selected" value="0">--Nhà sản xuất--</option>
-              <option *ngFor="let item of listManufProd" value="{{item.id}}">{{item.tennsx}}</option>
-            </select>
-          </div>
-          <button class="btn btn-primary btn-large btn-ssup" (click)="search()"><i class="fa fa-search"></i> Tìm kiếm
-          </button>
-        </div>
-      </div>
       <div class="box-body">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Tên sản phẩm</th>
               <th scope="col">Mã sản phẩm</th>
-              <th scope="col">SL</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Số lượng</th>
+              <th scope="col">Giá vốn</th>
               <th scope="col">Giá bán</th>
               <th scope="col">Danh mục</th>
               <th scope="col">Nhà sản xuất</th>
-              <th scope="col">Công cụ</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Ảnh sản phẩm</th>
+              <th scope="col">Mô tả sản phẩm</th>
+              <th scope="col">Đơn vị tính</th>
             </tr>
           </thead>
           <tbody>
               <ng-template ngFor let-item [ngForOf]="listProds" let-i="index">
                 <tr>
-                  <td scope="row">{{item.tensp}}</td>
                   <th scope="row">{{item.masp}}</th>
+                  <td scope="row">{{item.tensp}}</td>
                   <td scope="row">{{item.soluong}}</td>
+                  <td scope="row">{{item.giavon | currency: "VND"}}</td>
                   <td scope="row">{{item.giaban | currency: "VND"}}</td>
                   <td scope="row"><span *ngFor="let danhmuc of item.chitietdanhmuc; let i=index">{{danhmuc.danhmucsp.tendanhmuc}}<span *ngIf="i!=item.chitietdanhmuc.length-1">, </span>  </span></td>
                   <td scope="row">{{item.nhasanxuat.tennsx}}</td>
-                  <td style="text-align: center;">
-                      <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
-                      (click)="editProduct(item.id)"></i>
-                      <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteProduct(item.id)"></i>
-                      <i title ="{{titleState(item.id)}}" class="fa fa-pause" style="margin-left: 5px;"
-                      (click)="changestate(item.id)"></i>
-                  </td>
+                  <td scope="row">{{item.trangthai}}</td>
+                  <td scope="row">{{item.anhsp}}</td>
+                  <td scope="row">{{item.motasp}</td>
+                  <td scope="row">{{item.donvitinh}</td>
                 </tr>
               </ng-template>
           </tbody>
@@ -170,9 +147,6 @@
       <div class="box-footer">
         <div class="d-flex justify-content-between p-2"></div>
         <div class="alert alert-info summany-info clearfix" role="alert">
-          <div class="sm-info pull-left">
-            SL sản phẩm/SL nhà sản xuất: 3/2
-          </div>
           <div class="pull-right">
             <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
               lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"

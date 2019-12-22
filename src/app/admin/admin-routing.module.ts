@@ -23,6 +23,8 @@ import { CustomersComponent } from './customers/customers.component';
 import { AllCustomersResolver } from '../_resolver/customer-all-resolver';
 import { AllCateProductResolver } from '../_resolver/list-all-cate-resolver';
 import { CustomersDetailResolver } from '../_resolver/customer-detail-resolver';
+import { ProductDetailComponent } from './products/product-detail/product-detail.component';
+import { ProductsDetailResolver } from '../_resolver/product-detail-resolver';
 
 
 const routes: Routes = [
@@ -66,8 +68,8 @@ const routes: Routes = [
       },
       {
         path: 'products/:id',
-        component: ProductsComponent,
-        resolve: {product: ProductsResolver}
+        component: ProductDetailComponent,
+        resolve: {productdetail: ProductsDetailResolver}
       },
       {
         path: 'categories-prod',

@@ -21,7 +21,7 @@ import { CateDetailProductService } from 'src/app/_services/cate-detail-product.
 export class ProductsComponent implements OnInit {
   modalRefAddProd: BsModalRef;
   modalRefEditProd: BsModalRef;
-  id: string;
+  id: number;
   pagination: Pagination;
   listProds: SanPham[];
   searchTerm: string;
@@ -33,6 +33,10 @@ export class ProductsComponent implements OnInit {
   listManufProd: NhaSanXuat[];
   itemsPerPage = 4;
   listSubTrTableProd = [];
+  listProductStatus = [
+    'Đang kinh doanh',
+    'Ngừng kinh doanh'
+  ];
   productAdd: SanPham;
   addProdForm = new FormGroup({
     tensp: new FormControl('', Validators.required),
@@ -48,6 +52,7 @@ export class ProductsComponent implements OnInit {
     anhsp: new FormControl(''),
     motasp: new FormControl('')
   });
+  product: SanPham;
   productCurrent: SanPham;
   productEdit: SanPham;
   editProdForm = new FormGroup({
@@ -104,8 +109,8 @@ export class ProductsComponent implements OnInit {
         this.listProds = data.product.result;
         this.pagination = data.product.pagination;
         this.productCurrent = data.sanpham;
+        this.baseDataListProds = data.product.result;
      });
-    this.baseDataListProds = this.listProds;
     this.getListCateProd();
     this.getListManufProd();
     this.productEdit = this.productCurrent;
@@ -175,12 +180,6 @@ export class ProductsComponent implements OnInit {
     this.selectedFiles = event.target.files;
   }
 
-
-
-  toggleChiTietSanPham(id: number) {
-    this.listSubTrTableProd[id] = !this.listSubTrTableProd[id];
-  }
-
   getListCateProd() {
     this.cateProdService.getListCateArr().subscribe(
       data => {
@@ -194,6 +193,9 @@ export class ProductsComponent implements OnInit {
         this.listManufProd = data;
       }
     );
+  }
+  editProduct(id: number) {
+    this.router.navigate(['/admin/products/' + id ]);
   }
 
   updateValueProdForm() {
@@ -271,11 +273,9 @@ export class ProductsComponent implements OnInit {
   updateListProduct(data) {
     this.listProds = data;
     this.baseDataListProds = [];
-    this.listSubTrTableProd = [];
     if (data != null ) {
       this.listProds.forEach(x => {
         this.baseDataListProds.push(x);
-        this.listSubTrTableProd.push(false);
       });
     }
   }
@@ -305,22 +305,45 @@ export class ProductsComponent implements OnInit {
         );
   }
   filter() {
-    if (this.filterStatus === 2) {
+    if (this.filterStatus == 2) {
       this.listProds = this.baseDataListProds.filter(this.isNonSale);
-    } else if (this.filterStatus === 0) {
+    } else if (this.filterStatus == 0) {
       this.listProds = this.baseDataListProds;
     } else {
       this.listProds = this.baseDataListProds.filter(this.isSale);
     }
   }
   isSale(sanpham: SanPham) {
-    return sanpham.trangthai === 1;
+    return sanpham.trangthai == 1;
   }
   isNonSale(sanpham: SanPham) {
-    return sanpham.trangthai === 0;
+    return sanpham.trangthai == 0;
   }
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
     this.search();
+  }
+  changestate(id: number) {
+    this.product = new SanPham();
+    this.product = this.findProductByID(id);
+    this.product.trangthai = this.product.trangthai == 1 ? 0 : 1;
+    this.productService.updateProduct(this.product).subscribe(() => {
+      alert('Đã thay đổi trạng thái');
+      this.getListProduct();
+    },
+    error => {
+      console.error(error);
+      alert('Thất bại!');
+    });
+  }
+  findProductByID(id: number) {
+    return this.listProds.find(x => x.id == id);
+  }
+  titleState(id: number){
+    let title = '';
+    this.product = new SanPham();
+    this.product = this.findProductByID(id);
+    title = this.product.trangthai === 1 ? this.listProductStatus[0] : this.listProductStatus[1];
+    return title;
   }
 }
