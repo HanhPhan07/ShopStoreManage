@@ -80,7 +80,7 @@ export class EditOrderComponent implements OnInit {
     this.i = 0;
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.activatedRoute.data.subscribe(data => {
-      this.statesComplex = data.prods;
+      this.statesComplex = data.prodsdata.filter(x => x.trangthai == 1);
       this.statesComplexKhachHang = data.custs;
       this.hoadonbanhang = data.bill;
       this.asyncSelectedKhachHang = data.bill.khachhang.makhachhang;

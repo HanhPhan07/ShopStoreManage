@@ -73,7 +73,7 @@ export class SellProdComponent implements OnInit {
     this.ghichu = '';
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.activatedRoute.data.subscribe(data => {
-      this.statesComplex = data.prods;
+      this.statesComplex = data.prods.filter(x => x.trangthai == 1);
       this.statesComplexKhachHang = data.custs;
     });
     this.dataSource = Observable.create((observer: any) => {

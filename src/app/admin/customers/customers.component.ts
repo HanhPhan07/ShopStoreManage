@@ -106,9 +106,6 @@ export class CustomersComponent implements OnInit {
 
   }
 
-  resetFilter() {
-    this.searchkey = '';
-  }
   editCustomer(makhachhang: string) {
     this.router.navigate(['/admin/customers/' + makhachhang ]);
    }
