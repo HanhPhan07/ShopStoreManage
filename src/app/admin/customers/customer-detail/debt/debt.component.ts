@@ -109,6 +109,10 @@ export class DebtComponent implements OnInit {
     this.getCustomerBillsDebt(this.idkhachhang);
   }
 
+  reset() {
+    this.receiptsAll = 0 ;
+  }
+
   getTotalCusBill() {
     if (this.listCusBillDebt != null) {
       return this.listCusBillDebt.length;
@@ -169,7 +173,24 @@ export class DebtComponent implements OnInit {
   }
 
   receiptsAllDebt() {
-
+    this.proceeds.forEach(x => {
+      this.phieuthu = new PhieuThu();
+      this.phieuthu.maphieuthu = '';
+      this.phieuthu.nguoithu = this.currentUser.manhanvien;
+      this.phieuthu.hinhthucthu =  this.methodPay;
+      this.phieuthu.ngaythu = new Date();
+      this.phieuthu.idhoadon = x.id;
+      this.phieuthu.sotienthu = x.value;
+      if (this.phieuthu.sotienthu != 0 ) {
+        this.debtCusBillService.postReceipts(this.phieuthu).subscribe ();
+        console.log(this.phieuthu);
+      } else {
+        return;
+      }
+    });
+    alert('Thu nợ thành công');
+    this.getCustomerBillsDebt(this.idkhachhang);
+    this.reset();
   }
   onChangeReceptAll() {
     this.proceeds.forEach(x => x.value = 0);
@@ -202,4 +223,5 @@ export class DebtComponent implements OnInit {
     }
     return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu > 0 ;
   }
+
 }
