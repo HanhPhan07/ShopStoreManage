@@ -82,7 +82,6 @@ export class PurchaseHistoryComponent implements OnInit {
         this.baseDataListBills.push(x);
       });
     }
-    console.log(data);
   }
 
   editCustomer(mahoadon: string) {

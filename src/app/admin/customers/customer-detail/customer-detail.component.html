@@ -4,13 +4,22 @@
     <h1>
       Thông tin khách hàng
       <span class="pull-right">
-        <button
+        <div class="col-lg-7">
+          <button
           type="button"
           class="btn btn-block btn-primary"
-          (click)="openModal(template)"
-        >
+          (click)="openModal(template)">
           <i class="fa fa-edit"></i> Sửa KH
         </button>
+        </div>
+        
+        <div class="col-lg-5">
+          <a routerLink="../../customers">
+            <button class="btn-back btn btn-danger" type="button"><i class="fa fa-arrow-left"></i> Thoát
+            </button>
+          </a>
+        </div>
+        
       </span>
     </h1>
   </section>
@@ -149,8 +158,6 @@
                   <div class="col-md-8">{{usersdetail.diachi}}</div>
               </div>
           </div>
-
-
       </div>
     </div>
     <div *ngIf=(isPurchaseHistory)>

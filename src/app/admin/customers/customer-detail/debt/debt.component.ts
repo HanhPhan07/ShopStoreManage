@@ -4,6 +4,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { DebtCustomerBillService } from 'src/app/_services/debt-customer-bill.service';
 import { PhieuThu } from 'src/app/_models/phieuthu';
+import { FormGroup, FormControl } from '@angular/forms';
+import { User } from 'src/app/_models/user';
+import { KhachHang } from 'src/app/_models/khachhang';
 @Component({
   selector: 'app-debt',
   templateUrl: './debt.component.html',
@@ -11,15 +14,21 @@ import { PhieuThu } from 'src/app/_models/phieuthu';
 })
 export class DebtComponent implements OnInit {
   @Input() listOrder: HoaDonBanHang[];
-  @Output('chageToPurchaseHistory') change = new EventEmitter<boolean>();
 
-  id: string;
+  @Output('chageToPurchaseHistory') change = new EventEmitter<boolean>();
+  ngaythu: Date;
+  receiptsAll: number;
+  idkhachhang: string;
   listCusBillDebt: HoaDonBanHang[];
   itemsPerPage = 4;
-  baseDataListBills: HoaDonBanHang[];
+  collection: number;
   pagination: Pagination;
   phieuthus: PhieuThu[];
   phieuthu: PhieuThu;
+  proceeds: any[]; // số tiền thu
+  methodPay: number;
+  currentUser: User;
+  currentCustomer: KhachHang;
   listMethodBill = [
     'Tiền mặt',
     'Thẻ',
@@ -39,10 +48,11 @@ export class DebtComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.listCusBillDebt = new Array();
-    this.baseDataListBills = [];
+    this.receiptsAll = 0;
+    this.ngaythu = new Date();
+    this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.route.params.subscribe(params => {
-      this.id = params.id;
+      this.idkhachhang = params.id;
     });
     this.pagination = {
       currentPage: 1,
@@ -50,16 +60,15 @@ export class DebtComponent implements OnInit {
       totalPages: 0,
       itemsPerPage: this.itemsPerPage
     };
-    this.getCustomerBillsDebt(this.id);
+    this.proceeds =  new Array();
+    this.getCustomerBillsDebt(this.idkhachhang);
+    this.methodPay = 1;
   }
 
   toggleToPurchaseHistory(value: boolean) {
     this.change.emit(value);
   }
 
-  debt(mahoadon: string) {
-    
-  }
 
   getCustomerBillsDebt(makhachhang: string) {
     this.debtCusBillService.getListCustomerBillDebt
@@ -75,6 +84,7 @@ export class DebtComponent implements OnInit {
               itemsPerPage: this.itemsPerPage
             };
         }
+
         this.updateListDebt(data.result);
       },
       error => console.log(error)
@@ -82,19 +92,21 @@ export class DebtComponent implements OnInit {
 
   }
   updateListDebt(data) {
-    this.listCusBillDebt = data;
-    this.baseDataListBills = [];
+    this.listCusBillDebt = data.filter(this.checkDebtBill);
+    this.proceeds = [];
     if (data != null ) {
       this.listCusBillDebt.forEach(x => {
-        this.baseDataListBills.push(x);
+        this.proceeds.push({
+          'id':x.id,
+          'value': 0
+        });
       });
     }
-    console.log(data);
   }
 
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
-    this.getCustomerBillsDebt(this.id);
+    this.getCustomerBillsDebt(this.idkhachhang);
   }
 
   getTotalCusBill() {
@@ -130,11 +142,64 @@ export class DebtComponent implements OnInit {
         tongphieuthu += element.sotienthu;
       });
     }
-    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu ;
+    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu  ;
   }
 
-  getDate() {
-    return Date.now();
+
+  receipts(id: number, hoadonbanhang: HoaDonBanHang) {
+    this.collection = this.proceeds.find(x => x.id === id).value;
+    if (this.collection > this.getDebt(hoadonbanhang)) {
+      alert('Số tiền thu lớn hơn số tiền nợ!');
+      this.proceeds.find(x => x.id === id).value = this.getDebt(hoadonbanhang);
+      return;
+    }
+    this.phieuthu = new PhieuThu();
+    this.phieuthu.maphieuthu = '';
+    this.phieuthu.idhoadon = id;
+    this.phieuthu.sotienthu = this.collection;
+    this.phieuthu.ngaythu = this.ngaythu;
+    this.phieuthu.nguoithu = this.currentUser.manhanvien;
+    this.phieuthu.hinhthucthu = this.methodPay;
+    this.debtCusBillService.postReceipts(this.phieuthu).subscribe (data => {
+      alert('Thu thành công');
+      this.getCustomerBillsDebt(this.idkhachhang);
+    }, error => {
+      alert('Thu thất bại');
+    }, () => {});
   }
 
+  receiptsAllDebt() {
+
+  }
+  onChangeReceptAll() {
+    this.proceeds.forEach(x => x.value = 0);
+    const tongno =  this.getTotalDebt();
+    if (this.receiptsAll > tongno) {
+      this.receiptsAll = tongno;
+    }
+    let totalMoney = this.receiptsAll;
+    let chimuc = 0;
+    while (totalMoney > 0) {
+      if (this.listCusBillDebt[chimuc] != undefined ) {
+        let no = this.getDebt(this.listCusBillDebt[chimuc]);
+        if (totalMoney >= no) {
+          this.proceeds[chimuc].value = no;
+          totalMoney -= no;
+        } else {
+          this.proceeds[chimuc].value = totalMoney;
+          totalMoney = 0;
+        }
+        chimuc++;
+      }
+    }
+  }
+  checkDebtBill(hoadonbanhang: HoaDonBanHang) {
+    let tongphieuthu = 0;
+    if (hoadonbanhang.phieuthus != null) {
+      hoadonbanhang.phieuthus.forEach(element => {
+        tongphieuthu += element.sotienthu;
+      });
+    }
+    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu > 0 ;
+  }
 }

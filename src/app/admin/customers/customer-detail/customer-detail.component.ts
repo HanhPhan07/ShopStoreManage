@@ -55,6 +55,7 @@ export class CustomerDetailComponent implements OnInit {
 
   ngOnInit() {
     this.isPurchaseHistory = true;
+
     this.route.data.subscribe( data => {
       this.usersdetail = data.khachhang;
     });
@@ -80,7 +81,6 @@ export class CustomerDetailComponent implements OnInit {
         this.baseDataListProds.push(x);
       });
     }
-    console.log(this.listCusBill);
   }
 
   updateValueProfileForm() {
