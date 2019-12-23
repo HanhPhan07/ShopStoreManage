@@ -28,10 +28,16 @@ public class PhieuthuService {
     }
 
 	public boolean create(phieuthu phieuthu) {
-		String randomString=(new Date()).getTime()+"";
-		phieuthu.setMaphieuthu("PT"+ randomString);
-		phieuthuRepo.save(phieuthu);
-		return true;
+		String maphieuthu="PT"+((new Date()).getTime()+"");
+		if(!phieuthuRepo.findBymaphieuthu(maphieuthu).isPresent()) {
+			phieuthu.setMaphieuthu(maphieuthu);
+			phieuthuRepo.save(phieuthu);
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 	
 	
