@@ -90,7 +90,7 @@ public class CustomerController {
         return new ResponseEntity<Page<hoadonbanhang>>(kh,HttpStatus.OK);
     }
 	
-/* ---------------- GET BILL CUSTOMER BY MAKHCHHANG ------------------------ */
+/* ---------------- GET BILL CUSTOMER BY MAKHCHHANG DEBT ------------------------ */
 	
 	@GetMapping("/customers/bill/debt/{makhachhang}")
 	
