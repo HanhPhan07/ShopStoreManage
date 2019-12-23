@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import {NgxPrintModule} from 'ngx-print';
 
 import { AdminComponent } from './admin.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -35,7 +36,8 @@ import { ChooseProdComponent } from './orders/sell-prod/choose-prod/choose-prod.
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
     PaginationModule.forRoot(),
-    TypeaheadModule.forRoot()
+    TypeaheadModule.forRoot(),
+    NgxPrintModule
   ],
   declarations: [
     AdminComponent,

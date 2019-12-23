@@ -26,11 +26,9 @@ export function tokenGetter() {
       enableTracing: false
     }),
     JwtModule.forRoot({
-      // Use this config to globally add jwt to request
-      // https://github.com/auth0/angular2-jwt#usage-injection
       config: {
          tokenGetter: tokenGetter,
-         whitelistedDomains: ['localhost:8090'],
+         whitelistedDomains: ['localhost:8090', 'springbootapijava.herokuapp.com'],
          blacklistedRoutes: ['localhost:5000/api/auth']
       }
     })
