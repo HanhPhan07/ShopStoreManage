@@ -12,9 +12,14 @@ constructor(
   private http: HttpClient
 ) { }
 
-  addCateDetailProd(catedetailprod: ChiTietDanhMuc): Observable<any> {
+  addCateDetailProd(catedetailprod: ChiTietDanhMuc[]): Observable<any> {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.httpClient.post(environment.baseUrl + 'detailCate', catedetailprod, { headers: headers });
+  }
+  updateCateDetailProd(catedetailprod: ChiTietDanhMuc) {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.put(environment.baseUrl + 'detailCate', catedetailprod, { headers : headers });
   }
 }

@@ -1,6 +1,6 @@
 import { DanhMucSP } from './danhmucsp';
 
-export interface ChiTietDanhMuc {
+export class ChiTietDanhMuc {
     id?: number;
     danhmucsp: DanhMucSP;
     id_sanpham: number;

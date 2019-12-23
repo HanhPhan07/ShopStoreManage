@@ -2,24 +2,24 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ManufProdService } from '../_services/manuf-prod.service';
-import { NhaSanXuat } from '../_models/nhasanxuat';
+import { NhaCungCap } from '../_models/nhacungcap';
+import { SupsProdService } from '../_services/sups-prod.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ManuProductResolver implements Resolve<NhaSanXuat[]>{
+export class SupplierProductResolver implements Resolve<NhaCungCap[]>{
     pageNumber = 1;
     pageSize = 4;
     constructor(
-        private manuProdrService: ManufProdService,
+        private supsProdrService: SupsProdService,
         private router: Router
     ) { }
-    resolve(route: ActivatedRouteSnapshot): Observable<NhaSanXuat[]> {
-        return this.manuProdrService.getManuProductPage(this.pageNumber, this.pageSize).pipe(
+    resolve(route: ActivatedRouteSnapshot): Observable<NhaCungCap[]> {
+        return this.supsProdrService.getSupProductPage(this.pageNumber, this.pageSize).pipe(
             catchError(error => {
                 console.log(error);
-                this.router.navigate(['/admin/manuf-prod']);
+                this.router.navigate(['/admin/suppliers-prod']);
                 return of(null);
             })
         );

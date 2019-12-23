@@ -81,10 +81,10 @@ export class ProductService {
       }));
   }
 
-  getProduct(id: number): any {
+  getProduct(masp: string): any {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json; charset=utf-8');
-    return this.httpClient.get(environment.baseUrl + 'product/' + id, { headers: headers });
+    return this.httpClient.get(environment.baseUrl + 'productbymasp/' + masp, { headers: headers });
   }
 
 }

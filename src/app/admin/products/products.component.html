@@ -157,7 +157,7 @@
                   <td scope="row">{{item.nhasanxuat.tennsx}}</td>
                   <td style="text-align: center;">
                       <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
-                      (click)="editProduct(item.id)"></i>
+                      (click)="editProduct(item.masp)"></i>
                       <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteProduct(item.id)"></i>
                       <i title ="{{titleState(item.id)}}" class="fa fa-pause" style="margin-left: 5px;"
                       (click)="changestate(item.id)"></i>
@@ -171,7 +171,7 @@
         <div class="d-flex justify-content-between p-2"></div>
         <div class="alert alert-info summany-info clearfix" role="alert">
           <div class="sm-info pull-left">
-            SL sản phẩm/SL nhà sản xuất: 3/2
+            SL sản phẩm/SL nhà sản xuất: <span>{{getTotalProducts()}}</span> / <span>{{getTotalManuf()}}</span>
           </div>
           <div class="pull-right">
             <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"

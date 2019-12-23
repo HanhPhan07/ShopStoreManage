@@ -22,11 +22,12 @@ export class ProductsComponent implements OnInit {
   modalRefAddProd: BsModalRef;
   modalRefEditProd: BsModalRef;
   id: number;
+  dvtinh: string;
   pagination: Pagination;
   listProds: SanPham[];
   searchTerm: string;
-  // fitlerdanhmucsp: number;
-  // fitlernhasx: number;
+  fitlerdanhmucsp: number;
+  fitlernhasx: number;
   baseDataListProds: SanPham[];
   filterStatus: number;
   listCateProd: DanhMucSP[];
@@ -53,22 +54,6 @@ export class ProductsComponent implements OnInit {
     motasp: new FormControl('')
   });
   product: SanPham;
-  productCurrent: SanPham;
-  productEdit: SanPham;
-  editProdForm = new FormGroup({
-    masp: new FormControl({value: '', disabled: true}),
-    tensp: new FormControl('', Validators.required),
-    soluong: new FormControl('', Validators.required),
-    giavon: new FormControl('', Validators.required),
-    giaban: new FormControl('', Validators.required),
-    danhmuc: new FormArray([]),
-    nhasx: new FormControl('', Validators.required),
-    hot: new FormControl('', Validators.required),
-    new: new FormControl('', Validators.required),
-    display: new FormControl('', Validators.required),
-    anhsp: new FormControl(''),
-    motasp: new FormControl('')
-  });
 
     selectedFiles: FileList;
     currentFile: File;
@@ -80,18 +65,15 @@ export class ProductsComponent implements OnInit {
     private cateProdService: CateProductService,
     private manufProdService: ManufProdService,
     private activatedRoute: ActivatedRoute,
-    private cateDetailProd: CateDetailProductService) { }
+    private cateDetailProd: CateDetailProductService
+    ) { }
 
   openModal(template: TemplateRef<any>) {
     this.modalRefAddProd = this.modalService.show(template);
-    //this.modalRefEditProd = this.modalService.show(template);
-  }
-  openEditModal(template: TemplateRef<any>) {
-    this.modalRefEditProd = this.modalService.show(template);
   }
   ngOnInit() {
-    // this.fitlerdanhmucsp = 0;
-    // this.fitlernhasx = 0;
+    this.fitlerdanhmucsp = 0;
+    this.fitlernhasx = 0;
     this.filterStatus = 0;
     this.listProds = new Array();
     this.pagination = {
@@ -108,13 +90,10 @@ export class ProductsComponent implements OnInit {
     this.activatedRoute.data.subscribe(data => {
         this.listProds = data.product.result;
         this.pagination = data.product.pagination;
-        this.productCurrent = data.sanpham;
         this.baseDataListProds = data.product.result;
      });
     this.getListCateProd();
     this.getListManufProd();
-    this.productEdit = this.productCurrent;
-    this.updateValueProdForm();
   }
   onCheckChange(event) {
     let formArray: FormArray = this.addProdForm.get('danhmuc') as FormArray;
@@ -134,6 +113,9 @@ export class ProductsComponent implements OnInit {
         i++;
       });
     }
+  }
+  donvitinh() {
+    
   }
   createProduct() {
     this.productAdd = new SanPham();
@@ -155,13 +137,14 @@ export class ProductsComponent implements OnInit {
     this.productService.uploadFile(this.currentFile).subscribe(response => {
       this.productAdd.anhsp = response.fileDownloadUri;
       this.productService.addProduct(this.productAdd).subscribe( next => {
+        let chitietdanhmucs = [];
         this.addProdForm.controls['danhmuc'].value.forEach(y => {
           let danhmuc: DanhMucSP = this.listCateProd.find(x => x.id === y);
-          let chitietdanhmuc: ChiTietDanhMuc = {
-            id_sanpham: next.id,
+          chitietdanhmucs.push({
+            id_sanpham: this.productAdd.id,
             danhmucsp: danhmuc
-          };
-          this.cateDetailProd.addCateDetailProd(chitietdanhmuc).subscribe(() => {
+          });
+          this.cateDetailProd.addCateDetailProd(chitietdanhmucs).subscribe(() => {
             alert('Thêm thành công !');
             this.getListProduct();
             this.modalRefAddProd.hide();
@@ -194,50 +177,9 @@ export class ProductsComponent implements OnInit {
       }
     );
   }
-  editProduct(id: number) {
-    this.router.navigate(['/admin/products/' + id ]);
+  editProduct(masp: string) {
+    this.router.navigate(['/admin/products/' + masp ]);
   }
-
-  updateValueProdForm() {
-    this.editProdForm.controls['masp'].setValue(this.productCurrent.masp);
-    this.editProdForm.controls['tensp'].setValue(this.productCurrent.tensp);
-    this.editProdForm.controls['soluong'].setValue(this.productCurrent.soluong);
-    this.editProdForm.controls['giavon'].setValue(this.productCurrent.giagoc);
-    this.editProdForm.controls['giaban'].setValue(this.productCurrent.giaban);
-    this.editProdForm.controls['danhmuc'].setValue(this.productCurrent.chitietdanhmuc);
-    this.editProdForm.controls['nhasx'].setValue(this.productCurrent.nhasanxuat);
-    this.editProdForm.controls['donvitinh'].setValue(this.productCurrent.donvitinh);
-    this.editProdForm.controls['hot'].setValue(this.productCurrent.ishot);
-    this.editProdForm.controls['new'].setValue(this.productCurrent.isnew);
-    this.editProdForm.controls['display'].setValue(this.productCurrent.displaywebsite);
-    this.editProdForm.controls['anhsp'].setValue(this.productCurrent.anhsp);
-    this.editProdForm.controls['motasp'].setValue(this.productCurrent.motasp);
-  }
-  updateProduct() {
-    this.productEdit.masp = this.productCurrent.masp;
-    this.productEdit.tensp = this.editProdForm.controls['tensp'].value;
-    this.productEdit.soluong = this.editProdForm.controls['soluong'].value;
-    this.productEdit.giagoc = this.editProdForm.controls['giavon'].value;
-    this.productEdit.giaban = this.editProdForm.controls['giaban'].value;
-    this.productEdit.chitietdanhmuc = this.editProdForm.controls['danhmuc'].value;
-    this.productEdit.nhasanxuat = this.editProdForm.controls['nhasx'].value;
-    this.productEdit.donvitinh = this.editProdForm.controls['donvitinh'].value;
-    this.productEdit.ishot = this.editProdForm.controls['hot'].value;
-    this.productEdit.isnew = this.editProdForm.controls['new'].value;
-    this.productEdit.displaywebsite = this.editProdForm.controls['display'].value;
-    this.productEdit.anhsp = this.editProdForm.controls['anhsp'].value;
-    this.productEdit.motasp = this.editProdForm.controls['motasp'].value;
-    this.productService.updateProduct(this.productEdit).subscribe(next => {
-      this.productCurrent = this.productEdit;
-      alert('Update Successfully');
-      this.getListProduct();
-      this.modalRefAddProd.hide();
-      }, error => {
-        alert('Error');
-        console.log(error);
-      }, () => {});
-  }
-
   deleteProduct(id: number) {
     if (confirm('Bạn thực sự muốn xóa sản phẩm này?')) {
       this.productService.deleteProduct(id).subscribe(() => {
@@ -313,6 +255,17 @@ export class ProductsComponent implements OnInit {
       this.listProds = this.baseDataListProds.filter(this.isSale);
     }
   }
+  // filterManu(nhasx: number) {
+  //   if(this.fitlernhasx == 0) {
+  //     this.listProds = this.baseDataListProds;
+  //   } else {
+  //     this.listProds = this.baseDataListProds.filter(this.manuProd(nhasx));
+  //   }
+  // }
+  // manuProd(nhasx: number) {
+  //   this.product = new SanPham();
+  //   return this.product.nhasx.id == nhasx;
+  // }
   isSale(sanpham: SanPham) {
     return sanpham.trangthai == 1;
   }
@@ -345,5 +298,15 @@ export class ProductsComponent implements OnInit {
     this.product = this.findProductByID(id);
     title = this.product.trangthai === 1 ? this.listProductStatus[0] : this.listProductStatus[1];
     return title;
+  }
+  getTotalProducts() {
+    if (this.listProds != null) {
+      return this.listProds.length;
+    }
+  }
+  getTotalManuf() {
+    if (this.listManufProd != null) {
+      return this.listManufProd.length;
+    }
   }
 }

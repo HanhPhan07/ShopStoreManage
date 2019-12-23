@@ -19,12 +19,6 @@ export class ProductsDetailResolver implements Resolve<SanPham> {
     ) { }
 
     resolve(route: ActivatedRouteSnapshot): any {
-        return this.prodService.getProduct(route.params.id).pipe(
-            catchError(error => {
-                console.log(error);
-                this.router.navigate(['/admin/products']);
-                return of(null);
-            })
-        ); // lấy router trong resolver
+        return this.prodService.getProduct(route.paramMap.get('masp')); // lấy router trong resolver
     }
 }

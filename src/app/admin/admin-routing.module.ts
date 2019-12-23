@@ -25,6 +25,8 @@ import { AllCateProductResolver } from '../_resolver/list-all-cate-resolver';
 import { CustomersDetailResolver } from '../_resolver/customer-detail-resolver';
 import { ProductDetailComponent } from './products/product-detail/product-detail.component';
 import { ProductsDetailResolver } from '../_resolver/product-detail-resolver';
+import { ManuProductResolver } from '../_resolver/manuf-prod.resolver';
+import { SupplierProductResolver } from '../_resolver/supplier-prod-resolver';
 
 
 const routes: Routes = [
@@ -67,7 +69,7 @@ const routes: Routes = [
         resolve: {product: ProductResolver, cates: AllCateProductResolver}
       },
       {
-        path: 'products/:id',
+        path: 'products/:masp',
         component: ProductDetailComponent,
         resolve: {productdetail: ProductsDetailResolver}
       },
@@ -78,11 +80,13 @@ const routes: Routes = [
       },
       {
         path: 'manuf-prod',
-        component: ManufProdComponent
+        component: ManufProdComponent,
+        resolve: {manuProd: ManuProductResolver}
       },
       {
         path: 'suppliers-prod',
-        component: SuppliersProdComponent
+        component: SuppliersProdComponent,
+        resolve: {supProd: SupplierProductResolver}
       },
       {
         path: 'profile',
