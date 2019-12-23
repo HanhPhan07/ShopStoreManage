@@ -94,6 +94,19 @@ public class ProductController {
         }
         return new ResponseEntity<>(product.get(), HttpStatus.OK);
     }
+	/* ---------------- GET PRODUCT BY MASP ------------------------ */
+	@GetMapping("/productbymasp/{masp}")
+	
+	public ResponseEntity<sanpham> getProductByMasp(
+            @PathVariable("masp") String masp) {
+        Optional<sanpham> product = productService.findByMasp(masp);
+
+        if (!product.isPresent()) {
+            return new ResponseEntity<>(product.get(),
+                    HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(product.get(), HttpStatus.OK);
+    }
 
 	/* ---------------- CREATE NEW PRODUCT ------------------------ */
 	@PostMapping("/product")

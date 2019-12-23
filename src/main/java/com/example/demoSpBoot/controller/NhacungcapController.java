@@ -1,5 +1,7 @@
 package com.example.demoSpBoot.controller;
 
+import java.text.ParseException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.nhacungcap;
+import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.NhacungcapService;
 
 @RestController
@@ -28,8 +31,17 @@ import com.example.demoSpBoot.service.NhacungcapService;
 public class NhacungcapController {
 	@Autowired
 	NhacungcapService nhaccService;
-	@GetMapping("/NCCs")
+	@GetMapping("/allSUPs")
 	/* ---------------- GET ALL NCC ------------------------ */
+	public ResponseEntity<List<nhacungcap>> findAllNCC() {
+		List<nhacungcap> listSUP= nhaccService.findAllSup();
+		if(listSUP.isEmpty()) {
+			return new ResponseEntity<List<nhacungcap>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<nhacungcap>>(listSUP, HttpStatus.OK);
+	}
+	@GetMapping("/NCCs")
+	/* ---------------- GET NCC PAGE ------------------------ */
 	public ResponseEntity<Page<nhacungcap>> findAllNCCs(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
@@ -45,6 +57,16 @@ public class NhacungcapController {
 	public ResponseEntity<nhacungcap> getNCCById(
             @PathVariable("id") int id) {
         Optional<nhacungcap> ncc = nhaccService.findByID(id);
+
+        if (!ncc.isPresent()) {
+            return new ResponseEntity<>(ncc.get(),
+                    HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(ncc.get(), HttpStatus.OK);
+    }
+	public ResponseEntity<nhacungcap> getNCCByMancc(
+            @PathVariable("mancc") String mancc) {
+        Optional<nhacungcap> ncc = nhaccService.findByMancc(mancc);
 
         if (!ncc.isPresent()) {
             return new ResponseEntity<>(ncc.get(),
@@ -80,5 +102,16 @@ public class NhacungcapController {
 		else {
 			return new ResponseEntity<nhacungcap>(HttpStatus.NOT_FOUND);
 		}
+	}
+	@GetMapping("/suppliers/search")
+	/* ---------------- SEARCH ------------------------ */
+	public ResponseEntity<Page<nhacungcap>> findSUP(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+		Page<nhacungcap> listSUP = null;
+			listSUP= nhaccService.searchSupProd(pageNumber,pageSize,searchTerm);
+		
+			if(listSUP.isEmpty()) {
+				return new ResponseEntity<Page<nhacungcap>>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<Page<nhacungcap>>(listSUP, HttpStatus.OK);
 	}
 }

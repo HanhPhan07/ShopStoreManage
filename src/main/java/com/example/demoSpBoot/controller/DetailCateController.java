@@ -54,10 +54,10 @@ public class DetailCateController {
 
 	/* ---------------- CREATE NEW BILL ------------------------ */
 	@PostMapping("/detailCate")
-	public ResponseEntity<chitietdanhmuc> saveBill(@Valid @RequestBody chitietdanhmuc detailCate) {
-		if(detailCateService.create(detailCate)) return new ResponseEntity<chitietdanhmuc>(detailCate,HttpStatus.OK);
+	public ResponseEntity<Boolean> saveCateDetail(@Valid @RequestBody chitietdanhmuc[] detailCate) {
+		if(detailCateService.create(detailCate)) return new ResponseEntity<Boolean>(HttpStatus.OK);
 		else {
-			return new ResponseEntity<chitietdanhmuc>(detailCate,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
 		}
 		
 	}

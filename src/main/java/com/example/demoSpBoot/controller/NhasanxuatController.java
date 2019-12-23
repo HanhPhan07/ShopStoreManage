@@ -1,5 +1,6 @@
 package com.example.demoSpBoot.controller;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,5 +94,16 @@ public class NhasanxuatController {
 		else {
 			return new ResponseEntity<nhasanxuat>(HttpStatus.NOT_FOUND);
 		}
+	}
+	@GetMapping("/ManuProd/search")
+	/* ---------------- SEARCH ------------------------ */
+	public ResponseEntity<Page<nhasanxuat>> findManu(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+		Page<nhasanxuat> listManu = null;
+			listManu= nsxService.searchManu(pageNumber,pageSize,searchTerm);
+		
+			if(listManu.isEmpty()) {
+				return new ResponseEntity<Page<nhasanxuat>>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<Page<nhasanxuat>>(listManu, HttpStatus.OK);
 	}
 }

@@ -31,6 +31,9 @@ public class ProductService {
 	public Optional<sanpham> findByID(int id) {
         return productRepo.findById(id);
     }
+	public Optional<sanpham> findByMasp(String masp) {
+        return productRepo.findBymasp(masp);
+    }
 
 	public boolean create(sanpham product) {		
 			String randomString=(new Date()).getTime()+"";
@@ -57,6 +60,8 @@ public class ProductService {
 			return false;
 		} else {
 			productRepo.deleteDetailCate(id);
+			productRepo.deleteDetailBillBH(id);
+			productRepo.deleteDetailBillNH(id);
 			productRepo.delete(product);
 			return true;
 		}
