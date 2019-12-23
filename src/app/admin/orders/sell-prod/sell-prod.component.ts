@@ -51,6 +51,11 @@ export class SellProdComponent implements OnInit {
     ngaysinh: new FormControl(''),
     gioitinh: new FormControl(''),
   });
+  listMethodBill = [
+    'Tiền mặt',
+    'Thẻ',
+    'Chuyển khoản'
+  ];
   constructor(
     private modalService: BsModalService,
     private productService: ProductService,
@@ -92,7 +97,9 @@ export class SellProdComponent implements OnInit {
     );
 
   }
-
+  getCurrentDate() {
+    return new Date();
+  }
   // Function for get Product
   loadProducts() {
     this.productService.getListProduct().subscribe(data => {
