@@ -53,8 +53,8 @@ public class PhieuthuController {
     }
 
 	/* ---------------- CREATE NEW phieu thu ------------------------ */
-	@PostMapping("/phieuthu")
-	public ResponseEntity<phieuthu> saveNCC(@Valid @RequestBody phieuthu phieuthu) {
+	@PostMapping("/receipts")
+	public ResponseEntity<phieuthu> saveReceipts(@Valid @RequestBody phieuthu phieuthu) {
 		if(phieuthuService.create(phieuthu)) return new ResponseEntity<phieuthu>(phieuthu,HttpStatus.OK);
 		else {
 			return new ResponseEntity<phieuthu>(phieuthu,HttpStatus.NOT_FOUND);
