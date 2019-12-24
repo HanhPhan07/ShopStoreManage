@@ -62,20 +62,18 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col-md-4">Tên danh mục</th>
-              <th scope="col-md-6">Mô tả</th>
-              <th scope="col-md-2" style="text-align: center;">Công cụ</th>
+              <th scope="col-md-4" class="col-md-2">Tên danh mục</th>
+              <th scope="col-md-6" class="col-md-2">Mô tả</th>
+              <th scope="col-md-2" style="text-align:left;" class="col-md-1">Công cụ</th>
             </tr>
           </thead>
           <tbody>
               <ng-template ngFor let-item [ngForOf]="listCateProds" let-i="index">
-                <tr>
-                  <td scope="row col-md-4">{{item.tendanhmuc}}</td>
-                  <th scope="row col-md-6">{{item.motadanhmuc}}</th>
-                  <td style="text-align: center;">
-                      <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
-                        (click)="editCateProduct(item.id)"></i>
-                      <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteCateProduct(item.id)"></i>
+                <tr (keyup.enter)="editCateProduct(item.id)">
+                  <td scope="row col-md-4" class="col-md-2"><input  type="text" [(ngModel)]="item.tendanhmuc" class="col-md-10"></td>
+                  <th scope="row col-md-6" class="col-md-2"><input  type="text" [(ngModel)]="item.motadanhmuc" class="col-md-10"></th>
+                  <td style="text-align: left;">
+                      <i class="fa fa-trash-o col-md-1" style="color: darkred;" title="Xóa" (click)="deleteCateProduct(item.id)"></i>
                   </td>
                 </tr>
               </ng-template>

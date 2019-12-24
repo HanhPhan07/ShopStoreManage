@@ -39,6 +39,11 @@ export class SupsProdService {
     headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.httpClient.post(environment.baseUrl + 'NCCs', supProd, { headers: headers });
   }
+  updateSupsProduct(supProd: NhaCungCap) {
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'application/json; charset=utf-8');
+    return this.httpClient.put(environment.baseUrl + 'NCCs', supProd, { headers : headers });
+  }
   deleteSupProduct(id: number) {
     return this.httpClient.delete(environment.baseUrl + 'NCCs/' + id);
   }

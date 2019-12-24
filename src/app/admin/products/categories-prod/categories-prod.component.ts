@@ -51,7 +51,7 @@ export class CategoriesProdComponent implements OnInit {
     this.cateAdd = new DanhMucSP();
     this.cateAdd.tendanhmuc = this.addCateForm.controls['tendanhmuc'].value;
     this.cateAdd.motadanhmuc = this.addCateForm.controls['motadanhmuc'].value;
-    this.cateProdService.addProduct(this.cateAdd).subscribe(() => {
+    this.cateProdService.addCateProduct(this.cateAdd).subscribe(() => {
       alert('Thêm thành công !');
       this.getListCateProduct();
       this.modalRefAddCateProd.hide();
@@ -62,7 +62,15 @@ export class CategoriesProdComponent implements OnInit {
     });
   }
   editCateProduct(maDM: number) {
-    this.router.navigate(['/admin/products/categories-prod/' + maDM]);
+    this.cateProdService.updateCateProduct(this.listCateProds.find(x => x.id == maDM)).subscribe(() => {
+      alert('Sửa thành công !');
+      this.getListCateProduct();
+    },
+    error => {
+      alert('Lỗi');
+      console.log(error);
+    }
+  );
   }
   deleteCateProduct(maDM: number) {
     if (confirm('Bạn thực sự muốn xóa danh mục này?')) {

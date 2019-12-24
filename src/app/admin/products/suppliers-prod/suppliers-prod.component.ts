@@ -78,8 +78,16 @@ export class SuppliersProdComponent implements OnInit {
       console.log(error);
     });
   }
-  editSupProduct(maNCC: string) {
-    this.router.navigate(['/admin/products/suppliers-prod/' + maNCC]);
+  editSupsProduct(id: number) {
+    this.supProdService.updateSupsProduct(this.listSupProds.find(x => x.id == id)).subscribe(() => {
+      alert('Sửa thành công !');
+      this.getListSupProduct();
+    },
+    error => {
+      alert('Lỗi');
+      console.log(error);
+      }
+    );
   }
   deleteSupProduct(id: number) {
     if (confirm('Bạn thực sự muốn xóa danh mục này?')) {

@@ -164,7 +164,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getListCateProd() {
-    this.cateProdService.getListCateArr().subscribe(
+    this.cateProdService.getListCate().subscribe(
       data => {
         this.listCateProd = data;
       }
