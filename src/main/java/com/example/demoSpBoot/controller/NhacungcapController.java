@@ -64,6 +64,7 @@ public class NhacungcapController {
         }
         return new ResponseEntity<>(ncc.get(), HttpStatus.OK);
     }
+	@GetMapping("/NCCs/{mancc}")
 	public ResponseEntity<nhacungcap> getNCCByMancc(
             @PathVariable("mancc") String mancc) {
         Optional<nhacungcap> ncc = nhaccService.findByMancc(mancc);
