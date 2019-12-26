@@ -69,8 +69,8 @@ export class CategoriesProdComponent implements OnInit {
     error => {
       alert('Lỗi');
       console.log(error);
-    }
-  );
+      }
+    );
   }
   deleteCateProduct(maDM: number) {
     if (confirm('Bạn thực sự muốn xóa danh mục này?')) {

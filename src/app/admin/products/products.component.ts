@@ -123,7 +123,6 @@ export class ProductsComponent implements OnInit {
     this.productAdd.soluong = this.addProdForm.controls['soluong'].value;
     this.productAdd.giagoc = this.addProdForm.controls['giavon'].value;
     this.productAdd.giaban = this.addProdForm.controls['giaban'].value;
-    console.log(this.addProdForm.controls['danhmuc'].value);
     let productManu = this.listManufProd.find( x => {
       return x.id == this.addProdForm.controls['nhasx'].value;
     });
@@ -139,11 +138,12 @@ export class ProductsComponent implements OnInit {
       this.productService.addProduct(this.productAdd).subscribe( next => {
         let chitietdanhmucs = [];
         this.addProdForm.controls['danhmuc'].value.forEach(y => {
-          let danhmuc: DanhMucSP = this.listCateProd.find(x => x.id === y);
+          let danhmuc: DanhMucSP = this.listCateProd.find(x => x.id == y);
           chitietdanhmucs.push({
-            id_sanpham: this.productAdd.id,
+            id_sanpham: next.id,
             danhmucsp: danhmuc
           });
+          console.log(chitietdanhmucs);
           this.cateDetailProd.addCateDetailProd(chitietdanhmucs).subscribe(() => {
             alert('Thêm thành công !');
             this.getListProduct();
