@@ -16,6 +16,7 @@ export class DebtComponent implements OnInit {
   @Input() listOrder: HoaDonBanHang[];
 
   @Output('chageToPurchaseHistory') change = new EventEmitter<boolean>();
+
   ngaythu: Date;
   receiptsAll: number;
   idkhachhang: string;
@@ -37,9 +38,14 @@ export class DebtComponent implements OnInit {
 
   listStatusBill = [
     'Khởi tạo',
-    'Hoàn thành'
+    'Đang xử lý',
+    'Đang giao',
+    'Hoàn thành',
+    'Tạm dừng',
+    'Đã hủy'
   ];
 
+  value: boolean;
 
   constructor(
     private router: Router,
@@ -69,7 +75,11 @@ export class DebtComponent implements OnInit {
     this.change.emit(value);
   }
 
-
+  show(value: boolean) {
+    if () {
+      this.change.emit(value);
+    }
+  }
   getCustomerBillsDebt(makhachhang: string) {
     this.debtCusBillService.getListCustomerBillDebt
     (makhachhang, this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(
