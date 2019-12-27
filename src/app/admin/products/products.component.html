@@ -29,9 +29,6 @@
             <input type="text" class="form-control" id="tensp" 
             placeholder="Nhập tên SP (bắt buộc)" formControlName="tensp"/>
           </div>
-          <div ng-if="addProdForm.tensp.$touched && addProdForm.tensp.$error" class="alert alert-danger">
-            <span ng-if="addProdForm.tensp.$error.required">Username is required!</span>
-        </div>
           <div class="form-group">
             <label for="soluong">Số lượng</label>
             <input type="number" class="form-control"
@@ -63,10 +60,9 @@
           </select>
           <div class="form-group">
             <label for="donvitinh">Đơn vị tính</label>
-            <select name="nhasx" class="form-control" id="donvitinh" formControlName="donvitinh">
-              <option value="cái" selected="true">Cái</option>  
+            <select name="donvitinh" class="form-control" id="donvitinh" formControlName="donvitinh">
+              <option value="cái" >Cái</option>  
             </select>
-            <!-- /<input type="text" class="form-control" id="donvitinh" formControlName="donvitinh" value="cái" disabled="true"/> -->
           </div>
           </div>
           <div class="form-group">
@@ -118,19 +114,21 @@
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
             <select class="form-control" [(ngModel)]="filterStatus" (change)="filter()"
             name="filterStatus">
-              <option value="0">Trạng thái</option>
+              <option value="0" selected="selected">Trạng thái</option>
               <option value="1">Đang kinh doanh</option>
               <option value="2">Đã ngừng kinh doanh</option>
             </select>
           </div>
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
-          <select class="form-control" >
+          <select class="form-control" [(ngModel)]="fitlerdanhmucsp" (change)="filter()"
+          name="fitlerdanhmucsp">
               <option selected="selected" value="0">--Danh mục--</option>
               <option *ngFor="let item of listCateProd" value="{{item.id}}">{{item.tendanhmuc}}</option>
             </select>
           </div>
           <div class="col-md-3 padd-0" style="margin-right: 10px;">
-            <select class="form-control search-option-3" >
+            <select class="form-control search-option-3" [(ngModel)]="fitlernhasx" (change)="filter()"
+            name="fitlernhasx">
               <option selected="selected" value="0">--Nhà sản xuất--</option>
               <option *ngFor="let item of listManufProd" value="{{item.id}}">{{item.tennsx}}</option>
             </select>

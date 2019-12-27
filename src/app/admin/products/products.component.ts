@@ -25,6 +25,7 @@ export class ProductsComponent implements OnInit {
   dvtinh: string;
   pagination: Pagination;
   listProds: SanPham[];
+  listProFilter: SanPham[];
   searchTerm: string;
   fitlerdanhmucsp: number;
   fitlernhasx: number;
@@ -33,7 +34,6 @@ export class ProductsComponent implements OnInit {
   listCateProd: DanhMucSP[];
   listManufProd: NhaSanXuat[];
   itemsPerPage = 4;
-  listSubTrTableProd = [];
   listProductStatus = [
     'Đang kinh doanh',
     'Ngừng kinh doanh'
@@ -114,9 +114,7 @@ export class ProductsComponent implements OnInit {
       });
     }
   }
-  donvitinh() {
-    
-  }
+
   createProduct() {
     this.productAdd = new SanPham();
     this.productAdd.tensp = this.addProdForm.controls['tensp'].value;
@@ -247,30 +245,47 @@ export class ProductsComponent implements OnInit {
         );
   }
   filter() {
-    if (this.filterStatus == 2) {
-      this.listProds = this.baseDataListProds.filter(this.isNonSale);
-    } else if (this.filterStatus == 0) {
-      this.listProds = this.baseDataListProds;
+    if (this.filterStatus == 0 && this.fitlernhasx == 0) {
+      this.getListProduct();
     } else {
-      this.listProds = this.baseDataListProds.filter(this.isSale);
+      this.getListProFilter();
+      if (this.fitlerdanhmucsp != 0 ) {
+        this.baseDataListProds.forEach(x => {
+          x.chitietdanhmuc.forEach(y => {
+            y.id==this.fitlerdanhmucsp;
+            this.listProds.push(x);
+          });
+        });
+      }
     }
   }
-  // filterManu(nhasx: number) {
-  //   if(this.fitlernhasx == 0) {
-  //     this.listProds = this.baseDataListProds;
-  //   } else {
-  //     this.listProds = this.baseDataListProds.filter(this.manuProd(nhasx));
-  //   }
-  // }
-  // manuProd(nhasx: number) {
-  //   this.product = new SanPham();
-  //   return this.product.nhasx.id == nhasx;
-  // }
+  filterbyCate() {
+    
+  }
+  getListProFilter() {
+    this.productService.filterProductPageWithStatusandManu (
+      this.pagination.currentPage, this.pagination.itemsPerPage, this.filterStatus, this.fitlernhasx).subscribe(
+        (data: PaginatedResult<SanPham[]>) => {
+          if (typeof(data.pagination) !== 'undefined') {
+            this.pagination = data.pagination;
+          } else {
+              this.pagination = {
+                currentPage: 1,
+                totalItems: 0,
+                totalPages: 0,
+                itemsPerPage: this.itemsPerPage
+              };
+          }
+          this.updateListProduct(data.result);
+        },
+      error => console.log(error)
+    );
+  }
   isSale(sanpham: SanPham) {
     return sanpham.trangthai == 1;
   }
   isNonSale(sanpham: SanPham) {
-    return sanpham.trangthai == 0;
+    return sanpham.trangthai == 2;
   }
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
@@ -279,7 +294,7 @@ export class ProductsComponent implements OnInit {
   changestate(id: number) {
     this.product = new SanPham();
     this.product = this.findProductByID(id);
-    this.product.trangthai = this.product.trangthai == 1 ? 0 : 1;
+    this.product.trangthai = this.product.trangthai == 1 ? 2 : 1;
     this.productService.updateProduct(this.product).subscribe(() => {
       alert('Đã thay đổi trạng thái');
       this.getListProduct();
@@ -292,7 +307,7 @@ export class ProductsComponent implements OnInit {
   findProductByID(id: number) {
     return this.listProds.find(x => x.id == id);
   }
-  titleState(id: number){
+  titleState(id: number) {
     let title = '';
     this.product = new SanPham();
     this.product = this.findProductByID(id);
