@@ -8,8 +8,9 @@ import { KhachHang } from 'src/app/_models/khachhang';
 import { KhachHangDTO } from 'src/app/_models/khachhangDTO';
 import { error } from 'util';
 import { TabHeadingDirective } from 'ngx-bootstrap';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 
 @Component({
   selector: 'app-customers',
@@ -35,17 +36,29 @@ export class CustomersComponent implements OnInit {
   diachi: string;
   ngaysinh: Date;
   gioitinh: boolean;
+  haveCus: boolean;
   addCustomersForm = new FormGroup({
     makhachhang: new FormControl(''),
-    ten: new FormControl(''),
-    sdt: new FormControl(''),
-    email: new FormControl(''),
-    diachi: new FormControl(''),
-    ngaysinh: new FormControl(''),
+    ten: new FormControl('', [
+      Validators.required,
+    ]),
+    sdt: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')
+    ]),
+    diachi: new FormControl('', [
+      Validators.required,
+    ]),
+    ngaysinh: new FormControl('', [Validators.required]),
     gioitinh: new FormControl(''),
   });
   constructor(
     private modalService: BsModalService,
+    private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private customersService: CustomersService) { }
@@ -60,10 +73,10 @@ export class CustomersComponent implements OnInit {
       this.listCustomers = data.customers.result;
       this.pagination = data.customers.pagination;
     });
-
     this.baseDataListCustomers = this.listCustomers;
-
   }
+
+
   search() {
     this.customersService.getSearchKhachHang(
       this.pagination.currentPage, this.pagination.itemsPerPage, this.searchTerm ).subscribe(
@@ -100,7 +113,6 @@ export class CustomersComponent implements OnInit {
           }
           this.updateListBill(data.result);
       },
-      // tslint:disable-next-line: no-shadowed-variable
       error => console.log(error)
       );
 
@@ -159,12 +171,14 @@ export class CustomersComponent implements OnInit {
   }
 
   updateListBill(data) {
+    this.haveCus = false;
     this.listCustomers = data; // lưu dữ liệu bên html
     this.baseDataListCustomers = []; // lưu dữ liệu gốc
     if (data != null ) {
       this.listCustomers.forEach(x => {
         this.baseDataListCustomers.push(x);
       });
+      this.haveCus = true;
     }
   }
 
@@ -175,7 +189,6 @@ export class CustomersComponent implements OnInit {
         this.getListCustomers();
         alert('Xóa thành công !');
       },
-        // tslint:disable-next-line: no-shadowed-variable
         error => {
           console.log(error);
           alert('Xóa thất bại !');
@@ -185,20 +198,25 @@ export class CustomersComponent implements OnInit {
   }
 
   addCustomer() {
-        this.customer =  new KhachHang();
-        this.customer.ten = this.addCustomersForm.controls['ten'].value;
-        this.customer.sdt = this.addCustomersForm.controls['sdt'].value;
-        this.customer.email = this.addCustomersForm.controls['email'].value;
-        this.customer.diachi = this.addCustomersForm.controls['diachi'].value;
-        this.customer.ngaysinh = this.addCustomersForm.controls['ngaysinh'].value;
-        this.customer.gioitinh = this.addCustomersForm.controls['gioitinh'].value;
-        this.customersService.addCustomer(this.customer).subscribe( next => {
-          alert('Thêm thành công !');
-          this.getListCustomers();
-          this.modalRef.hide();
-        }, error => {
-            alert('Thêm thất bại');
-            console.log(error);
-          }, () => {});
+    this.customer =  new KhachHang();
+    this.customer.ten = this.addCustomersForm.controls['ten'].value;
+    this.customer.sdt = this.addCustomersForm.controls['sdt'].value;
+    this.customer.email = this.addCustomersForm.controls['email'].value;
+    this.customer.diachi = this.addCustomersForm.controls['diachi'].value;
+    this.customer.ngaysinh = this.addCustomersForm.controls['ngaysinh'].value;
+    this.customer.gioitinh = this.addCustomersForm.controls['gioitinh'].value;
+    this.customersService.addCustomer(this.customer).subscribe( next => {
+      alert('Thêm thành công !');
+      this.getListCustomers();
+      this.modalRef.hide();
+      this.addCustomersForm.reset();
+    }, error => {
+      alert('Thêm thất bại');
+      console.log(error);
+      }, () => {});
   }
+
+
+
+
 }

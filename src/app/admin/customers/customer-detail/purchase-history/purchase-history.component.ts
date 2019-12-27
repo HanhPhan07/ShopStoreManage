@@ -28,6 +28,14 @@ export class PurchaseHistoryComponent implements OnInit {
     'Thẻ',
     'Chuyển khoản'
   ];
+  listStatusBill = [
+    'Khởi tạo',
+    'Đang xử lý',
+    'Đang giao',
+    'Hoàn thành',
+    'Tạm dừng',
+    'Đã hủy'
+  ];
   constructor(
     private route: ActivatedRoute,
     private router: Router,

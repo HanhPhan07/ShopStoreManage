@@ -34,62 +34,77 @@
       <!--Form Add KH-->
       <div class="modal-body">
         <form [formGroup]="addCustomersForm" (ngSubmit)="addCustomer()">
-          <!-- <div class="form-group">
-            <label for="makh">Mã KH</label>
-            <input 
-              type="text"
-              class="form-control"
-              id="makhachhang"
-              formControlName="makhachhang"
-              placeholder="Nhập mã khách hàng (bắt buộc)"
-            />
-          </div> -->
           <div class="form-group">
             <label for="tenkh">Tên KH</label>
             <input
-              type="text"
-              class="form-control"
-              id="ten"
-              formControlName="ten"
+              type="text" class="form-control"
+              id="ten" name="ten" formControlName="ten"
               placeholder="Nhập tên khách hàng (bắt buộc)"
             />
+            <div class="col alert alert-danger" role="alert"
+                *ngIf="addCustomersForm.controls['ten'].invalid && ((addCustomersForm.controls['ten'].touched)
+                  ||(addCustomersForm.controls['ten'].dirty))">
+                  Vui lòng nhập tên
+            </div>
           </div>
+         
           <div class="form-group">
               <label for="sdtkh">Số điện thoại</label>
               <input
                 type="text"
                 class="form-control"
-                id="sdt"
+                id="sdt" name="sdt"
                 formControlName="sdt"
                 placeholder="Nhập số điện thoại (bắt buộc)"
               />
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="((addCustomersForm.controls['sdt'].touched)
+                  &&(addCustomersForm.controls['sdt'].hasError('pattern')))">
+                  Vui lòng nhập số điện thoại (10 số)
+              </div>
           </div>
           <div class="form-group">
               <label for="email">Email</label>
               <input
-                type="email"
-                class="form-control"
-                id="email"
+                type="email" class="form-control"
+                id="email" name="email"
                 formControlName="email"
               />
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="((addCustomersForm.controls['email'].touched)
+                &&(addCustomersForm.controls['email'].hasError('pattern')))">
+                Vui lòng nhập đúng định dạng Email
+              </div>
           </div>
           <div class="form-group">
               <label for="diachikh">Địa chỉ</label>
               <input
                 type="text"
                 class="form-control"
-                id="diachi"
+                id="diachi" name="diachi"
                 formControlName="diachi"
               />
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="addCustomersForm.controls['diachi'].invalid && 
+                  ((addCustomersForm.controls['diachi'].touched)
+                  ||(addCustomersForm.controls['diachi'].dirty))">
+                  Vui lòng nhập tên
+              </div>
           </div>
           <div class="form-group">
               <label for="ngaysinhkh">Ngày sinh</label>
               <input
                 bsDatepicker
                 class="form-control"
-                placement="top"
+                placement="top" name="ngaysinh"
                 formControlName="ngaysinh"
               />
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="addCustomersForm.controls['ngaysinh'].invalid && 
+                (addCustomersForm.controls['ngaysinh'].dirty || 
+                addCustomersForm.controls['ngaysinh'].touched)">
+                Vui lòng chọn ngày sinh
+              </div>
           </div>
           <div class="form-group">
               <label>Giới tính</label>
@@ -107,7 +122,7 @@
               </div>
           </div>
           <div class="form-group">
-              <button type="submit" class="btn btn-primary"  >Lưu</button>
+              <button type="submit" class="btn btn-primary" [disabled]="addCustomersForm.pristine || addCustomersForm.invalid"  >Lưu</button>
           </div>
 
         </form>
@@ -173,22 +188,30 @@
               </tr>
             </ng-template>
             </tbody>
-          </table><div class="box-footer">
-          <div class="d-flex justify-content-between p-2"></div>
-          <div class="alert alert-info summany-info clearfix" role="alert">
-            <div class="sm-info pull-left">
-                Số khách hàng: <span>{{getTotalCustomers()}}</span> Tổng tiền: <span>{{getTotalMoney() | currency: "VND"}}</span>đ
-                Tổng nợ: <span>{{getTotalDet() | currency: "VND"}}</span>đ
+          </table>
+
+          <div class="box-footer" >
+            <div class="alert alert-info summany-info clearfix" role="alert">
+              <div class="sm-info pull-left">
+                  Số khách hàng: <span>{{getTotalCustomers()}}</span> Tổng tiền: <span>{{getTotalMoney() | currency: "VND"}}</span>đ
+                  Tổng nợ: <span>{{getTotalDet() | currency: "VND"}}</span>đ
+              </div> 
+            </div>
+            <div class="pull-right">
+              <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
+                lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+                [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+                (pageChanged)="pageChanged($event)">
+              </pagination>
             </div> 
           </div>
-          <div class="pull-right">
-            <pagination previousText="&lsaquo;" name="currentPage" nextText="&rsaquo;" firstText="&laquo;"
-              lastText="&raquo;" [boundaryLinks]="true" [totalItems]="pagination.totalItems"
-              [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
-              (pageChanged)="pageChanged($event)">
-            </pagination>
-          </div> 
-        </div>
+          <div  class="box-footer"  >
+            <div class="alert alert-warning summany-info clearfix" role="alert">
+              <div class="sm-info pull-left">
+                  Chưa có khách hàng nào !
+              </div> 
+            </div>
+          </div>
         </div>
            
       </form>
