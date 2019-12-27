@@ -40,7 +40,7 @@ export class ProductsComponent implements OnInit {
   ];
   productAdd: SanPham;
   addProdForm = new FormGroup({
-    tensp: new FormControl('', Validators.required),
+    tensp: new FormControl('', [Validators.required]),
     soluong: new FormControl('', Validators.required),
     giavon: new FormControl('', Validators.required),
     giaban: new FormControl('', Validators.required),
@@ -49,7 +49,7 @@ export class ProductsComponent implements OnInit {
     donvitinh: new FormControl('', Validators.required),
     hot: new FormControl('', Validators.required),
     new: new FormControl('', Validators.required),
-    display: new FormControl('', Validators.required),
+    display: new FormControl(''),
     anhsp: new FormControl(''),
     motasp: new FormControl('')
   });
@@ -116,6 +116,7 @@ export class ProductsComponent implements OnInit {
   }
 
   createProduct() {
+    console.log(this.addProdForm);
     this.productAdd = new SanPham();
     this.productAdd.tensp = this.addProdForm.controls['tensp'].value;
     this.productAdd.soluong = this.addProdForm.controls['soluong'].value;
@@ -246,22 +247,28 @@ export class ProductsComponent implements OnInit {
   }
   filter() {
     if (this.filterStatus == 0 && this.fitlernhasx == 0) {
-      this.getListProduct();
+      this.filterDanhmuc();
     } else {
       this.getListProFilter();
-      if (this.fitlerdanhmucsp != 0 ) {
-        this.baseDataListProds.forEach(x => {
-          x.chitietdanhmuc.forEach(y => {
-            y.id==this.fitlerdanhmucsp;
-            this.listProds.push(x);
-          });
-        });
-      }
+    }
+    console.log(this.listProds);
+  }
+  
+  filterDanhmuc() {
+    if (this.fitlerdanhmucsp != 0 ) {
+      this.listProds = this.baseDataListProds.filter(x => {
+        for (let item of x.chitietdanhmuc) {
+          if (item.danhmucsp.id === +this.fitlerdanhmucsp) {
+            return true;
+          }
+        }
+        return false;
+      });
+    } else {
+      this.listProds = this.baseDataListProds;
     }
   }
-  filterbyCate() {
-    
-  }
+
   getListProFilter() {
     this.productService.filterProductPageWithStatusandManu (
       this.pagination.currentPage, this.pagination.itemsPerPage, this.filterStatus, this.fitlernhasx).subscribe(
@@ -276,7 +283,9 @@ export class ProductsComponent implements OnInit {
                 itemsPerPage: this.itemsPerPage
               };
           }
+
           this.updateListProduct(data.result);
+          this.filterDanhmuc();
         },
       error => console.log(error)
     );
