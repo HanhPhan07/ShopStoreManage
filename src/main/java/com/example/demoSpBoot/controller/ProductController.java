@@ -43,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demoSpBoot.dto.UploadResponse;
 import com.example.demoSpBoot.model.hoadonbanhang;
+import com.example.demoSpBoot.model.nhasanxuat;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.ProductService;
 
@@ -139,6 +140,7 @@ public class ProductController {
 			return new ResponseEntity<sanpham>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
 	@GetMapping("/product/search")
 	/* ---------------- SEARCH ------------------------ */
 	public ResponseEntity<Page<sanpham>> findProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
@@ -149,6 +151,17 @@ public class ProductController {
 				return new ResponseEntity<Page<sanpham>>(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<Page<sanpham>>(listBill, HttpStatus.OK);
+	}
+	
+	@GetMapping("/product/filter")
+	/* ---------------- SEARCH ------------------------ */
+	public ResponseEntity<Page<sanpham>> filterProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam int trangthai,@RequestParam int nhasx) throws ParseException {
+		Page<sanpham> listPro = null;
+		listPro= productService.filterProduct(pageNumber,pageSize,trangthai, nhasx);
+		if(listPro.isEmpty()) {
+			return new ResponseEntity<Page<sanpham>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Page<sanpham>>(listPro, HttpStatus.OK);
 	}
 	
 	//upload anhsp

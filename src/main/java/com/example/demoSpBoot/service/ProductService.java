@@ -12,13 +12,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demoSpBoot.model.hoadonbanhang;
+import com.example.demoSpBoot.model.nhasanxuat;
 import com.example.demoSpBoot.model.sanpham;
+import com.example.demoSpBoot.repository.NhasanxuatRepository;
 import com.example.demoSpBoot.repository.ProductRepository;
 
 @Service
 public class ProductService {
 	@Autowired
 	ProductRepository productRepo;
+	@Autowired
+	NhasanxuatRepository nhasxRepo;
 	public List<sanpham> findAllProd(){
 		return (List<sanpham>) productRepo.findAll();
 	}
@@ -39,6 +43,7 @@ public class ProductService {
 			String randomString=(new Date()).getTime()+"";
 			product.setCreatedAt(new Date());
 			product.setMasp("SP"+randomString);
+			product.setTrangthai(1);
 			productRepo.save(product);
 			return true;
 	}
@@ -70,5 +75,20 @@ public class ProductService {
 		Sort sortable = Sort.by("id").descending();
 		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
 		return (Page<sanpham>) productRepo.findBymasportensp(phantrang,searchTerm);
+	}
+	
+	public Page<sanpham> filterProduct( int pageNumber, int pageSize, int trangthai, int nhasx){
+		System.out.println(nhasx);
+		Optional<nhasanxuat> nhasanxuat= nhasxRepo.findById(nhasx);
+		
+		Sort sortable = Sort.by("id").descending();
+		Pageable phantrang = (Pageable) PageRequest.of(pageNumber, pageSize, sortable);
+		if(trangthai==0) {
+			return (Page<sanpham>) productRepo.findByNhasanxuatIs(phantrang, nhasanxuat.get());
+		}else if(nhasx==0) {
+			return (Page<sanpham>) productRepo.findByTrangthaiIs(phantrang, trangthai);
+		}else {
+			return (Page<sanpham>) productRepo.findByTrangthaiAndNhasanxuatIs(phantrang, trangthai, nhasanxuat.get());
+		}
 	}
 }

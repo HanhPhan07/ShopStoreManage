@@ -1,24 +1,10 @@
 Manifest-Version: 1.0
-Built-By: truon
-Build-Jdk: 13
 Implementation-Title: spring-security-jwt
 Implementation-Version: 0.1.0
-<<<<<<< HEAD
 Built-By: ASUS-PRO
 Implementation-Vendor-Id: org.springframework
 Build-Jdk: 1.8.0_202
-=======
-<<<<<<< HEAD
-Built-By: ADMIN
-Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_212
->>>>>>> 5d3b9bf9c5b17040c7bdea02da8a2c3e94dd2761
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/spring-security-jwt
-=======
-Implementation-Vendor-Id: org.springframework
-Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
- -starter-parent/spring-security-jwt
->>>>>>> 081aa551c2c83aaeb6fbf887e2a80e220acb53b7
 Created-By: Maven Integration for Eclipse
 
