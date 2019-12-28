@@ -56,11 +56,11 @@ public class CustomerController {
 	@GetMapping("/customers/search")
 	
 	public ResponseEntity<Page<KhachHangDTO>> findCustomersList(@RequestParam int pageNumber, @RequestParam int pageSize,@RequestParam String searchTerm) {
-        Page<KhachHangDTO> list = customerService.findByName(pageNumber, pageSize,searchTerm);
-        if (list.isEmpty()) {
+        Page<KhachHangDTO> listCustomers = customerService.findByName(pageNumber, pageSize,searchTerm);
+        if (listCustomers.isEmpty()) {
             return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Page<KhachHangDTO>>(list,HttpStatus.OK);
+        return new ResponseEntity<Page<KhachHangDTO>>(listCustomers,HttpStatus.OK);
     }
 	
 	

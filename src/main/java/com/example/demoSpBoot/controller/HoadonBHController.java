@@ -40,29 +40,29 @@ public class HoadonBHController {
 	@GetMapping("/billBHs")
 	/* ---------------- GET ALL BILL ------------------------ */
 	public ResponseEntity<Page<hoadonbanhang>> findAllBills(@RequestParam int pageNumber, @RequestParam int pageSize) {
-		Page<hoadonbanhang> listBill= hoadonService.findAll(pageNumber,pageSize);
-		if(listBill.isEmpty()) {
+		Page<hoadonbanhang> listBillBH= hoadonService.findAll(pageNumber,pageSize);
+		if(listBillBH.isEmpty()) {
 			return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Page<hoadonbanhang>>(listBill, HttpStatus.OK);
+		return new ResponseEntity<Page<hoadonbanhang>>(listBillBH, HttpStatus.OK);
 	}
 	
 	@GetMapping("/billBHs/search")
 	/* ---------------- GET ALL BILL ------------------------ */
 	public ResponseEntity<Page<hoadonbanhang>> findBills(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm, @RequestParam String fromdate,@RequestParam String todate) throws ParseException {
-		Page<hoadonbanhang> listBill = null;
+		Page<hoadonbanhang> listBillBH = null;
 		if(fromdate == "" &&todate=="") {
-			listBill= hoadonService.searchBillNoDate(pageNumber,pageSize,searchTerm);
+			listBillBH= hoadonService.searchBillNoDate(pageNumber,pageSize,searchTerm);
 		}else {
 			Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(fromdate);  
 			Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(todate);
-			listBill= hoadonService.searchBill(pageNumber,pageSize,searchTerm,date1,date2);
+			listBillBH= hoadonService.searchBill(pageNumber,pageSize,searchTerm,date1,date2);
 		}
 		
-		if(listBill.isEmpty()) {
+		if(listBillBH.isEmpty()) {
 			return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Page<hoadonbanhang>>(listBill, HttpStatus.OK);
+		return new ResponseEntity<Page<hoadonbanhang>>(listBillBH, HttpStatus.OK);
 	}
 	
 	
@@ -72,30 +72,30 @@ public class HoadonBHController {
 	
 	public ResponseEntity<hoadonbanhang> getBillById(
             @PathVariable("id") int id) {
-        Optional<hoadonbanhang> bill = hoadonService.findByID(id);
+        Optional<hoadonbanhang> billBH = hoadonService.findByID(id);
 
-        if (!bill.isPresent()) {
-            return new ResponseEntity<>(bill.get(),
+        if (!billBH.isPresent()) {
+            return new ResponseEntity<>(billBH.get(),
                     HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(bill.get(), HttpStatus.OK);
+        return new ResponseEntity<>(billBH.get(), HttpStatus.OK);
     }
 
 	/* ---------------- CREATE NEW BILL ------------------------ */
 	@PostMapping("/billBHs")
-	public ResponseEntity<hoadonbanhang> saveBill(@Valid @RequestBody hoadonbanhang bill) {
-		if(hoadonService.create(bill)) return new ResponseEntity<hoadonbanhang>(bill,HttpStatus.OK);
+	public ResponseEntity<hoadonbanhang> saveBill(@Valid @RequestBody hoadonbanhang billBH) {
+		if(hoadonService.create(billBH)) return new ResponseEntity<hoadonbanhang>(billBH,HttpStatus.OK);
 		else {
-			return new ResponseEntity<hoadonbanhang>(bill,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<hoadonbanhang>(billBH,HttpStatus.NOT_FOUND);
 		}
 		
 	}
 	
 	/* ---------------- UPDATE BILL ------------------------ */
 	@PutMapping("/billBHs")
-	public ResponseEntity<hoadonbanhang> updateBill(@RequestBody hoadonbanhang bill) {
-		if(checkSoLuong(bill.getChitiethoadons())) {
-			if(hoadonService.update(bill)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
+	public ResponseEntity<hoadonbanhang> updateBill(@RequestBody hoadonbanhang billBH) {
+		if(checkSoLuong(billBH.getChitiethoadons())) {
+			if(hoadonService.update(billBH)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
 			else {
 				return new ResponseEntity<hoadonbanhang>(HttpStatus.BAD_GATEWAY);
 			}
@@ -105,8 +105,8 @@ public class HoadonBHController {
 	}
 	
 	@PutMapping("/billBHs/cancle")
-	public ResponseEntity<hoadonbanhang> cancleBill(@RequestBody hoadonbanhang bill) {
-		if(hoadonService.cancleBill(bill)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
+	public ResponseEntity<hoadonbanhang> cancleBill(@RequestBody hoadonbanhang billBH) {
+		if(hoadonService.cancleBill(billBH)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonbanhang>(HttpStatus.BAD_GATEWAY);
 		}

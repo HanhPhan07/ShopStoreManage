@@ -52,7 +52,7 @@ public class UsersController {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
-	/* ---------------- GET ALL CUSTOMER ------------------------ */
+	/* ---------------- GET ALL USER ------------------------ */
 	@GetMapping("/users")
 	public ResponseEntity<List<users>> findAllUsers() {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
@@ -63,41 +63,41 @@ public class UsersController {
 		}
 		return new ResponseEntity<List<users>>(listUser, HttpStatus.OK);
 	}
-	/* ---------------- GET CUSTOMER BY ID ------------------------ */
+	/* ---------------- GET USER BY ID ------------------------ */
 	@GetMapping("/users/{manhanvien}")
 	public ResponseEntity<users> getProductById(
             @PathVariable("manhanvien") String manhanvien) {
-        Optional<users> product = usersService.findByMNV(manhanvien);
+        Optional<users> user = usersService.findByMNV(manhanvien);
 
-        if (!product.isPresent()) {
-            return new ResponseEntity<>(product.get(),
+        if (!user.isPresent()) {
+            return new ResponseEntity<>(user.get(),
                     HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(product.get(), HttpStatus.OK);
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
-	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
+	/* ---------------- CREATE NEW USER ------------------------ */
 	@PostMapping("/users")
-	public ResponseEntity<users> saveCustomer(@Valid @RequestBody users customer) {
+	public ResponseEntity<users> saveUser(@Valid @RequestBody users user) {
 		String salt=randomSalt();
-		customer.setSalt(salt);
-		customer.setPassword(BCrypt.hashpw(customer.getPassword().concat(salt), BCrypt.gensalt(12)));
-		if(usersService.create(customer)) return new ResponseEntity<users>(customer,HttpStatus.OK);
+		user.setSalt(salt);
+		user.setPassword(BCrypt.hashpw(user.getPassword().concat(salt), BCrypt.gensalt(12)));
+		if(usersService.create(user)) return new ResponseEntity<users>(user,HttpStatus.OK);
 		else {
-			return new ResponseEntity<users>(customer,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<users>(user,HttpStatus.NOT_FOUND);
 		}
 		
 	}
 	
-	/* ---------------- UPDATE CUSTOMER ------------------------ */
+	/* ---------------- UPDATE USER ------------------------ */
 	@PutMapping("/users")
 	public ResponseEntity<Boolean> update(@RequestBody users user) {
 		return new ResponseEntity<Boolean>(usersService.update(user), HttpStatus.OK);
 	}
-	public void updateCustomer(@RequestBody users customer) {
-		usersService.update(customer);
+	public void updateUser(@RequestBody users user) {
+		usersService.update(user);
 	}
-	/* ---------------- DELETE CUSTOMER ------------------------ */
+	/* ---------------- DELETE USER ------------------------ */
 	
 	@DeleteMapping("/users/{manhanvien}")
 	public void deleteCustomer(@PathVariable("manhanvien") String manhanvien) {

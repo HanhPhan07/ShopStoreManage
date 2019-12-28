@@ -34,8 +34,6 @@ public class CateController {
 	@GetMapping("/allcates")
 	/* ---------------- GET ALL PRODUCT ------------------------ */
 	public ResponseEntity<List<danhmucsp>> findAllProduct() {
-		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
-		
 		List<danhmucsp> listCate= cateService.findAllCate();
 		if(listCate.isEmpty()) {
 			return new ResponseEntity<List<danhmucsp>>(HttpStatus.NO_CONTENT);
@@ -97,7 +95,7 @@ public class CateController {
 	}
 	@GetMapping("/cate/search")
 	/* ---------------- SEARCH ------------------------ */
-	public ResponseEntity<Page<danhmucsp>> findProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+	public ResponseEntity<Page<danhmucsp>> findCate(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
 		Page<danhmucsp> listCate = null;
 			listCate= cateService.searchCate(pageNumber, pageSize, searchTerm);
 		

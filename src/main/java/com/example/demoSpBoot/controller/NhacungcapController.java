@@ -43,7 +43,6 @@ public class NhacungcapController {
 	@GetMapping("/NCCs")
 	/* ---------------- GET NCC PAGE ------------------------ */
 	public ResponseEntity<Page<nhacungcap>> findAllNCCs(@RequestParam int pageNumber, @RequestParam int pageSize) {
-		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
 		Page<nhacungcap> listNCC= nhaccService.findAll(pageNumber,pageSize);
 		if(listNCC.isEmpty()) {

@@ -62,7 +62,6 @@ public class ProductController {
 	@GetMapping("/allproducts")
 	/* ---------------- GET ALL PRODUCT ------------------------ */
 	public ResponseEntity<List<sanpham>> findAllProduct() {
-		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
 		List<sanpham> listProduct= productService.findAllProd();
 		if(listProduct.isEmpty()) {
@@ -144,17 +143,17 @@ public class ProductController {
 	@GetMapping("/product/search")
 	/* ---------------- SEARCH ------------------------ */
 	public ResponseEntity<Page<sanpham>> findProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
-		Page<sanpham> listBill = null;
-			listBill= productService.searchProduct(pageNumber,pageSize,searchTerm);
+		Page<sanpham> listProduct = null;
+			listProduct= productService.searchProduct(pageNumber,pageSize,searchTerm);
 		
-			if(listBill.isEmpty()) {
+			if(listProduct.isEmpty()) {
 				return new ResponseEntity<Page<sanpham>>(HttpStatus.NO_CONTENT);
 			}
-			return new ResponseEntity<Page<sanpham>>(listBill, HttpStatus.OK);
+			return new ResponseEntity<Page<sanpham>>(listProduct, HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/filter")
-	/* ---------------- SEARCH ------------------------ */
+	/* ---------------- Filter ------------------------ */
 	public ResponseEntity<Page<sanpham>> filterProduct(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam int trangthai,@RequestParam int nhasx) throws ParseException {
 		Page<sanpham> listPro = null;
 		listPro= productService.filterProduct(pageNumber,pageSize,trangthai, nhasx);

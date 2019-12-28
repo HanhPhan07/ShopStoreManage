@@ -31,8 +31,7 @@ public class DetailBHController {
 	@Autowired
 	ProductService prdService;
 	@GetMapping("/detailBH")
-	public ResponseEntity<Page<chitiethoadonbh>> findAllCates(@RequestParam int pageNumber, @RequestParam int pageSize) {
-		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
+	public ResponseEntity<Page<chitiethoadonbh>> findAllDetaiBH(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		
 		Page<chitiethoadonbh> listDetail= detailBHService.findAll(pageNumber,pageSize);
 		if(listDetail.isEmpty()) {
@@ -43,7 +42,7 @@ public class DetailBHController {
 	/* ---------------- GET CATE BY ID ------------------------ */
 	@GetMapping("/detailBH/{id}")
 	
-	public ResponseEntity<chitiethoadonbh> getcateById(
+	public ResponseEntity<chitiethoadonbh> getdetailBHById(
             @PathVariable("id") int id) {
         Optional<chitiethoadonbh> chitiet = detailBHService.findByID(id);
 
@@ -56,7 +55,7 @@ public class DetailBHController {
 
 	/* ---------------- CREATE NEW CATE ------------------------ */
 	@PostMapping("/detailBH")
-	public ResponseEntity<chitiethoadonbh> saveCate(@Valid @RequestBody chitiethoadonbh chitiet) {
+	public ResponseEntity<chitiethoadonbh> savedetailBH(@Valid @RequestBody chitiethoadonbh chitiet) {
 		if(detailBHService.create(chitiet)) return new ResponseEntity<chitiethoadonbh>(chitiet,HttpStatus.OK);
 		else {
 			return new ResponseEntity<chitiethoadonbh>(chitiet,HttpStatus.NOT_FOUND);
@@ -64,7 +63,7 @@ public class DetailBHController {
 	}
 	
 	@PostMapping("/detailsBH")
-	public ResponseEntity<Boolean> saveDetailsBill(@Valid @RequestBody chitiethoadonbh[] chitiets) {
+	public ResponseEntity<Boolean> saveDetailsBH(@Valid @RequestBody chitiethoadonbh[] chitiets) {
 		if (checkSoLuong(chitiets)) {
 			for( @Valid chitiethoadonbh chitiet : chitiets) {
 					Optional<sanpham> sp= prdService.findByID(chitiet.getSanpham().getId());

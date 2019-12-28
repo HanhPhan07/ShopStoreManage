@@ -32,7 +32,7 @@ public class NhasanxuatController {
 	@Autowired
 	NhasanxuatService nsxService;
 	@GetMapping("/allNSX")
-	/* ---------------- GET ALL PRODUCT ------------------------ */
+	/* ---------------- GET ALL NSX ------------------------ */
 	public ResponseEntity<List<nhasanxuat>> findAllNSX() {
 		
 		List<nhasanxuat> listNSX= nsxService.findAllNSX();
@@ -43,7 +43,7 @@ public class NhasanxuatController {
 	}
 	
 	@GetMapping("/NSXs")
-	/* ---------------- GET ALL NSX ------------------------ */
+	/* ---------------- GET ALL NSX PAGE ------------------------ */
 	public ResponseEntity<Page<nhasanxuat>> findAllNSXs(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
@@ -69,7 +69,7 @@ public class NhasanxuatController {
 
 	/* ---------------- CREATE NEW NSX ------------------------ */
 	@PostMapping("/NSXs")
-	public ResponseEntity<nhasanxuat> saveNCC(@Valid @RequestBody nhasanxuat nsx) {
+	public ResponseEntity<nhasanxuat> saveNSX(@Valid @RequestBody nhasanxuat nsx) {
 		if(nsxService.create(nsx)) return new ResponseEntity<nhasanxuat>(nsx,HttpStatus.OK);
 		else {
 			return new ResponseEntity<nhasanxuat>(nsx,HttpStatus.NOT_FOUND);
@@ -80,7 +80,7 @@ public class NhasanxuatController {
 	/* ---------------- UPDATE NSX ------------------------ */
 	@PutMapping("/NSXs")
 
-	public ResponseEntity<nhasanxuat> updateNCC(@RequestBody nhasanxuat nsx) {
+	public ResponseEntity<nhasanxuat> updateNSX(@RequestBody nhasanxuat nsx) {
 		if(nsxService.update(nsx)) return new ResponseEntity<nhasanxuat>(nsx,HttpStatus.OK);
 		else {
 			return new ResponseEntity<nhasanxuat>(nsx,HttpStatus.NOT_FOUND);
