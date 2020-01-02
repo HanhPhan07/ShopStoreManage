@@ -181,6 +181,7 @@ export class ProductDetailComponent implements OnInit {
             });
             this.cateDetailProdService.addCateDetailProd(chitietdanhmucs).subscribe(() => {
               alert('Sửa thành công!');
+              this.router.navigate(['/admin/products']);
             },
               error => console.log(error));
           },
@@ -202,9 +203,9 @@ export class ProductDetailComponent implements OnInit {
         });
         this.cateDetailProdService.addCateDetailProd(chitietdanhmucs).subscribe(() => {
             alert('Sửa thành công!');
+            this.router.navigate(['/admin/products']);
         },
           error => console.log(error));
-        alert('Sửa thành công!');
       },
       error => console.log(error));
     });

@@ -45,10 +45,10 @@ export class ProductsComponent implements OnInit {
     giavon: new FormControl('', Validators.required),
     giaban: new FormControl('', Validators.required),
     danhmuc: new FormArray([]),
-    nhasx: new FormControl('', Validators.required),
-    donvitinh: new FormControl('', Validators.required),
-    hot: new FormControl('', Validators.required),
-    new: new FormControl('', Validators.required),
+    nhasx: new FormControl([ Validators.required ]),
+    donvitinh: new FormControl('' ),
+    hot: new FormControl(''),
+    new: new FormControl(''),
     display: new FormControl(''),
     anhsp: new FormControl(''),
     motasp: new FormControl('')
@@ -126,6 +126,7 @@ export class ProductsComponent implements OnInit {
       return x.id == this.addProdForm.controls['nhasx'].value;
     });
     this.productAdd.nhasanxuat = productManu;
+    console.log(this.productAdd.nhasanxuat);
     this.productAdd.donvitinh = this.addProdForm.controls['donvitinh'].value;
     this.productAdd.ishot = this.addProdForm.controls['hot'].value;
     this.productAdd.isnew = this.addProdForm.controls['new'].value;
@@ -156,6 +157,14 @@ export class ProductsComponent implements OnInit {
           console.log(error);
         }, () => {});
     });
+  }
+
+  get hasManuerror() {
+    return (
+      this.addProdForm.get('nhasx').touched &&
+      this.addProdForm.get('nhasx').errors &&
+      this.addProdForm.get('nhasx').errors.required
+    )
   }
 
   selectFile(event) {
