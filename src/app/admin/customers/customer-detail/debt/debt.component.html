@@ -6,7 +6,7 @@
     </button>
   </span>
 </h1>
-<div class="box" *ngIf="show(true)">
+<div class="box" *ngIf="show()">
   <div class="box-header">
       <div class="form-row align-items-center">
         <div class="col-md-4">
@@ -92,7 +92,7 @@
     </div>
   </div>
 </div>
-<div class="box"  *ngIf="show(false)">
+<div class="box"  *ngIf="!show()">
   <div class="box-footer">
     <div class="alert alert-warning summany-info clearfix" role="alert">
       <div class="sm-info pull-left">

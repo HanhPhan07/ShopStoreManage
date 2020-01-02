@@ -76,6 +76,12 @@ export class CustomersComponent implements OnInit {
     this.baseDataListCustomers = this.listCustomers;
   }
 
+  show() {
+    console.log(this.listCustomers);
+    if (this.listCustomers != null || typeof(this.listCustomers) !== 'undefined') {
+       return true;
+    } else { return false; }
+  }
 
   search() {
     this.customersService.getSearchKhachHang(

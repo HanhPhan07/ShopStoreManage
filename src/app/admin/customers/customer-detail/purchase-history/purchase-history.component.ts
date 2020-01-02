@@ -62,6 +62,13 @@ export class PurchaseHistoryComponent implements OnInit {
     this.change.emit(value);
   }
 
+  show() {
+    console.log(this.getCustomerBills(this.id));
+    if (this.getCustomerBills(this.id) != null || typeof(this.getCustomerBills(this.id)) !== 'undefined') {
+       return true;
+    } else { return false; }
+  }
+
   getCustomerBills(makhachhang: string) {
     this.purchaseHistoryService.getListCustomerBill (
       makhachhang, this.pagination.currentPage, this.pagination.itemsPerPage).subscribe(
