@@ -75,7 +75,6 @@ export class DebtComponent implements OnInit {
     this.change.emit(value);
   }
 
-<<<<<<< HEAD
   show() {
     console.log(this.getCustomerBillsDebt(this.idkhachhang));
     if (this.getCustomerBillsDebt(this.idkhachhang) != null || typeof(this.getCustomerBillsDebt(this.idkhachhang)) !== 'undefined') {
@@ -83,13 +82,7 @@ export class DebtComponent implements OnInit {
     } else { return false; }
   }
 
-=======
-  // show(value: boolean) {
-  //   if () {
-  //     this.change.emit(value);
-  //   }
-  // }
->>>>>>> 0aa8f858ec76333729189b10c865499927d4436c
+
   getCustomerBillsDebt(makhachhang: string) {
     this.debtCusBillService.getListCustomerBillDebt
     (makhachhang, this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(

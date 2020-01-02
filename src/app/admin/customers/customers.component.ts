@@ -56,6 +56,7 @@ export class CustomersComponent implements OnInit {
     ngaysinh: new FormControl('', [Validators.required]),
     gioitinh: new FormControl(''),
   });
+
   constructor(
     private modalService: BsModalService,
     private formBuilder: FormBuilder,
@@ -77,7 +78,6 @@ export class CustomersComponent implements OnInit {
   }
 
   show() {
-    console.log(this.listCustomers);
     if (this.listCustomers != null || typeof(this.listCustomers) !== 'undefined') {
        return true;
     } else { return false; }
@@ -107,7 +107,7 @@ export class CustomersComponent implements OnInit {
     this.customersService.getAllKhachHang(
       this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(
         (data: PaginatedResult<KhachHangDTO[]>) => {
-          if (typeof(data.pagination) !== 'undefined') {
+          if (typeof(data.pagination) !== 'undefined' || data.pagination !== null) {
             this.pagination = data.pagination;
           } else {
               this.pagination = {
