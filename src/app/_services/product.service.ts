@@ -87,4 +87,28 @@ export class ProductService {
     return this.httpClient.get(environment.baseUrl + 'productbymasp/' + masp, { headers: headers });
   }
 
+  filterProductPageWithStatusandManu(page?: number, pageSize?: number, trangthai?: number, nhasx?: number):
+   Observable<PaginatedResult<SanPham[]>> {
+    const paginatedResult: PaginatedResult<SanPham[]> = new PaginatedResult<SanPham[]>();
+    let params = new HttpParams();
+    if (page != null && pageSize != null) {
+      params = params.append('pageNumber', (page - 1).toString());
+      params = params.append('pageSize', pageSize.toString());
+      params = params.append('trangthai', trangthai.toString());
+      params = params.append('nhasx', nhasx.toString());
+    }
+    return this.httpClient.get<any>(environment.baseUrl + 'product/filter', { observe: 'response', params })
+      .pipe(map(response => {
+        paginatedResult.result = response.body.content;
+        paginatedResult.totalElements = response.body.totalElements;
+        paginatedResult.pagination = {
+          currentPage: response.body.pageable.pageNumber + 1,
+          totalItems: response.body.totalElements,
+          totalPages: response.body.totalPages,
+          itemsPerPage: response.body.pageable.pageSize
+        };
+        return paginatedResult;
+      }));
+  }
+
 }
