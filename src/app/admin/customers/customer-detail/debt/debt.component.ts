@@ -75,11 +75,14 @@ export class DebtComponent implements OnInit {
     this.change.emit(value);
   }
 
-  // show(value: boolean) {
-  //   if () {
-  //     this.change.emit(value);
-  //   }
-  // }
+  show() {
+    console.log(this.getCustomerBillsDebt(this.idkhachhang));
+    if (this.getCustomerBillsDebt(this.idkhachhang) != null || typeof(this.getCustomerBillsDebt(this.idkhachhang)) !== 'undefined') {
+       return true;
+    } else { return false; }
+  }
+
+
   getCustomerBillsDebt(makhachhang: string) {
     this.debtCusBillService.getListCustomerBillDebt
     (makhachhang, this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(
@@ -102,9 +105,9 @@ export class DebtComponent implements OnInit {
 
   }
   updateListDebt(data) {
-    this.listCusBillDebt = data.filter(this.checkDebtBill);
     this.proceeds = [];
     if (data != null ) {
+      this.listCusBillDebt = data.filter(this.checkDebtBill);
       this.listCusBillDebt.forEach(x => {
         this.proceeds.push({
           'id':x.id,
@@ -193,7 +196,6 @@ export class DebtComponent implements OnInit {
       this.phieuthu.sotienthu = x.value;
       if (this.phieuthu.sotienthu != 0 ) {
         this.debtCusBillService.postReceipts(this.phieuthu).subscribe ();
-        console.log(this.phieuthu);
       } else {
         return;
       }
