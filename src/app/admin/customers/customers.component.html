@@ -19,17 +19,27 @@
   <section class="content">
     <ng-template #template>
       <div class="modal-header">
-        <h4 class="modal-title pull-left">
-          <strong>Tạo mới khách hàng</strong>
-        </h4>
-        <button
-          type="button"
-          class="close pull-right"
-          aria-label="Close"
-          (click)="modalRef.hide()"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="col-lg-7">
+          <h4 class="modal-title pull-left">
+            <strong>Tạo mới khách hàng</strong>
+          </h4>
+          <button
+            type="button"
+            class="close pull-right"
+            aria-label="Close"
+            (click)="modalRef.hide()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="col-lg-5">
+          <a routerLink="../../customers">
+            <button class="btn-back btn btn-danger" type="button"><i class="fa fa-arrow-left"></i> Thoát
+            </button>
+          </a>
+        </div>
+        
       </div>
       <!--Form Add KH-->
       <div class="modal-body">
