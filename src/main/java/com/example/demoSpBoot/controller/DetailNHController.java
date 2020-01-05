@@ -27,7 +27,7 @@ public class DetailNHController {
 	@Autowired
 	DetailNHService detailNHService;
 	@GetMapping("/detailNH")
-	public ResponseEntity<Page<chitiethoadonnh>> findAllDetailNH(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<chitiethoadonnh>> getAllDetailNHPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
 		Page<chitiethoadonnh> listDetail= detailNHService.findAll(pageNumber,pageSize);
@@ -52,7 +52,7 @@ public class DetailNHController {
 
 	/* ---------------- CREATE NEW CATE ------------------------ */
 	@PostMapping("/detailNH")
-	public ResponseEntity<chitiethoadonnh> saveDetailNH(@Valid @RequestBody chitiethoadonnh chitiet) {
+	public ResponseEntity<chitiethoadonnh> createDetailNH(@Valid @RequestBody chitiethoadonnh chitiet) {
 		if(detailNHService.create(chitiet)) return new ResponseEntity<chitiethoadonnh>(chitiet,HttpStatus.OK);
 		else {
 			return new ResponseEntity<chitiethoadonnh>(chitiet,HttpStatus.NOT_FOUND);

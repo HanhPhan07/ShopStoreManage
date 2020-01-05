@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.nhacungcap;
-import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.NhacungcapService;
 
 @RestController
@@ -33,7 +32,7 @@ public class NhacungcapController {
 	NhacungcapService nhaccService;
 	@GetMapping("/allSUPs")
 	/* ---------------- GET ALL NCC ------------------------ */
-	public ResponseEntity<List<nhacungcap>> findAllNCC() {
+	public ResponseEntity<List<nhacungcap>> getAllNCC() {
 		List<nhacungcap> listSUP= nhaccService.findAllSup();
 		if(listSUP.isEmpty()) {
 			return new ResponseEntity<List<nhacungcap>>(HttpStatus.NO_CONTENT);
@@ -42,7 +41,7 @@ public class NhacungcapController {
 	}
 	@GetMapping("/NCCs")
 	/* ---------------- GET NCC PAGE ------------------------ */
-	public ResponseEntity<Page<nhacungcap>> findAllNCCs(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<nhacungcap>> getAllNCCPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		
 		Page<nhacungcap> listNCC= nhaccService.findAll(pageNumber,pageSize);
 		if(listNCC.isEmpty()) {
@@ -77,7 +76,7 @@ public class NhacungcapController {
 
 	/* ---------------- CREATE NEW NCC ------------------------ */
 	@PostMapping("/NCCs")
-	public ResponseEntity<nhacungcap> saveNCC(@Valid @RequestBody nhacungcap ncc) {
+	public ResponseEntity<nhacungcap> createNCC(@Valid @RequestBody nhacungcap ncc) {
 		if(nhaccService.create(ncc)) return new ResponseEntity<nhacungcap>(ncc,HttpStatus.OK);
 		else {
 			return new ResponseEntity<nhacungcap>(ncc,HttpStatus.NOT_FOUND);
@@ -105,7 +104,7 @@ public class NhacungcapController {
 	}
 	@GetMapping("/suppliers/search")
 	/* ---------------- SEARCH ------------------------ */
-	public ResponseEntity<Page<nhacungcap>> findSUP(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+	public ResponseEntity<Page<nhacungcap>> findNCC(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
 		Page<nhacungcap> listSUP = null;
 			listSUP= nhaccService.searchSupProd(pageNumber,pageSize,searchTerm);
 		

@@ -30,7 +30,7 @@ public class PhieuchiController {
 	PhieuchiService phieuchiService;
 	@GetMapping("/phieuchi")
 	/* ---------------- GET ALL PHIEU CHI ------------------------ */
-	public ResponseEntity<Page<phieuchi>> findAllPhieuchi(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<phieuchi>> getAllPhieuchiPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		
 		Page<phieuchi> listPC= phieuchiService.findAll(pageNumber,pageSize);
 		if(listPC.isEmpty()) {
@@ -54,7 +54,7 @@ public class PhieuchiController {
 
 	/* ---------------- CREATE NEW Phieu chi ------------------------ */
 	@PostMapping("/phieuchi")
-	public ResponseEntity<phieuchi> savePC(@Valid @RequestBody phieuchi phieuchi) {
+	public ResponseEntity<phieuchi> createPC(@Valid @RequestBody phieuchi phieuchi) {
 		if(phieuchiService.create(phieuchi)) return new ResponseEntity<phieuchi>(phieuchi,HttpStatus.OK);
 		else {
 			return new ResponseEntity<phieuchi>(phieuchi,HttpStatus.NOT_FOUND);

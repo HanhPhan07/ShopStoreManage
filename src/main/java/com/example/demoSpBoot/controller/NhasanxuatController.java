@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoSpBoot.model.nhasanxuat;
-import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.NhasanxuatService;
 
 @RestController
@@ -33,7 +32,7 @@ public class NhasanxuatController {
 	NhasanxuatService nsxService;
 	@GetMapping("/allNSX")
 	/* ---------------- GET ALL NSX ------------------------ */
-	public ResponseEntity<List<nhasanxuat>> findAllNSX() {
+	public ResponseEntity<List<nhasanxuat>> getAllNSX() {
 		
 		List<nhasanxuat> listNSX= nsxService.findAllNSX();
 		if(listNSX.isEmpty()) {
@@ -44,7 +43,7 @@ public class NhasanxuatController {
 	
 	@GetMapping("/NSXs")
 	/* ---------------- GET ALL NSX PAGE ------------------------ */
-	public ResponseEntity<Page<nhasanxuat>> findAllNSXs(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<nhasanxuat>> getAllNSXPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
 		Page<nhasanxuat> listNSX= nsxService.findAll(pageNumber,pageSize);
@@ -69,7 +68,7 @@ public class NhasanxuatController {
 
 	/* ---------------- CREATE NEW NSX ------------------------ */
 	@PostMapping("/NSXs")
-	public ResponseEntity<nhasanxuat> saveNSX(@Valid @RequestBody nhasanxuat nsx) {
+	public ResponseEntity<nhasanxuat> createNSX(@Valid @RequestBody nhasanxuat nsx) {
 		if(nsxService.create(nsx)) return new ResponseEntity<nhasanxuat>(nsx,HttpStatus.OK);
 		else {
 			return new ResponseEntity<nhasanxuat>(nsx,HttpStatus.NOT_FOUND);
@@ -97,7 +96,7 @@ public class NhasanxuatController {
 	}
 	@GetMapping("/ManuProd/search")
 	/* ---------------- SEARCH ------------------------ */
-	public ResponseEntity<Page<nhasanxuat>> findManu(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
+	public ResponseEntity<Page<nhasanxuat>> findNSX(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm) throws ParseException {
 		Page<nhasanxuat> listManu = null;
 			listManu= nsxService.searchManu(pageNumber,pageSize,searchTerm);
 		

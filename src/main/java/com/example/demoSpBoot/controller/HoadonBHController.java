@@ -39,7 +39,7 @@ public class HoadonBHController {
 	ProductService prdService;
 	@GetMapping("/billBHs")
 	/* ---------------- GET ALL BILL ------------------------ */
-	public ResponseEntity<Page<hoadonbanhang>> findAllBills(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<hoadonbanhang>> getAllBillBHPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		Page<hoadonbanhang> listBillBH= hoadonService.findAll(pageNumber,pageSize);
 		if(listBillBH.isEmpty()) {
 			return new ResponseEntity<Page<hoadonbanhang>>(HttpStatus.NO_CONTENT);
@@ -49,7 +49,7 @@ public class HoadonBHController {
 	
 	@GetMapping("/billBHs/search")
 	/* ---------------- GET ALL BILL ------------------------ */
-	public ResponseEntity<Page<hoadonbanhang>> findBills(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm, @RequestParam String fromdate,@RequestParam String todate) throws ParseException {
+	public ResponseEntity<Page<hoadonbanhang>> findBillBHs(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam String searchTerm, @RequestParam String fromdate,@RequestParam String todate) throws ParseException {
 		Page<hoadonbanhang> listBillBH = null;
 		if(fromdate == "" &&todate=="") {
 			listBillBH= hoadonService.searchBillNoDate(pageNumber,pageSize,searchTerm);
@@ -70,7 +70,7 @@ public class HoadonBHController {
 	/* ---------------- GET BILL BY ID ------------------------ */
 	@GetMapping("/billBHs/{id}")
 	
-	public ResponseEntity<hoadonbanhang> getBillById(
+	public ResponseEntity<hoadonbanhang> getBillBHById(
             @PathVariable("id") int id) {
         Optional<hoadonbanhang> billBH = hoadonService.findByID(id);
 
@@ -83,7 +83,7 @@ public class HoadonBHController {
 
 	/* ---------------- CREATE NEW BILL ------------------------ */
 	@PostMapping("/billBHs")
-	public ResponseEntity<hoadonbanhang> saveBill(@Valid @RequestBody hoadonbanhang billBH) {
+	public ResponseEntity<hoadonbanhang> createBillBH(@Valid @RequestBody hoadonbanhang billBH) {
 		if(hoadonService.create(billBH)) return new ResponseEntity<hoadonbanhang>(billBH,HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonbanhang>(billBH,HttpStatus.NOT_FOUND);
@@ -93,7 +93,7 @@ public class HoadonBHController {
 	
 	/* ---------------- UPDATE BILL ------------------------ */
 	@PutMapping("/billBHs")
-	public ResponseEntity<hoadonbanhang> updateBill(@RequestBody hoadonbanhang billBH) {
+	public ResponseEntity<hoadonbanhang> updateBillBH(@RequestBody hoadonbanhang billBH) {
 		if(checkSoLuong(billBH.getChitiethoadons())) {
 			if(hoadonService.update(billBH)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
 			else {
@@ -105,7 +105,7 @@ public class HoadonBHController {
 	}
 	
 	@PutMapping("/billBHs/cancle")
-	public ResponseEntity<hoadonbanhang> cancleBill(@RequestBody hoadonbanhang billBH) {
+	public ResponseEntity<hoadonbanhang> cancleBillBH(@RequestBody hoadonbanhang billBH) {
 		if(hoadonService.cancleBill(billBH)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonbanhang>(HttpStatus.BAD_GATEWAY);
@@ -123,7 +123,7 @@ public class HoadonBHController {
 	/* ---------------- DELETE CATE ------------------------ */
 	
 	@DeleteMapping("/billBHs/{id}")
-	public ResponseEntity<hoadonbanhang> deleteCate(@PathVariable("id") int id) {
+	public ResponseEntity<hoadonbanhang> deleteBillBH(@PathVariable("id") int id) {
 		if(hoadonService.delete(id)) return new ResponseEntity<hoadonbanhang>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonbanhang>(HttpStatus.NOT_FOUND);

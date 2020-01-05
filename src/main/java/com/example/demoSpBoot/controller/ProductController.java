@@ -1,29 +1,20 @@
 package com.example.demoSpBoot.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Array;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demoSpBoot.dto.UploadResponse;
-import com.example.demoSpBoot.model.hoadonbanhang;
-import com.example.demoSpBoot.model.nhasanxuat;
 import com.example.demoSpBoot.model.sanpham;
 import com.example.demoSpBoot.service.ProductService;
-
-import lombok.var;
-
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/ShopStore")
@@ -61,7 +46,7 @@ public class ProductController {
 	
 	@GetMapping("/allproducts")
 	/* ---------------- GET ALL PRODUCT ------------------------ */
-	public ResponseEntity<List<sanpham>> findAllProduct() {
+	public ResponseEntity<List<sanpham>> getAllProduct() {
 		
 		List<sanpham> listProduct= productService.findAllProd();
 		if(listProduct.isEmpty()) {
@@ -72,7 +57,7 @@ public class ProductController {
 	
 	@GetMapping("/product")
 	/* ---------------- GET ALL PRODUCT ------------------------ */
-	public ResponseEntity<Page<sanpham>> findAllProduct(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<sanpham>> getAllProductPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
 		Page<sanpham> listProduct= productService.findAll(pageNumber,pageSize);
@@ -110,7 +95,7 @@ public class ProductController {
 
 	/* ---------------- CREATE NEW PRODUCT ------------------------ */
 	@PostMapping("/product")
-	public ResponseEntity<sanpham> saveProduct(@Valid @RequestBody sanpham product) {
+	public ResponseEntity<sanpham> createProduct(@Valid @RequestBody sanpham product) {
 		if(productService.create(product)) {
 			product.getId();
 			return new ResponseEntity<sanpham>(product,HttpStatus.OK);
@@ -165,7 +150,7 @@ public class ProductController {
 	
 	//upload anhsp
 	@PostMapping("/upload")
-	public ResponseEntity<UploadResponse> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<UploadResponse> uploadProImage(@RequestParam("file") MultipartFile file) throws Exception {
 		if (file == null) {
 			throw new RuntimeException("You must select the a file for uploading");
 		}
@@ -195,7 +180,7 @@ public class ProductController {
 	
 	@RequestMapping(value = "/images", method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage(@RequestParam("fileName") String fileName) throws IOException {
+    public ResponseEntity<byte[]> getProImage(@RequestParam("fileName") String fileName) throws IOException {
 
     	ClassPathResource imgFile = new ClassPathResource("uploads/" + fileName);
     	File file = imgFile.getFile();

@@ -30,7 +30,7 @@ public class HoadonNHController {
 	HoadonNHService hoadonNHService;
 	@GetMapping("/billNHs")
 	/* ---------------- GET ALL BILL ------------------------ */
-	public ResponseEntity<Page<hoadonnhaphang>> findAllBills(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<hoadonnhaphang>> getAllBillNHPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		
 		Page<hoadonnhaphang> listBillNH= hoadonNHService.findAll(pageNumber,pageSize);
 		if(listBillNH.isEmpty()) {
@@ -41,7 +41,7 @@ public class HoadonNHController {
 	/* ---------------- GET BILL BY ID ------------------------ */
 	@GetMapping("/billNHs/{id}")
 	
-	public ResponseEntity<hoadonnhaphang> getBillById(
+	public ResponseEntity<hoadonnhaphang> getBillNHById(
             @PathVariable("id") int id) {
         Optional<hoadonnhaphang> billNH = hoadonNHService.findByID(id);
 
@@ -54,7 +54,7 @@ public class HoadonNHController {
 
 	/* ---------------- CREATE NEW BILL ------------------------ */
 	@PostMapping("/billNHs")
-	public ResponseEntity<hoadonnhaphang> saveBill(@Valid @RequestBody hoadonnhaphang billNH) {
+	public ResponseEntity<hoadonnhaphang> createBillNH(@Valid @RequestBody hoadonnhaphang billNH) {
 		if(hoadonNHService.create(billNH)) return new ResponseEntity<hoadonnhaphang>(billNH,HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonnhaphang>(billNH,HttpStatus.NOT_FOUND);
@@ -65,7 +65,7 @@ public class HoadonNHController {
 	/* ---------------- UPDATE BILL ------------------------ */
 	@PutMapping("/billNHs")
 
-	public ResponseEntity<hoadonnhaphang> updateBill(@RequestBody hoadonnhaphang billNH) {
+	public ResponseEntity<hoadonnhaphang> updateBillNH(@RequestBody hoadonnhaphang billNH) {
 		if(hoadonNHService.update(billNH)) return new ResponseEntity<hoadonnhaphang>(billNH,HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonnhaphang>(billNH,HttpStatus.NOT_FOUND);
@@ -74,7 +74,7 @@ public class HoadonNHController {
 	/* ---------------- DELETE CATE ------------------------ */
 	
 	@DeleteMapping("/billNHs/{id}")
-	public ResponseEntity<hoadonnhaphang> deleteCate(@PathVariable("id") int id) {
+	public ResponseEntity<hoadonnhaphang> deleteBillNH(@PathVariable("id") int id) {
 		if(hoadonNHService.delete(id)) return new ResponseEntity<hoadonnhaphang>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<hoadonnhaphang>(HttpStatus.NOT_FOUND);

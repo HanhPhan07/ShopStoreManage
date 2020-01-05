@@ -35,7 +35,7 @@ public class CustomerController {
 	CustomerService customerService;
 	/* ---------------- GET ALL CUSTOMER ------------------------ */
 	@GetMapping("/customers")
-	public ResponseEntity<Page<KhachHangDTO>> findAllCustomers(@RequestParam int pageNumber, @RequestParam int pageSize) {	
+	public ResponseEntity<Page<KhachHangDTO>> getAllCustomersPage(@RequestParam int pageNumber, @RequestParam int pageSize) {	
 		Page<KhachHangDTO> listCustomers = customerService.findListAll(pageNumber, pageSize);
 		if(listCustomers.isEmpty()) {
 			return new ResponseEntity<Page<KhachHangDTO>>(HttpStatus.NO_CONTENT);
@@ -68,7 +68,7 @@ public class CustomerController {
 	
 	@GetMapping("/customers/{makhachhang}")
 	
-	public ResponseEntity<Optional<khachhang>> findCustomer(@PathVariable("makhachhang") String makhachhang) {
+	public ResponseEntity<Optional<khachhang>> findCustomerByMKH(@PathVariable("makhachhang") String makhachhang) {
         Optional<khachhang> kh = customerService.findBymakhachhang(makhachhang);
         if (!kh.isPresent()) {
             return new ResponseEntity<Optional<khachhang>>(HttpStatus.NO_CONTENT);
@@ -116,7 +116,7 @@ public class CustomerController {
 	
 	/* ---------------- CREATE NEW CUSTOMER ------------------------ */
 	@PostMapping("/customers")
-	public ResponseEntity<khachhang> saveCustomer(@Valid @RequestBody khachhang customer){
+	public ResponseEntity<khachhang> createCustomer(@Valid @RequestBody khachhang customer){
 		if(customerService.create(customer)) return new ResponseEntity<khachhang>(customer,HttpStatus.OK);
 		else {
 			return new ResponseEntity<khachhang>(HttpStatus.BAD_REQUEST);

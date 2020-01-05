@@ -12,12 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +34,6 @@ import com.example.demoSpBoot.jwt.CustomUserDetails;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.example.demoSpBoot.model.LoginForm;
-import com.example.demoSpBoot.model.khachhang;
-import com.example.demoSpBoot.model.users;
 
 
 @RestController
@@ -54,18 +49,18 @@ public class UsersController {
     private JwtTokenProvider tokenProvider;
 	/* ---------------- GET ALL USER ------------------------ */
 	@GetMapping("/users")
-	public ResponseEntity<List<users>> findAllUsers() {
+	public ResponseEntity<List<users>> getAllUser() {
 		//return new ResponseEntity<ServiceResult>(customerService.findAll(), HttpStatus.OK);
 		
 		List<users> listUser= usersService.findAll();
 		if(listUser.isEmpty()) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<users>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<users>>(listUser, HttpStatus.OK);
 	}
 	/* ---------------- GET USER BY ID ------------------------ */
 	@GetMapping("/users/{manhanvien}")
-	public ResponseEntity<users> getProductById(
+	public ResponseEntity<users> getUserByMNV(
             @PathVariable("manhanvien") String manhanvien) {
         Optional<users> user = usersService.findByMNV(manhanvien);
 
@@ -78,7 +73,7 @@ public class UsersController {
 
 	/* ---------------- CREATE NEW USER ------------------------ */
 	@PostMapping("/users")
-	public ResponseEntity<users> saveUser(@Valid @RequestBody users user) {
+	public ResponseEntity<users> createUser(@Valid @RequestBody users user) {
 		String salt=randomSalt();
 		user.setSalt(salt);
 		user.setPassword(BCrypt.hashpw(user.getPassword().concat(salt), BCrypt.gensalt(12)));
@@ -91,16 +86,16 @@ public class UsersController {
 	
 	/* ---------------- UPDATE USER ------------------------ */
 	@PutMapping("/users")
-	public ResponseEntity<Boolean> update(@RequestBody users user) {
+	public ResponseEntity<Boolean> updateUser(@RequestBody users user) {
 		return new ResponseEntity<Boolean>(usersService.update(user), HttpStatus.OK);
 	}
-	public void updateUser(@RequestBody users user) {
+	public void updateUsers(@RequestBody users user) {
 		usersService.update(user);
 	}
 	/* ---------------- DELETE USER ------------------------ */
 	
 	@DeleteMapping("/users/{manhanvien}")
-	public void deleteCustomer(@PathVariable("manhanvien") String manhanvien) {
+	public void deleteUser(@PathVariable("manhanvien") String manhanvien) {
 		usersService.delete(manhanvien);
 	}
 	/* ---------------- USER LOGIN ------------------------ */

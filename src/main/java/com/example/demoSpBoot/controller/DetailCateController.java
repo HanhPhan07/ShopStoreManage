@@ -29,7 +29,7 @@ public class DetailCateController {
 	DetailCateService detailCateService;
 	@GetMapping("/detailCate")
 	/* ---------------- GET ALL DETAILCATE ------------------------ */
-	public ResponseEntity<Page<chitietdanhmuc>> findAlls(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<Page<chitietdanhmuc>> getAllDetailCatePage(@RequestParam int pageNumber, @RequestParam int pageSize) {
 		
 		Page<chitietdanhmuc> listdetailCate= detailCateService.findAll(pageNumber,pageSize);
 		if(listdetailCate.isEmpty()) {
@@ -53,7 +53,7 @@ public class DetailCateController {
 
 	/* ---------------- CREATE NEW DETAILCATE ------------------------ */
 	@PostMapping("/detailCate")
-	public ResponseEntity<Boolean> saveCateDetail(@Valid @RequestBody chitietdanhmuc[] detailCate) {
+	public ResponseEntity<Boolean> createDetailCate(@Valid @RequestBody chitietdanhmuc[] detailCate) {
 		if(detailCateService.create(detailCate)) return new ResponseEntity<Boolean>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
@@ -64,7 +64,7 @@ public class DetailCateController {
 	/* ---------------- UPDATE DETAILCATE ------------------------ */
 	@PutMapping("/detailCate")
 
-	public ResponseEntity<chitietdanhmuc> updatedetailCate(@RequestBody chitietdanhmuc detailCate) {
+	public ResponseEntity<chitietdanhmuc> updateDetailCate(@RequestBody chitietdanhmuc detailCate) {
 		if(detailCateService.update(detailCate)) return new ResponseEntity<chitietdanhmuc>(detailCate,HttpStatus.OK);
 		else {
 			return new ResponseEntity<chitietdanhmuc>(detailCate,HttpStatus.NOT_FOUND);
@@ -73,7 +73,7 @@ public class DetailCateController {
 	/* ---------------- DELETE DETAILCATE ------------------------ */
 	
 	@DeleteMapping("/detailCate/{id}")
-	public ResponseEntity<chitietdanhmuc> deletedetailCate(@PathVariable("id") int id) {
+	public ResponseEntity<chitietdanhmuc> deleteDetailCate(@PathVariable("id") int id) {
 		if(detailCateService.delete(id)) return new ResponseEntity<chitietdanhmuc>(HttpStatus.OK);
 		else {
 			return new ResponseEntity<chitietdanhmuc>(HttpStatus.NOT_FOUND);
