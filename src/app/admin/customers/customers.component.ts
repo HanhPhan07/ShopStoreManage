@@ -71,14 +71,16 @@ export class CustomersComponent implements OnInit {
     this.searchTerm = '' ;
     this.fitlerloaikhachhang = 0;
     this.activatedRoute.data.subscribe(data => {
-      this.listCustomers = data.customers.result;
-      this.pagination = data.customers.pagination;
+      if (data.customers !== undefined && data.customers !== null) {
+        this.listCustomers = data.customers.result;
+        this.pagination = data.customers.pagination;
+      }
     });
     this.baseDataListCustomers = this.listCustomers;
   }
 
   show() {
-    if (this.listCustomers != null || typeof(this.listCustomers) !== 'undefined') {
+    if (this.listCustomers != null && this.listCustomers !== undefined) {
        return true;
     } else { return false; }
   }
@@ -104,11 +106,17 @@ export class CustomersComponent implements OnInit {
   }
 
   getListCustomers() {
+    let currenPage = 1;
+    if (this.pagination !== undefined && this.pagination !== null) {
+      this.itemsPerPage = this.pagination.itemsPerPage;
+      currenPage = this.pagination.currentPage;
+    }
     this.customersService.getAllKhachHang(
-      this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(
+      currenPage, this.itemsPerPage ).subscribe(
         (data: PaginatedResult<KhachHangDTO[]>) => {
-          if (typeof(data.pagination) !== 'undefined' || data.pagination !== null) {
+          if (data !== undefined && data !== null) {
             this.pagination = data.pagination;
+            this.updateListBill(data.result);
           } else {
               this.pagination = {
                 currentPage: 1,
@@ -116,8 +124,8 @@ export class CustomersComponent implements OnInit {
                 totalPages: 0,
                 itemsPerPage: this.itemsPerPage
               };
+              this.updateListBill(null);
           }
-          this.updateListBill(data.result);
       },
       error => console.log(error)
       );
