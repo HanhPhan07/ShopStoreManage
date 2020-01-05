@@ -80,12 +80,12 @@
           </div>
           <div class="form-group">
             <label for="nhasx">Nhà sản xuất</label>
-            <select name="nhasx" class="form-control" id="nhasx" formControlName="nhasx" required>
+            <select name="nhasx" class="form-control" id="nhasx" formControlName="nhasx">
               <option *ngFor="let item of listManufProd" value="{{item.id}}">{{item.tennsx}}</option>  
             </select>
-            <div class="col alert alert-danger" role="alert"
-            *ngIf="addProdForm.controls['nhasx'].value ==0 || addProdForm.controls['nhasx'].value==null">
-            Vui lòng  chọn nhà sản xuất
+            <div class="col alert alert-danger" role="alert" *ngIf="addProdForm.controls['nhasx'].invalid 
+            && ((addProdForm.controls['nhasx'].touched)||(addProdForm.controls['nhasx'].dirty))">
+              Vui lòng chọn nhà sản xuất
             </div>
           </div>
           <div class="form-group">
@@ -93,11 +93,11 @@
             <select name="donvitinh" class="form-control" id="donvitinh" formControlName="donvitinh">
               <option value="cái" >Cái</option>  
             </select>
-            <!-- <div class="col alert alert-danger" role="alert"
+            <div class="col alert alert-danger" role="alert"
                 *ngIf="addProdForm.controls['donvitinh'].invalid && ((addProdForm.controls['donvitinh'].touched)
                   ||(addProdForm.controls['donvitinh'].dirty))">
-                  Vui lòng nhập chọn đơn vị tính
-            </div> -->
+                  Vui lòng chọn đơn vị tính
+            </div>
           </div>
           <div class="form-group">
             <label for="motasp">Mô tả sản phẩm</label>

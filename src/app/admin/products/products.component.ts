@@ -45,8 +45,8 @@ export class ProductsComponent implements OnInit {
     giavon: new FormControl('', Validators.required),
     giaban: new FormControl('', Validators.required),
     danhmuc: new FormArray([]),
-    nhasx: new FormControl([ Validators.required ]),
-    donvitinh: new FormControl('' ),
+    nhasx: new FormControl('', [Validators.required]),
+    donvitinh: new FormControl('', [Validators.required]),
     hot: new FormControl(''),
     new: new FormControl(''),
     display: new FormControl(''),
@@ -262,7 +262,7 @@ export class ProductsComponent implements OnInit {
     }
     console.log(this.listProds);
   }
-  
+
   filterDanhmuc() {
     if (this.fitlerdanhmucsp != 0 ) {
       this.listProds = this.baseDataListProds.filter(x => {
@@ -329,7 +329,7 @@ export class ProductsComponent implements OnInit {
     let title = '';
     this.product = new SanPham();
     this.product = this.findProductByID(id);
-    title = this.product.trangthai === 1 ? this.listProductStatus[0] : this.listProductStatus[1];
+    title = this.product.trangthai === 1 ? this.listProductStatus[1] : this.listProductStatus[0];
     return title;
   }
   getTotalProducts() {
