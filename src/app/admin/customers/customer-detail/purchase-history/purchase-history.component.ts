@@ -63,8 +63,7 @@ export class PurchaseHistoryComponent implements OnInit {
   }
 
   show() {
-    console.log(this.getCustomerBills(this.id));
-    if (this.getCustomerBills(this.id) != null || typeof(this.getCustomerBills(this.id)) !== 'undefined') {
+    if (this.listCusBill != null || this.listCusBill !== undefined) {
        return true;
     } else { return false; }
   }

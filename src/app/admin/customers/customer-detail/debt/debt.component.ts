@@ -76,8 +76,7 @@ export class DebtComponent implements OnInit {
   }
 
   show() {
-    console.log(this.getCustomerBillsDebt(this.idkhachhang));
-    if (this.getCustomerBillsDebt(this.idkhachhang) != null || typeof(this.getCustomerBillsDebt(this.idkhachhang)) !== 'undefined') {
+    if (this.listCusBillDebt != null && this.listCusBillDebt !== undefined) {
        return true;
     } else { return false; }
   }

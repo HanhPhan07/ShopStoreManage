@@ -58,7 +58,7 @@
             <th scope="row">{{item.mahoadon}}</th>
             <td scope="row">{{item.createdAt | date: 'medium'}}</td>
             <td scope="row">{{item.nguoitao.ten}}</td>
-            <td scope="row">{{listStatusBill[item.loaithanhtoan]}}</td>
+            <td scope="row">{{listStatusBill[item.trangthai]}}</td>
             <td scope="row">{{item.tonggia | currency:'VND' }}</td>
             <td scope="row">{{item.khachhangtra | currency:'VND' }}</td>
             <td scope="row">{{getDebt(item) | currency:'VND' }}</td>
