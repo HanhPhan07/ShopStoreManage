@@ -28,7 +28,7 @@ constructor(private httpClient: HttpClient) { }
       params = params.append('pageNumber', (page - 1).toString());
       params = params.append('pageSize', pageSize.toString());
     }
-    return this.httpClient.get<any>(environment.baseUrl + 'customers/bill/' + makhachhang, { observe: 'response', params })
+    return this.httpClient.get<any>(environment.baseUrl + 'customers/bill/debt/' + makhachhang, { observe: 'response', params })
     .pipe(map(response => {
       if (response.body != null) {
         paginatedResult.pagination = {
@@ -37,7 +37,11 @@ constructor(private httpClient: HttpClient) { }
           totalPages: response.body.totalPages,
           itemsPerPage: response.body.pageable.pageSize
         };
-        paginatedResult.result = response.body.content;
+        if (response.body.content !== null) {
+          paginatedResult.result = response.body.content.filter(this.checkDebtBill);
+        } else {
+          paginatedResult.result = response.body.content;
+        }
       }
       return paginatedResult;
     }));
@@ -49,4 +53,13 @@ constructor(private httpClient: HttpClient) { }
     return this.httpClient.post(environment.baseUrl + 'receipts', phieuthu, { headers: headers });
   }
 
+  checkDebtBill(hoadonbanhang: HoaDonBanHang) {
+    let tongphieuthu = 0;
+    if (hoadonbanhang.phieuthus != null) {
+      hoadonbanhang.phieuthus.forEach(element => {
+        tongphieuthu += element.sotienthu;
+      });
+    }
+    return hoadonbanhang.tonggia - hoadonbanhang.khachhangtra - tongphieuthu > 0 ;
+  }
 }

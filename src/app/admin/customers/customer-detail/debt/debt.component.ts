@@ -86,8 +86,11 @@ export class DebtComponent implements OnInit {
     this.debtCusBillService.getListCustomerBillDebt
     (makhachhang, this.pagination.currentPage, this.pagination.itemsPerPage ).subscribe(
       (data: PaginatedResult<HoaDonBanHang[]>) => {
-        if (typeof(data.pagination) !== 'undefined') {
+        const totalItems = this.updateListDebt(data.result);
+        if (data.pagination !== undefined) {
           this.pagination = data.pagination;
+          data.pagination.totalItems = totalItems;
+          data.pagination.totalPages = totalItems / this.itemsPerPage;
         } else {
             this.pagination = {
               currentPage: 1,
@@ -96,8 +99,6 @@ export class DebtComponent implements OnInit {
               itemsPerPage: this.itemsPerPage
             };
         }
-
-        this.updateListDebt(data.result);
       },
       error => console.log(error)
     );
@@ -105,15 +106,17 @@ export class DebtComponent implements OnInit {
   }
   updateListDebt(data) {
     this.proceeds = [];
-    if (data != null ) {
-      this.listCusBillDebt = data.filter(this.checkDebtBill);
+    if (data != null) {
+      this.listCusBillDebt = data;
       this.listCusBillDebt.forEach(x => {
         this.proceeds.push({
           'id':x.id,
           'value': 0
         });
       });
+      return this.listCusBillDebt.length;
     }
+    return 0;
   }
 
   pageChanged(event: any): void {
@@ -195,13 +198,12 @@ export class DebtComponent implements OnInit {
       this.phieuthu.sotienthu = x.value;
       if (this.phieuthu.sotienthu != 0 ) {
         this.debtCusBillService.postReceipts(this.phieuthu).subscribe ();
-      } else {
-        return;
       }
     });
     alert('Thu nợ thành công');
     this.getCustomerBillsDebt(this.idkhachhang);
     this.reset();
+    this.toggleToPurchaseHistory(true);
   }
   onChangeReceptAll() {
     this.proceeds.forEach(x => x.value = 0);
