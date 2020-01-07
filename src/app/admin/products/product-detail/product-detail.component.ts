@@ -34,23 +34,19 @@ export class ProductDetailComponent implements OnInit {
   editProdForm = new FormGroup({
     id: new FormControl({value: ''}),
     masp: new FormControl({value: '', disabled: true}),
-    tensp: new FormControl('', Validators.required),
-    soluong: new FormControl('', Validators.required),
-    giavon: new FormControl('', Validators.required),
-    giaban: new FormControl('', Validators.required),
+    tensp: new FormControl('', [Validators.required]),
+    soluong: new FormControl('', [Validators.required]),
+    giavon: new FormControl('', [Validators.required]),
+    giaban: new FormControl('', [Validators.required]),
     danhmuc: new FormArray([]),
-    nhasx: new FormControl('', Validators.required),
-    donvitinh: new FormControl('', Validators.required),
-    hot: new FormControl('', Validators.required),
-    new: new FormControl('', Validators.required),
-    display: new FormControl('', Validators.required),
-    anhsp: new FormControl(''),
+    nhasx: new FormControl('', [Validators.required]),
+    donvitinh: new FormControl('', [Validators.required]),
+    hot: new FormControl(''),
+    new: new FormControl(''),
+    display: new FormControl(''),
+    anhsp: new FormControl('', [Validators.required]),
     motasp: new FormControl('')
   });
-  listProductStatus = [
-    'Đang kinh doanh',
-    'Ngừng kinh doanh'
-  ];
   activatedRoute: any;
   selectedFiles: FileList;
   currentFile: File;
@@ -211,29 +207,4 @@ export class ProductDetailComponent implements OnInit {
     });
     }
   }
-  updateListProduct(data) {
-    this.listProds = data;
-    this.baseDataListProds = [];
-    if (data != null ) {
-      this.listProds.forEach(x => {
-        this.baseDataListProds.push(x);
-      });
-    }
-  }
-  changestate(id: number) {
-    this.product = new SanPham();
-    this.product = this.findProductByID(id);
-    this.product.trangthai = this.product.trangthai == 1 ? 0 : 1;
-  }
-  findProductByID(id: number) {
-    return this.listProds.find(x => x.id == id);
-  }
-  titleState(id: number) {
-    let title = '';
-    this.product = new SanPham();
-    this.product = this.findProductByID(id);
-    title = this.product.trangthai === 1 ? this.listProductStatus[0] : this.listProductStatus[1];
-    return title;
-  }
-
 }

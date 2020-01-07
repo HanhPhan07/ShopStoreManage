@@ -50,7 +50,7 @@ export class ProductsComponent implements OnInit {
     hot: new FormControl(''),
     new: new FormControl(''),
     display: new FormControl(''),
-    anhsp: new FormControl(''),
+    anhsp: new FormControl('', [Validators.required]),
     motasp: new FormControl('')
   });
   product: SanPham;
@@ -235,6 +235,7 @@ export class ProductsComponent implements OnInit {
   search() {
         if (typeof (this.searchTerm) === 'undefined' || this.searchTerm === null) {
           this.searchTerm = '';
+          alert('chưa chọn tiêu chí tìm kiếm');
         }
         this.productService.getSearchListProduct (
           this.pagination.currentPage, this.pagination.itemsPerPage, this.searchTerm).subscribe(
@@ -292,7 +293,6 @@ export class ProductsComponent implements OnInit {
                 itemsPerPage: this.itemsPerPage
               };
           }
-
           this.updateListProduct(data.result);
           this.filterDanhmuc();
         },
