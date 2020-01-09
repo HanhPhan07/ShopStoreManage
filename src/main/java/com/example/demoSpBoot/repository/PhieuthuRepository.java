@@ -12,4 +12,5 @@ public interface PhieuthuRepository extends JpaRepository<phieuthu, Integer>{
 	Optional<phieuthu> findBymaphieuthu(String maphieuthu);
 	Page<phieuthu> findAll(Pageable pageable);
 	Page<phieuthu> findBymaphieuthuContaining(Pageable pageable, String searchTerm);
+	void deleteByIdhoadon(int idhoadon);
 }
