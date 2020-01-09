@@ -146,12 +146,28 @@ export class OrdersComponent implements OnInit {
   }
 
   filter() {
-    if (this.fitlerloaidonhang == 2) {
-      this.listBills = this.baseDataListBills.filter(this.isDebt);
-    } else if (this.fitlerloaidonhang == 0) {
-      this.listBills = this.baseDataListBills;
-    } else {
-      this.listBills = this.baseDataListBills.filter(this.isNonDebt);
+    switch (+this.fitlerloaidonhang) {
+      case 1:
+        this.listBills = this.baseDataListBills.filter(x => this.getDebt(x) <= 0);
+        break;
+      case 2:
+        this.listBills = this.baseDataListBills.filter(x => this.getDebt(x) > 0);
+        break;
+      case 3:
+        this.listBills = this.baseDataListBills.filter(this.isDanggiao);
+        break;
+      case 4:
+        this.listBills = this.baseDataListBills.filter(this.isDangxuly);
+        break;
+      case 5:
+        this.listBills = this.baseDataListBills.filter(this.isKhoitao);
+        break;
+      case 6:
+        this.listBills = this.baseDataListBills.filter(this.isHoanthanh);
+        break;
+      default:
+        this.listBills = this.baseDataListBills;
+        break;
     }
   }
 
@@ -162,8 +178,11 @@ export class OrdersComponent implements OnInit {
   }
 
   getBillOfWeek() {
-    const start = this.getDateOfWeek(49, 2019);
-    const end = this.getDateOfWeek(50, 2019);
+    let now = new Date();
+    let onejan = new Date(now.getFullYear(), 0, 1);
+    const week = Math.ceil( (((now.getTime() - onejan.getTime()) / 86400000) + onejan.getDay() + 1) / 7 );
+    const start = this.getDateOfWeek(week, now.getFullYear());
+    const end = this.getDateOfWeek(week + 1, now.getFullYear());
     this.fromdate = start;
     this.todate = end;
     const date1 = start.getDate() + '/' + (start.getMonth() + 1) + '/' + start.getFullYear();
@@ -240,11 +259,24 @@ export class OrdersComponent implements OnInit {
   }
 
   isDebt(hoadon: HoaDonBanHang) {
-    return hoadon.tonggia - hoadon.giamgia - hoadon.khachhangtra > 0;
+    return this.getDebt(hoadon) > 0;
   }
 
   isNonDebt(hoadon: HoaDonBanHang) {
-    return hoadon.tonggia - hoadon.giamgia - hoadon.khachhangtra <= 0;
+    return this.getDebt(hoadon)  <= 0;
+  }
+
+  isDanggiao(hoadon: HoaDonBanHang) {
+    return hoadon.trangthai === 2;
+  }
+  isDangxuly(hoadon: HoaDonBanHang) {
+    return hoadon.trangthai === 1;
+  }
+  isKhoitao(hoadon: HoaDonBanHang) {
+    return hoadon.trangthai === 0;
+  }
+  isHoanthanh(hoadon: HoaDonBanHang) {
+    return hoadon.trangthai === 3;
   }
 
   getTotal() {

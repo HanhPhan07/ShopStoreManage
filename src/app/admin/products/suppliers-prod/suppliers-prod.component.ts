@@ -129,7 +129,6 @@ export class SuppliersProdComponent implements OnInit {
         this.baseDataListSupProds.push(x);
       });
     }
-    console.log(this.listSupProds);
   }
   resetFilter() {
     this.searchTerm = '';

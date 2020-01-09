@@ -257,7 +257,6 @@ export class SellProdComponent implements OnInit {
       this.chitiethoadon.giamgia = 0;
       this.chitiethoadon.soluong = 1;
       this.chitiethoadon.gia = this.chitiethoadon.sanpham.giaban * this.chitiethoadon.soluong;
-
       this.listchitiethoadon.push(this.chitiethoadon);
     }
   }

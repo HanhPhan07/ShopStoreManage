@@ -112,7 +112,6 @@ export class CategoriesProdComponent implements OnInit {
         this.baseDataListCateProds.push(x);
       });
     }
-    console.log(this.listCateProds);
   }
   resetFilter() {
     this.searchTerm = '';

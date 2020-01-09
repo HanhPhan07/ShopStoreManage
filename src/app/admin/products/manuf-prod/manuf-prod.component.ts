@@ -116,7 +116,6 @@ export class ManufProdComponent implements OnInit {
         this.baseDataListManuProds.push(x);
       });
     }
-    console.log(this.listManuProds);
   }
   getListProduct() {
     this.productService.getListProduct().subscribe(

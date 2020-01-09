@@ -116,7 +116,6 @@ export class ProductsComponent implements OnInit {
   }
 
   createProduct() {
-    console.log(this.addProdForm);
     this.productAdd = new SanPham();
     this.productAdd.tensp = this.addProdForm.controls['tensp'].value;
     this.productAdd.soluong = this.addProdForm.controls['soluong'].value;
@@ -126,7 +125,6 @@ export class ProductsComponent implements OnInit {
       return x.id == this.addProdForm.controls['nhasx'].value;
     });
     this.productAdd.nhasanxuat = productManu;
-    console.log(this.productAdd.nhasanxuat);
     this.productAdd.donvitinh = this.addProdForm.controls['donvitinh'].value;
     this.productAdd.ishot = this.addProdForm.controls['hot'].value;
     this.productAdd.isnew = this.addProdForm.controls['new'].value;
@@ -143,7 +141,6 @@ export class ProductsComponent implements OnInit {
             id_sanpham: next.id,
             danhmucsp: danhmuc
           });
-          console.log(chitietdanhmucs);
           this.cateDetailProd.addCateDetailProd(chitietdanhmucs).subscribe(() => {
             alert('Thêm thành công !');
             this.getListProduct();
@@ -257,11 +254,27 @@ export class ProductsComponent implements OnInit {
   }
   filter() {
     if (this.filterStatus == 0 && this.fitlernhasx == 0) {
-      this.filterDanhmuc();
+      this.productService.getSearchListProduct (
+        this.pagination.currentPage, this.pagination.itemsPerPage, this.searchTerm).subscribe(
+          (data: PaginatedResult<SanPham[]>) => {
+            if (typeof(data.pagination) !== 'undefined') {
+              this.pagination = data.pagination;
+            } else {
+                this.pagination = {
+                  currentPage: 1,
+                  totalItems: 0,
+                  totalPages: 0,
+                  itemsPerPage: this.itemsPerPage
+                };
+            }
+            this.updateListProduct(data.result);
+            this.filterDanhmuc();
+      },
+        error => console.log(error)
+      );
     } else {
       this.getListProFilter();
     }
-    console.log(this.listProds);
   }
 
   filterDanhmuc() {
@@ -283,18 +296,22 @@ export class ProductsComponent implements OnInit {
     this.productService.filterProductPageWithStatusandManu (
       this.pagination.currentPage, this.pagination.itemsPerPage, this.filterStatus, this.fitlernhasx).subscribe(
         (data: PaginatedResult<SanPham[]>) => {
-          if (typeof(data.pagination) !== 'undefined') {
-            this.pagination = data.pagination;
+          if (data != null) {
+            if (data.pagination !== undefined) {
+              this.pagination = data.pagination;
+            } else {
+                this.pagination = {
+                  currentPage: 1,
+                  totalItems: 0,
+                  totalPages: 0,
+                  itemsPerPage: this.itemsPerPage
+                };
+            }
+            this.updateListProduct(data.result);
+            this.filterDanhmuc();
           } else {
-              this.pagination = {
-                currentPage: 1,
-                totalItems: 0,
-                totalPages: 0,
-                itemsPerPage: this.itemsPerPage
-              };
+            this.updateListProduct(null);
           }
-          this.updateListProduct(data.result);
-          this.filterDanhmuc();
         },
       error => console.log(error)
     );
@@ -303,7 +320,7 @@ export class ProductsComponent implements OnInit {
     return sanpham.trangthai == 1;
   }
   isNonSale(sanpham: SanPham) {
-    return sanpham.trangthai == 2;
+    return sanpham.trangthai != 1;
   }
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
@@ -312,7 +329,7 @@ export class ProductsComponent implements OnInit {
   changestate(id: number) {
     this.product = new SanPham();
     this.product = this.findProductByID(id);
-    this.product.trangthai = this.product.trangthai == 1 ? 2 : 1;
+    this.product.trangthai = this.product.trangthai == 1 ? 0 : 1;
     this.productService.updateProduct(this.product).subscribe(() => {
       alert('Đã thay đổi trạng thái');
       this.getListProduct();
@@ -341,5 +358,9 @@ export class ProductsComponent implements OnInit {
     if (this.listManufProd != null) {
       return this.listManufProd.length;
     }
+  }
+
+  isDangKD(idtrangthai: number) {
+    return idtrangthai == 1;
   }
 }

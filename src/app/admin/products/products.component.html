@@ -197,7 +197,7 @@
                       <i title="Sửa" class="fa fa-pencil-square-o" style="margin-right: 5px;"
                       (click)="editProduct(item.masp)"></i>
                       <i class="fa fa-trash-o" style="color: darkred;" title="Xóa" (click)="deleteProduct(item.id)"></i>
-                      <i title ="{{titleState(item.id)}}" class="fa fa-pause" style="margin-left: 5px;"
+                      <i title ="{{titleState(item.id)}}" [ngClass]="{'fa':true, 'fa-pause':item.trangthai==1,'fa-check':item.trangthai!=1}" style="margin-left: 5px;"
                       (click)="changestate(item.id)"></i>
                   </td>
                 </tr>
