@@ -23,10 +23,10 @@ export class SuppliersProdComponent implements OnInit {
   itemsPerPage = 4;
   supProdAdd: NhaCungCap;
   addSupProdForm = new FormGroup({
-    tenncc: new FormControl('', Validators.required),
-    sdt: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
-    diachi: new FormControl('', Validators.required)
+    tenncc: new FormControl('', [Validators.required]),
+    sdt: new FormControl('', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]),
+    email: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]),
+    diachi: new FormControl('', [Validators.required])
   });
   constructor(
     private modalService: BsModalService,

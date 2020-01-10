@@ -20,8 +20,8 @@ export class CategoriesProdComponent implements OnInit {
   itemsPerPage = 4;
   cateAdd: DanhMucSP;
   addCateForm = new FormGroup({
-    tendanhmuc: new FormControl('', Validators.required),
-    motadanhmuc: new FormControl('', Validators.required)
+    tendanhmuc: new FormControl('', [Validators.required]),
+    motadanhmuc: new FormControl('')
   });
   constructor(
     private modalService: BsModalService,

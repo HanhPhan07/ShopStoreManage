@@ -31,6 +31,11 @@
             id="tendm" 
             placeholder="Nhập tên danh mục SP (bắt buộc)"
             formControlName="tendanhmuc" />
+            <div class="col alert alert-danger" role="alert"
+                *ngIf="addCateForm.controls['tendanhmuc'].invalid && ((addCateForm.controls['tendanhmuc'].touched)
+                  ||(addCateForm.controls['tendanhmuc'].dirty))">
+                  Vui lòng nhập tên
+            </div>
           </div>
           <div class="form-group">
             <label for="sdtkh">Mô tả</label>
@@ -41,7 +46,7 @@
             formControlName="motadanhmuc"/>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="submit" class="btn btn-primary" [disabled]="addCateForm.pristine || addCateForm.invalid">Lưu</button>
           </div>
 
         </form>

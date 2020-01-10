@@ -24,7 +24,7 @@ export class ManufProdComponent implements OnInit {
   manuProdAdd: NhaSanXuat;
   manuProEdit: NhaSanXuat;
   addManuProdForm = new FormGroup({
-    tennsx: new FormControl('', Validators.required)
+    tennsx: new FormControl('', [Validators.required])
   });
   constructor(
     private modalService: BsModalService,

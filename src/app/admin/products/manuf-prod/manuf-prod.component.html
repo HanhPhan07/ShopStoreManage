@@ -31,9 +31,14 @@
               id="tennsx" 
               placeholder="Nhập tên nhà sản xuất (bắt buộc)"
               formControlName="tennsx" />
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="addManuProdForm.controls['tennsx'].invalid && ((addManuProdForm.controls['tennsx'].touched)
+                  ||(addManuProdForm.controls['tennsx'].dirty))">
+                  Vui lòng nhập tên
+            </div>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary">Lưu</button>
+              <button type="submit" class="btn btn-primary" [disabled]="addManuProdForm.pristine || addManuProdForm.invalid">Lưu</button>
             </div>
           </form>
         </div>

@@ -105,8 +105,7 @@
               <input type="file" (change)="selectFile($event)" formControlName="anhsp">
             </label>
             <div class="col alert alert-danger" role="alert"
-                *ngIf="addProdForm.controls['anhsp'].invalid && ((addProdForm.controls['anhsp'].touched)
-                  ||(addProdForm.controls['anhsp'].dirty))">
+                *ngIf="addProdForm.controls['anhsp'].invalid">
                   Vui lòng chọn ảnh sản phẩm
             </div>
           </div>

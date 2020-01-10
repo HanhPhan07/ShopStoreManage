@@ -199,6 +199,11 @@ export class ProductsComponent implements OnInit {
     }
   }
   getListProduct() {
+    let currenPage = 1;
+    if (this.pagination !== undefined && this.pagination !== null) {
+      this.itemsPerPage = this.pagination.itemsPerPage;
+      currenPage = this.pagination.currentPage;
+    }
     this.productService.getProductPage (
       this.pagination.currentPage, this.pagination.itemsPerPage).subscribe(
         (data: PaginatedResult<SanPham[]>) => {

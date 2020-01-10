@@ -15,7 +15,7 @@
       <ng-template #templateAddSupProd>
         <div class="modal-header">
           <h4 class="modal-title pull-left">
-            <strong>Tạo mới nhà sản xuất</strong>
+            <strong>Tạo mới nhà cung cấp</strong>
           </h4>
           <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefAddSupProd.hide()">
             <span aria-hidden="true">&times;</span>
@@ -31,6 +31,11 @@
               id="tenncc" 
               placeholder="Nhập tên nhà cung cấp (bắt buộc)"
               formControlName="tenncc" />
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="addSupProdForm.controls['tenncc'].invalid && ((addSupProdForm.controls['tenncc'].touched)
+                  ||(addSupProdForm.controls['tenncc'].dirty))">
+                  Vui lòng nhập tên
+            </div>
             </div>
             <div class="form-group">
               <label for="sdtkh">Số điện thoại</label>
@@ -39,6 +44,11 @@
               id="sdt"
               placeholder="Vui lòng nhập số điện thoại"
               formControlName="sdt"/>
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="((addSupProdForm.controls['sdt'].touched)
+                  &&(addSupProdForm.controls['sdt'].hasError('pattern')))">
+                  Vui lòng nhập số điện thoại (10 số)
+              </div>
             </div>
             <div class="form-group">
               <label for="sdtkh">Email</label>
@@ -47,6 +57,11 @@
               id="email"
               placeholder="Nhập email"
               formControlName="email"/>
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="((addSupProdForm.controls['email'].touched)
+                &&(addSupProdForm.controls['email'].hasError('pattern')))">
+                Vui lòng nhập đúng định dạng Email
+              </div>
             </div>
             <div class="form-group">
               <label for="sdtkh">Địa chỉ</label>
@@ -55,9 +70,14 @@
               id="diachi"
               placeholder="Nhập địa chỉ"
               formControlName="diachi"/>
+              <div class="col alert alert-danger" role="alert"
+                *ngIf="addSupProdForm.controls['diachi'].invalid && ((addSupProdForm.controls['diachi'].touched)
+                  ||(addSupProdForm.controls['diachi'].dirty))">
+                  Vui lòng nhập địa chỉ
+            </div>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary">Lưu</button>
+              <button type="submit" class="btn btn-primary" [disabled]="addSupProdForm.pristine || addSupProdForm.invalid">Lưu</button>
             </div>
           </form>
         </div>
