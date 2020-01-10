@@ -79,7 +79,7 @@ public class ProductService {
 			List<chitiethoadonbh> listchitiet = chitiethdbhRepo.findBySanpham(product);
 			if(!listchitiet.isEmpty()) {
 				for(chitiethoadonbh item : listchitiet) {
-					phieuthuRepo.deleteByIdhoadon(item.getId_hoadon());
+					productRepo.deletephieuthu(item.getId_hoadon());
 					hoadonRepo.delete(item.getId_hoadon());
 				}
 			}
